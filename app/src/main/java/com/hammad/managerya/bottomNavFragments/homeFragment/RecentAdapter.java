@@ -1,6 +1,8 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+
+import java.util.Random;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHolder> {
 

@@ -3,17 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable-v24/gradient_add_record.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable-v24/ic_android_18.xml" value="0.2518518518518518" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/a.xml" value="0.23981481481481481" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/blue_circle_background.xml" value="0.23981481481481481" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/blue_circular_background.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/card_background_home_frag.xml" value="0.24351851851851852" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/circular_add_button.xml" value="0.2518518518518518" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/gradient_add_record.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/gradient_toolbar.xml" value="0.25462962962962965" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/home_fragment_circular_recycle.xml" value="0.2518518518518518" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/home_screen_background.xml" value="0.25462962962962965" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_add.xml" value="0.2518518518518518" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_android.xml" value="0.25462962962962965" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_arrow_right.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_calendar.xml" value="0.2518518518518518" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_cancel.xml" value="0.23981481481481481" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_income.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_insights.xml" value="0.25" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/line.xml" value="0.23981481481481481" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/white_circle_background.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/white_circular_background.xml" value="0.21388888888888888" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_add_record.xml" value="0.2" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_home_screen.xml" value="0.21203703703703702" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_home.xml" value="0.22" />

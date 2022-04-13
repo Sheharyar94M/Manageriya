@@ -3,6 +3,7 @@ package com.hammad.managerya.bottomNavFragments.homeFragment;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.hammad.managerya.R;
 
@@ -46,6 +50,9 @@ public class HomeFragment extends Fragment {
             Color.rgb(5, 159, 249), Color.rgb(4, 151, 243),
             Color.rgb(187, 217, 249)
     };
+
+    //array list for pie chart entries
+    ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -159,7 +166,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadPieChartData() {
-        ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
         pieEntries.add(new PieEntry(0.3f, "Bills"));
         pieEntries.add(new PieEntry(0.2f, "Grocery"));
@@ -175,11 +181,11 @@ public class HomeFragment extends Fragment {
 
         ArrayList<Integer> colors = new ArrayList<>();
 
-        for (int color : ColorTemplate.createColors(COLORS_PALETTE_1)) {
+        for (int color : ColorTemplate.COLORFUL_COLORS/*createColors(COLORS_PALETTE_1)*/) {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate.createColors(COLORS_PALETTE_2)) {
+        for (int color : ColorTemplate.VORDIPLOM_COLORS/*createColors(COLORS_PALETTE_2)*/) {
             colors.add(color);
         }
 
@@ -229,6 +235,20 @@ public class HomeFragment extends Fragment {
         legend.setOrientation(Legend.LegendOrientation.VERTICAL);
         legend.setDrawInside(false);
         legend.setEnabled(true);*/
+
+       /* pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                int hi=h.getDataIndex();
+                Log.i("ITEM_1", "index : "+hi);
+                *//*Log.i("ITEM_1", "value : "+pieEntries.get(hi).getLabel());*//*
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });*/
 
     }
 

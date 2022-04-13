@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.hammad.managerya.bottomNavFragments.addRecord.AddRecordActivity;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -114,6 +116,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
     private void addRecord()
     {
-        Toast.makeText(homeScreenActivity, "Clicked", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, AddRecordActivity.class));
     }
 }
