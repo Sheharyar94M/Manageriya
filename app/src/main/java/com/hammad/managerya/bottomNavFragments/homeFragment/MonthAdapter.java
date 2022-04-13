@@ -24,8 +24,9 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
 
     Context context;
     List<String> monthsList;
-    int selectedPosition = -1;
-    int firstSelectedPosition=11;
+
+    //we set the default position to 10, so that the current month is highlighted when appliation is loaded
+    int selectedPosition = 10;
 
     //for getting the current date so that the current month can be highlighted
     String currentDate;
@@ -33,7 +34,6 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
     public MonthAdapter(Context context, List<String> stringList) {
         this.context = context;
         this.monthsList = stringList;
-        getCurrentDate();
     }
 
     @NonNull
@@ -49,20 +49,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
 
         holder.textView.setText(monthsList.get(position));
 
-        //highlighting the current month by default
-        if(monthsList.get(position).contains(currentDate))
+        //Bu default highlights the current selected month
+        if(selectedPosition == 10)
         {
-            Log.i("HOLDER_1", "called");
-            holder.textView.setTextColor(Color.parseColor("#0179d9"));
-            holder.itemView.setBackgroundResource(R.drawable.white_circular_background);
-        }
-
-        /*if(firstSelectedPosition==position)
-        {
-            Log.i("HOLDER_1", "called");
             holder.textView.setTextColor(Color.parseColor("#0179d9"));
             holder.constraintLayout.setBackgroundResource(R.drawable.white_circular_background);
-        }*/
+        }
 
         //click listener textview
         holder.textView.setOnClickListener(view -> {
@@ -111,10 +103,4 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
         }
     }
 
-    private void getCurrentDate(){
-        Calendar calendar=Calendar.getInstance();
-
-        SimpleDateFormat dateFormat=new SimpleDateFormat("MMM yyyy");
-        currentDate= dateFormat.format(calendar.getTime());
-    }
 }

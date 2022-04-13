@@ -76,8 +76,8 @@
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pie_chart"
-            android:layout_width="@dimen/_130sdp"
-            android:layout_height="@dimen/_130sdp"
+            android:layout_width="@dimen/_135sdp"
+            android:layout_height="@dimen/_135sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_20sdp"
             app:layout_constraintTop_toBottomOf="@id/recycler_view_months"
@@ -160,6 +160,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintTop_toBottomOf="@id/pie_chart"
             app:layout_constraintBottom_toBottomOf="@id/constraint_2"/>
 

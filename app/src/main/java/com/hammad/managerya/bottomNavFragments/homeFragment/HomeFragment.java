@@ -123,8 +123,8 @@ public class HomeFragment extends Fragment {
         MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList);
         recyclerViewMonth.setAdapter(monthAdapter);
 
-        //scroll recyclerview to current month
-        int newPosition = monthsList.size() - 2;
+        //scroll recyclerview to last month (current month = last month -1)
+        int newPosition = monthsList.size() - 1;
         recyclerViewMonth.scrollToPosition(newPosition);
     }
 
@@ -167,11 +167,11 @@ public class HomeFragment extends Fragment {
         pieEntries.add(new PieEntry(0.35f, "Health"));
         pieEntries.add(new PieEntry(0.25f, "Education"));
 
-        pieEntries.add(new PieEntry(0.12f, "Transport"));
+        /*pieEntries.add(new PieEntry(0.12f, "Transport"));
         pieEntries.add(new PieEntry(0.28f, "Shopping"));
         pieEntries.add(new PieEntry(0.30f, "Travel"));
         pieEntries.add(new PieEntry(0.35f, "Entertainment"));
-        pieEntries.add(new PieEntry(0.40f, "Wedding"));
+        pieEntries.add(new PieEntry(0.40f, "Wedding"));*/
 
         ArrayList<Integer> colors = new ArrayList<>();
 
@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment {
 
         pieData.setDrawValues(true);
         pieData.setValueFormatter(new PercentFormatter(pieChart));
-        pieData.setValueTextSize(8f);
+        pieData.setValueTextSize(9f);
         pieData.setValueTextColor(Color.WHITE);
 
         pieChart.setData(pieData);
@@ -204,7 +204,7 @@ public class HomeFragment extends Fragment {
         pieChart.setHoleColor(Color.parseColor("#06a6ff"));
         pieChart.setUsePercentValues(true);
 
-        pieChart.setCenterText("70\n\nSpend");
+        pieChart.setCenterText("$ 70\nSpend");
         pieChart.setCenterTextColor(Color.WHITE);
         pieChart.setCenterTextSize(13);
         pieChart.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
