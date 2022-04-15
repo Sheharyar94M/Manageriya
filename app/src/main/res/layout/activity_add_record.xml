@@ -73,7 +73,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+       <!-- <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_transfer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -103,7 +103,7 @@
                 app:layout_constraintStart_toStartOf="@id/img_view_transfer"
                 app:layout_constraintTop_toBottomOf="@id/img_view_transfer" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_add_expense"
@@ -142,8 +142,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
-            app:flow_horizontalGap="@dimen/_25sdp"
-            app:constraint_referenced_ids="constraint_add_income,constraint_transfer,constraint_add_expense"
+            app:flow_horizontalGap="@dimen/_45sdp"
+            app:constraint_referenced_ids="constraint_add_income,constraint_add_expense"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_view_1_add_record"/>
 

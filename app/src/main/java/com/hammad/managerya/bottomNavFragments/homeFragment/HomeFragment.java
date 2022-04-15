@@ -1,13 +1,14 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,13 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.hammad.managerya.R;
 
@@ -30,14 +28,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeFragTransAdapter.RecentTransInterface {
 
     private TextView textViewCurrentDate;
     private TextView textViewTotalIncome, textViewSpend, textViewPercentage;
+    private TextView textViewCurrencyIncome, textViewCurrencyExpense;
     private RecyclerView recyclerViewRecentTransaction, recyclerViewMonth;
     private List<String> monthsList = new ArrayList<>();
     private PieChart pieChart;
-    private RecyclerView recyclerViewRecent;
+    private RecyclerView recyclerViewRecentBudget;
+
+    //string for inner circle of pie graph
+    public static String currency="$ ";
+    String spend="\nSpend";
 
     public  static final int[] COLORS_PALETTE_1 = {
             Color.rgb(210, 245, 255),Color.rgb(197, 230, 252),
@@ -79,7 +82,7 @@ public class HomeFragment extends Fragment {
         loadPieChartData();
 
         //setting the recent recyclerview
-        setRecentRecyclerview();
+        setBudgetRecentRecyclerview();
 
 
         return view;
@@ -98,10 +101,18 @@ public class HomeFragment extends Fragment {
         textViewSpend = view.findViewById(R.id.text_view_total_expense);
         textViewPercentage = view.findViewById(R.id.text_view_percentage);
 
+        textViewCurrencyIncome=view.findViewById(R.id.text_view_currency_1);
+
+        textViewCurrencyExpense =view.findViewById(R.id.text_view_currency_2);
+
+        //setting the currency to relevant textviews
+        textViewCurrencyIncome.setText(currency);
+        textViewCurrencyExpense.setText(currency);
+
         pieChart = view.findViewById(R.id.pie_chart);
 
         //recyclerview recent
-        recyclerViewRecent=view.findViewById(R.id.recycler_view_recent);
+        recyclerViewRecentBudget =view.findViewById(R.id.recycler_view_recent);
 
     }
 
@@ -118,7 +129,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity());
+        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity(),this);
         recyclerViewRecentTransaction.setAdapter(adapter);
     }
 
@@ -135,8 +146,8 @@ public class HomeFragment extends Fragment {
         recyclerViewMonth.scrollToPosition(newPosition);
     }
 
-    private void getMonthsList() {
 
+    private void getMonthsList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy");
 
         /*
@@ -210,7 +221,7 @@ public class HomeFragment extends Fragment {
         pieChart.setHoleColor(Color.parseColor("#06a6ff"));
         pieChart.setUsePercentValues(true);
 
-        pieChart.setCenterText("$ 70\nSpend");
+        pieChart.setCenterText(currency.concat("70").concat(spend));
         pieChart.setCenterTextColor(Color.WHITE);
         pieChart.setCenterTextSize(13);
         pieChart.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -252,12 +263,19 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void setRecentRecyclerview()
+    private void setBudgetRecentRecyclerview()
     {
         LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerViewRecent.setLayoutManager(layoutManager);
+        recyclerViewRecentBudget.setLayoutManager(layoutManager);
 
         RecentAdapter recentAdapter=new RecentAdapter(requireContext());
-        recyclerViewRecent.setAdapter(recentAdapter);
+        recyclerViewRecentBudget.setAdapter(recentAdapter);
+    }
+
+    //overridden click listener of HomeFragTransAdapter
+    @Override
+    public void onRecentTransClick(int position) {
+
+        startActivity(new Intent(requireContext(),ViewTransDetailsActivity.class));
     }
 }

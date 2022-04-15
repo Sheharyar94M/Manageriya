@@ -39,6 +39,14 @@ public class AddIncomeFragment extends Fragment {
                                 R.drawable.pension,R.drawable.pocket_money,R.drawable.salary,R.drawable.savings,
                                 R.drawable.tuition };
 
+    /*private int[] eightImagesList={ R.drawable.allowance_100,R.drawable.bonus_100,R.drawable.business_profit_100,R.drawable.commission_100,
+            R.drawable.freelance_100,R.drawable.gifts_received_100,R.drawable.investment_100,R.drawable.loan_recived_100 };
+
+    private int[] thirteenImagesList={ R.drawable.allowance_100,R.drawable.bonus_100,R.drawable.business_profit_100,R.drawable.commission_100,
+            R.drawable.freelance_100,R.drawable.gifts_received_100,R.drawable.investment_100,R.drawable.loan_recived_100,
+            R.drawable.pension_100,R.drawable.pocket_money_100,R.drawable.salary_100,R.drawable.savings_100,
+            R.drawable.tuition_100 };*/
+
 
     private String[] eightCatNameList={"Allowance","Bonus","Business\nProfit","Commission",
             "Freelance","Gifts\nReceived","Investment","Loan\nReceived"};

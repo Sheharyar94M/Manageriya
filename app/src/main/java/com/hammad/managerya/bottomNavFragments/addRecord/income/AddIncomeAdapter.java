@@ -39,8 +39,6 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull AddIncomeAdapter.MyViewHolder holder, int position) {
 
-
-
         holder.imageCatImage.setImageResource(imagesList[position]);
 
         holder.textCatName.setText(catNameList[position]);
@@ -77,7 +75,7 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return imagesList.length;
+        return /*imagesList.length*/3;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{

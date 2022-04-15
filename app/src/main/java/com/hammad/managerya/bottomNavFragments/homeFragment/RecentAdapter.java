@@ -16,11 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHolder> {
 
     Context context;
+    Random random=new Random();
+    String colorCode;
+
+    List<String> colorsList= Arrays.asList("#fc0505","#fc3705","#fc6805","#fc8505","#fc9105","#fcae05"
+            ,"#fcbf05","#fce005","#f0fc05","#cbfc05","#bafc05","#9efc05","#79fc05","#53fc05","#05fc60"
+            ,"#05fc7d","#05fcd3","#05fcf0","#05f8fc","#05e0fc","#0579fc","#5805fc","#6c05fc"
+            ,"#7405fc","#8905fc","#a205fc","#c305fc","#e005fc","#fc05fc","#fc05e0"
+            ,"#fc0599","#fc0558","#fc0543","#fc052e","#fc0522","#fc0505");
 
     public RecentAdapter(Context context) {
         this.context = context;
@@ -36,6 +46,12 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecentAdapter.MyViewHolder holder, int position) {
+
+        //random color code from colorsList
+        colorCode =colorsList.get(random.nextInt(colorsList.size()));
+
+        //set the randomly generated color as progress tint
+        holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor(colorCode)));
 
     }
 

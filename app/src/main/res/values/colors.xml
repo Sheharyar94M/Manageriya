@@ -8,4 +8,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="percentage_color">#B61111</color>
+
+    <color name="colorGreen">#17BD24</color>
+
+    <color name="colorRed">#E11010</color>
 </resources>

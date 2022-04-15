@@ -16,9 +16,11 @@ import com.hammad.managerya.R;
 public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdapter.MyViewHolder> {
 
     Context context;
+    private RecentTransInterface mRecentTransInterface;
 
-    public HomeFragTransAdapter(Context context) {
+    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface) {
         this.context = context;
+        this.mRecentTransInterface=recentTransInterface;
     }
 
     @NonNull
@@ -27,7 +29,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
         LayoutInflater inflater=LayoutInflater.from(context);
         View view=inflater.inflate(R.layout.layout_home_fragment_recyclerview,parent,false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mRecentTransInterface);
     }
 
     @Override
@@ -45,8 +47,9 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         ConstraintLayout constraintLayout;
         ImageView imageView;
         TextView textViewCategory,textViewCash,textViewAmount,textViewDate;
+        RecentTransInterface recentTransInterface;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,RecentTransInterface recentTransInterface) {
             super(itemView);
 
             constraintLayout=itemView.findViewById(R.id.constraint_home_frag_recycler);
@@ -57,6 +60,21 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
             textViewCash=itemView.findViewById(R.id.text_view_cash_home_frag_recycler);
             textViewAmount=itemView.findViewById(R.id.text_view_amount_home_frag_recycler);
             textViewDate=itemView.findViewById(R.id.text_view_date_home_frag_recycler);
+
+            this.recentTransInterface=recentTransInterface;
+
+
+            constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recentTransInterface.onRecentTransClick(getAdapterPosition());
+                }
+            });
         }
+    }
+
+    public interface RecentTransInterface
+    {
+        void onRecentTransClick(int position);
     }
 }

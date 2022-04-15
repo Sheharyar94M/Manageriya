@@ -91,13 +91,26 @@
             android:textStyle="bold"
             android:fontFamily="@font/century_gothic"
             android:text="100"
-            android:textSize="@dimen/_14ssp"
-            android:padding="@dimen/_3sdp"
+            android:textSize="@dimen/_18ssp"
             app:layout_constraintTop_toTopOf="@id/pie_chart"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginStart="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/pie_chart"/>
+
+        <TextView
+            android:id="@+id/text_view_currency_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:fontFamily="@font/century_gothic"
+            android:text=""
+            android:textSize="@dimen/_18ssp"
+            android:layout_marginEnd="@dimen/_3sdp"
+            app:layout_constraintTop_toTopOf="@id/text_view_total_income"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_total_income"
+            app:layout_constraintEnd_toStartOf="@id/text_view_total_income"/>
 
         <TextView
             android:id="@+id/text_view_1"
@@ -107,26 +120,38 @@
             android:text="Budget"
             android:textStyle="bold"
             android:textSize="@dimen/_9ssp"
-            android:padding="@dimen/_3sdp"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/text_view_total_income"
+            app:layout_constraintTop_toBottomOf="@id/text_view_currency_1"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toStartOf="@id/text_view_total_income"/>
+            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
 
         <TextView
             android:id="@+id/text_view_total_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 70"
+            android:text="70"
             android:textStyle="bold"
-            android:textSize="@dimen/_13ssp"
+            android:textSize="@dimen/_15ssp"
             android:textColor="@color/white"
             android:fontFamily="@font/century_gothic"
-            android:padding="@dimen/_3sdp"
             app:layout_constraintTop_toBottomOf="@+id/text_view_1"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toEndOf="@id/pie_chart"
-            app:layout_constraintStart_toStartOf="@id/text_view_1"/>
+            android:layout_marginStart="@dimen/_4sdp"
+            app:layout_constraintStart_toEndOf="@id/text_view_currency_2" />
+
+        <TextView
+            android:id="@+id/text_view_currency_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/century_gothic"
+            app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
+            app:layout_constraintEnd_toStartOf="@id/text_view_total_expense"
+            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
 
         <TextView
             android:id="@+id/text_view_2"
@@ -136,11 +161,10 @@
             android:text="Spend"
             android:textStyle="bold"
             android:textSize="@dimen/_9ssp"
-            android:padding="@dimen/_3sdp"
             android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/text_view_total_expense"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toStartOf="@id/text_view_total_income"/>
+            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
 
         <TextView
             android:id="@+id/text_view_percentage"
@@ -150,10 +174,9 @@
             android:textSize="@dimen/_13ssp"
             android:textColor="#F8F5F5"
             android:fontFamily="@font/century_gothic"
-            android:padding="@dimen/_3sdp"
             android:layout_marginStart="@dimen/_10sdp"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_1"
-            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
             app:layout_constraintStart_toEndOf="@id/text_view_total_expense" />
 
         <androidx.recyclerview.widget.RecyclerView

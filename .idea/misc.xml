@@ -12,14 +12,19 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/button_finish_background.xml" value="0.23703703703703705" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/card_background_home_frag.xml" value="0.24351851851851852" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/circular_add_button.xml" value="0.2518518518518518" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/custom_colored.xml" value="0.23055555555555557" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/drawable_card.xml" value="0.23703703703703705" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/drawable_line.xml" value="0.23055555555555557" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/drawable_recent_trans_activity.xml" value="0.23055555555555557" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/drawable_recycler_highlight.xml" value="0.23703703703703705" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/drawable_white_recent_trans.xml" value="0.23055555555555557" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/edit_text_white_background.xml" value="0.23703703703703705" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/gradient_add_record.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/gradient_toolbar.xml" value="0.25462962962962965" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/home_fragment_circular_recycle.xml" value="0.2518518518518518" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/home_screen_background.xml" value="0.25462962962962965" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_add.xml" value="0.2518518518518518" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_allowance.xml" value="0.23055555555555557" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_android.xml" value="0.25462962962962965" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_arrow_down.xml" value="0.23703703703703705" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_arrow_right.xml" value="0.23981481481481481" />
@@ -35,6 +40,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_add_record.xml" value="0.2" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_home_screen.xml" value="0.21203703703703702" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_view_trans_details.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/button_finish_background.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_expense.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_income.xml" value="0.22" />
@@ -48,7 +54,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_home_fragment_recyclerview.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_month_reycycler_view.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_nav_drawer_header.xml" value="0.22" />
-        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recyclerview_item.xml" value="0.22" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recyclerview_item.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/navigation_view_menu.xml" value="0.27291666666666664" />
       </map>

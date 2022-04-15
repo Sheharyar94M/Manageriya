@@ -56,9 +56,9 @@ public class AddRecordActivity extends AppCompatActivity {
             imageViewExpense.setImageResource(R.drawable.add_expense_50_white);
             imageViewExpense.setBackgroundResource(R.drawable.blue_circle_background);
 
-            //changing the background of transfer
+            /*//changing the background of transfer
             imageViewTransfer.setImageResource(R.drawable.transfer_50_white);
-            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);
+            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);*/
 
             replaceFragment(new AddIncomeFragment());
         });
@@ -74,15 +74,15 @@ public class AddRecordActivity extends AppCompatActivity {
             imageViewExpense.setImageResource(R.drawable.add_expense_50_black);
             imageViewExpense.setBackgroundResource(R.drawable.white_circle_background);
 
-            //changing the background of transfer
+            /*//changing the background of transfer
             imageViewTransfer.setImageResource(R.drawable.transfer_50_white);
-            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);
+            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);*/
 
             replaceFragment(new AddExpenseFragment());
         });
 
         //constraint transfer click listener
-        constraintTransfer.setOnClickListener(view -> {
+        /*constraintTransfer.setOnClickListener(view -> {
 
             //changing the background of income
             imageViewIncome.setImageResource(R.drawable.add_income_50_white);
@@ -97,7 +97,7 @@ public class AddRecordActivity extends AppCompatActivity {
             imageViewTransfer.setBackgroundResource(R.drawable.white_circle_background);
 
             replaceFragment(new AddTransferFragment());
-        });
+        });*/
     }
 
     private void initializeViews() {
@@ -107,12 +107,12 @@ public class AddRecordActivity extends AppCompatActivity {
 
         constraintIncome=findViewById(R.id.constraint_add_income);
         constraintExpense=findViewById(R.id.constraint_add_expense);
-        constraintTransfer=findViewById(R.id.constraint_transfer);
+        //constraintTransfer=findViewById(R.id.constraint_transfer);
 
         //image views of above constraints
         imageViewIncome=findViewById(R.id.img_view_add_income);
         imageViewExpense=findViewById(R.id.img_view_add_expense);
-        imageViewTransfer=findViewById(R.id.img_view_transfer);
+        //imageViewTransfer=findViewById(R.id.img_view_transfer);
 
         frameLayout=findViewById(R.id.frame_layout_add_record);
     }
