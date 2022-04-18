@@ -99,7 +99,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/_8sdp"
-        android:background="@drawable/button_finish_background"
+        android:background="@drawable/button_finish_background_circular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_detail_expense"/>

@@ -16,14 +16,13 @@ import android.widget.ImageView;
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseFragment;
 import com.hammad.managerya.bottomNavFragments.addRecord.income.AddIncomeFragment;
-import com.hammad.managerya.bottomNavFragments.addRecord.transfer.AddTransferFragment;
 
 public class AddRecordActivity extends AppCompatActivity {
 
     ImageView imageViewFinishActivity;
-    ConstraintLayout constraintIncome,constraintTransfer,constraintExpense;
+    ConstraintLayout constraintIncome,constraintExpense;
     FrameLayout frameLayout;
-    ImageView imageViewIncome,imageViewExpense,imageViewTransfer;
+    ImageView imageViewIncome,imageViewExpense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +55,6 @@ public class AddRecordActivity extends AppCompatActivity {
             imageViewExpense.setImageResource(R.drawable.add_expense_50_white);
             imageViewExpense.setBackgroundResource(R.drawable.blue_circle_background);
 
-            /*//changing the background of transfer
-            imageViewTransfer.setImageResource(R.drawable.transfer_50_white);
-            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);*/
 
             replaceFragment(new AddIncomeFragment());
         });
@@ -74,30 +70,9 @@ public class AddRecordActivity extends AppCompatActivity {
             imageViewExpense.setImageResource(R.drawable.add_expense_50_black);
             imageViewExpense.setBackgroundResource(R.drawable.white_circle_background);
 
-            /*//changing the background of transfer
-            imageViewTransfer.setImageResource(R.drawable.transfer_50_white);
-            imageViewTransfer.setBackgroundResource(R.drawable.blue_circle_background);*/
 
             replaceFragment(new AddExpenseFragment());
         });
-
-        //constraint transfer click listener
-        /*constraintTransfer.setOnClickListener(view -> {
-
-            //changing the background of income
-            imageViewIncome.setImageResource(R.drawable.add_income_50_white);
-            imageViewIncome.setBackgroundResource(R.drawable.blue_circle_background);
-
-            //changing the background of expense
-            imageViewExpense.setImageResource(R.drawable.add_expense_50_white);
-            imageViewExpense.setBackgroundResource(R.drawable.blue_circle_background);
-
-            //changing the background of transfer
-            imageViewTransfer.setImageResource(R.drawable.transfer_50_black);
-            imageViewTransfer.setBackgroundResource(R.drawable.white_circle_background);
-
-            replaceFragment(new AddTransferFragment());
-        });*/
     }
 
     private void initializeViews() {

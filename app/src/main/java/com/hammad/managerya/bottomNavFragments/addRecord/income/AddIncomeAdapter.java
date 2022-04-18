@@ -75,7 +75,7 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return /*imagesList.length*/3;
+        return imagesList.length;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{

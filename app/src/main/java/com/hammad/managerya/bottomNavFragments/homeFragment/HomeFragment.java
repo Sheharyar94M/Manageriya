@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,8 +53,10 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             Color.rgb(187, 217, 249)
     };
 
+
     //array list for pie chart entries
     ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,7 +146,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         int newPosition = monthsList.size() - 1;
         recyclerViewMonth.scrollToPosition(newPosition);
     }
-
 
     private void getMonthsList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy");
@@ -276,6 +276,14 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     @Override
     public void onRecentTransClick(int position) {
 
-        startActivity(new Intent(requireContext(),ViewTransDetailsActivity.class));
+        Intent intent=new Intent(requireContext(),ViewTransDetailsActivity.class);
+
+        //creating the bundle object
+        Bundle bundle=new Bundle();
+        bundle.putInt("position",position);
+
+        intent.putExtras(bundle);
+
+        startActivity(intent,bundle);
     }
 }

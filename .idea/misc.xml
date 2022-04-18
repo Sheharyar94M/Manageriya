@@ -31,16 +31,21 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_arrow_up.xml" value="0.23703703703703705" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_calendar.xml" value="0.2518518518518518" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_cancel.xml" value="0.23981481481481481" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_description.xml" value="0.22685185185185186" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_income.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_insights.xml" value="0.25" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_location.xml" value="0.22685185185185186" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_price_tag.xml" value="0.22685185185185186" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/ic_receipt.xml" value="0.22685185185185186" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/line.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/white_circle_background.xml" value="0.23981481481481481" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/white_circle_recyclerview.xml" value="0.23703703703703705" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/drawable/white_circular_background.xml" value="0.21388888888888888" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_add_record.xml" value="0.2" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_add_transaction_detail.xml" value="0.2" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_home_screen.xml" value="0.21203703703703702" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_main.xml" value="0.27291666666666664" />
-        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_view_trans_details.xml" value="0.22" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_view_trans_details.xml" value="0.2" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/button_finish_background.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_expense.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_income.xml" value="0.22" />
@@ -57,6 +62,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recyclerview_item.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/navigation_view_menu.xml" value="0.27291666666666664" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/xml/file_paths.xml" value="0.27291666666666664" />
       </map>
     </option>
   </component>

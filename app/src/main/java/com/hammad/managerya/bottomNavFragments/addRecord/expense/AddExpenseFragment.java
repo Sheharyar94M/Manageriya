@@ -1,5 +1,6 @@
 package com.hammad.managerya.bottomNavFragments.addRecord.expense;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
 
 public class AddExpenseFragment extends Fragment {
 
@@ -72,7 +74,13 @@ public class AddExpenseFragment extends Fragment {
         });
 
         //button details click listener
-        buttonDetails.setOnClickListener(v -> Toast.makeText(requireContext(), "Details", Toast.LENGTH_SHORT).show());
+        buttonDetails.setOnClickListener(v -> {
+
+            Intent intent=new Intent(requireContext(), ActivityAddTransactionDetail.class);
+            intent.putExtra("fragment","expense");
+            startActivity(intent);
+
+        });
 
         //button finish click listener
         buttonFinish.setOnClickListener(v -> Toast.makeText(requireContext(), "Finish", Toast.LENGTH_SHORT).show());

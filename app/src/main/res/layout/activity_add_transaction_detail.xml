@@ -48,7 +48,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/txt_cat"
+            android:id="@+id/txt_cat_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category Name"
@@ -71,13 +71,13 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"
-            app:layout_constraintTop_toBottomOf="@id/txt_cat"
+            app:layout_constraintTop_toBottomOf="@id/txt_cat_add"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginStart="@dimen/_10sdp"/>
 
         <TextView
-            android:id="@+id/txt_amount"
+            android:id="@+id/txt_amount_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="7000+"
@@ -92,14 +92,14 @@
             android:layout_marginEnd="@dimen/_10sdp"/>
 
         <TextView
-            android:id="@+id/txt_date"
+            android:id="@+id/txt_date_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="April 15, 2022"
             android:fontFamily="@font/century_gothic"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"
-            app:layout_constraintTop_toBottomOf="@id/txt_amount"
+            app:layout_constraintTop_toBottomOf="@id/txt_amount_add"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"/>
@@ -110,7 +110,7 @@
         android:id="@+id/txt_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Additional Detail"
+        android:text="Add Details"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="@dimen/_15ssp"
@@ -120,20 +120,6 @@
         android:layout_marginStart="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraint_2"/>
-
-    <TextView
-        android:id="@+id/txt_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PREVIEW"
-        android:textSize="@dimen/_12ssp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="@id/constraint_receipt"
-        app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
-        app:layout_constraintEnd_toEndOf="@id/constraint_receipt"
-        android:layout_marginEnd="@dimen/_30sdp"
-        android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_description"
@@ -150,11 +136,10 @@
             android:layout_margin="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <TextView
-            android:id="@+id/txt_desc"
+        <EditText
+            android:id="@+id/edit_txt_desc"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
             app:layout_constraintStart_toEndOf="@id/img_1"
@@ -162,7 +147,8 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_1"
             app:layout_constraintWidth_percent="0.8"
-            android:hint="Added Description"
+            android:hint="Add Description"
+            android:background="@null"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 
@@ -197,8 +183,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
-        <TextView
-            android:id="@+id/txt_tag"
+        <EditText
+            android:id="@+id/edit_txt_tag"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
             app:layout_constraintStart_toEndOf="@id/img_2"
@@ -206,7 +192,8 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_2"
             app:layout_constraintWidth_percent="0.8"
-            android:hint="Added Tag"
+            android:hint="Add Tag"
+            android:background="@null"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 
@@ -242,7 +229,7 @@
             />
 
         <TextView
-            android:id="@+id/txt_location"
+            android:id="@+id/txt_location_add"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
             app:layout_constraintStart_toEndOf="@id/img_3"
@@ -250,7 +237,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_3"
             app:layout_constraintWidth_percent="0.8"
-            android:hint="Entered Location"
+            android:hint="Enter Location"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 
@@ -286,7 +273,7 @@
             />
 
         <TextView
-            android:id="@+id/txt_receipt"
+            android:id="@+id/txt_receipt_add"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
             app:layout_constraintStart_toEndOf="@id/img_4"
@@ -294,7 +281,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_4"
             app:layout_constraintWidth_percent="0.8"
-            android:hint="Attached Receipt"
+            android:hint="Attach Receipt"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 
@@ -307,6 +294,34 @@
             android:layout_marginTop="@dimen/_3sdp"
             app:layout_constraintWidth_percent="0.93"
             android:background="@drawable/drawable_line"/>
+
+        <TextView
+            android:id="@+id/txt_preview_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PREVIEW"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="@id/constraint_receipt"
+            app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/_200sdp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txt_delete_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DELETE"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorRed"
+            app:layout_constraintTop_toTopOf="@id/constraint_receipt"
+            app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
+            app:layout_constraintStart_toEndOf="@id/txt_preview_add"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:visibility="gone"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -324,5 +339,20 @@
         app:flow_wrapMode="aligned"
         android:layout_margin="@dimen/_10sdp"
         app:flow_verticalGap="@dimen/_10sdp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_finish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.4"
+        android:textColor="@color/white"
+        android:text="Finish"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_12ssp"
+        android:background="@drawable/button_finish_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/flow_recent_trans"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
