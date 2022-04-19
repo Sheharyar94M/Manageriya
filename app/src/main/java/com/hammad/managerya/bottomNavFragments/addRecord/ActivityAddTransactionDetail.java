@@ -12,13 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,14 +53,17 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         initializeViews();
 
         //getting the intent which will differentiate from which fragment the activity is called
-        Intent fragmentIntent=getIntent();
+        Intent fragmentIntent = getIntent();
         String fragmentCalled = fragmentIntent.getStringExtra("fragment");
 
         //the intent function
         getIntentData(fragmentCalled);
 
+        //getting the current location address
+        getLocationIntentData();
+
         //textview location click listener
-        textViewLocation.setOnClickListener(view -> Toast.makeText(this, "Location", Toast.LENGTH_SHORT).show());
+        textViewLocation.setOnClickListener(view -> checkLocationPermission());
 
         //textview receipt click listener
         textViewReceipt.setOnClickListener(view -> selectImage());
@@ -68,7 +71,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         //textview delete click listener
         textViewDelete.setOnClickListener(view -> {
 
-            currentPicturePath="";
+            currentPicturePath = "";
 
             //setting the Visibility of Textviews preview and Delete to gone
             textViewPreview.setVisibility(View.GONE);
@@ -79,14 +82,15 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         //textview preview click listener
         textViewPreview.setOnClickListener(view -> {
 
-            Intent intent=new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(currentPicturePath),"image/*");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(currentPicturePath), "image/*");
             this.startActivity(intent);
         });
 
         //button finish click listener
         buttonFinish.setOnClickListener(view -> finish());
     }
+
 
     private void initializeViews() {
 
@@ -106,16 +110,24 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         buttonFinish = findViewById(R.id.button_finish);
     }
 
-    private void getIntentData(String fragmentCalled)
-    {
-        if(fragmentCalled.equals("expense"))
+    private void getIntentData(String fragmentCalled) {
+        if (fragmentCalled != null)
         {
-            textViewAmount.setTextColor(Color.RED);
-            textViewAmount.setText("7000-");
+            if (fragmentCalled.equals("expense")) {
+                textViewAmount.setTextColor(Color.RED);
+                textViewAmount.setText("7000-");
+            } else if (fragmentCalled.equals("income")) {
+                textViewAmount.setTextColor(Color.GREEN);
+            }
         }
-        else if(fragmentCalled.equals("income"))
-        {
-            textViewAmount.setTextColor(Color.GREEN);
+    }
+
+    private void getLocationIntentData() {
+
+        Intent intent = getIntent();
+
+        if (intent.getStringExtra("location") != null) {
+            textViewLocation.setText(intent.getStringExtra("location"));
         }
     }
 
@@ -151,11 +163,48 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 1:
+
+                if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+
+            case 2:
+
+                if (requestCode == 2 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openGallery();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Gallery permission denied", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+
+            case 3:
+
+                if (requestCode == 3 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(this, LocationActivity.class));
+                } else {
+                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
+                }
+
+        }
+
+    }
+
     private void openCamera() {
         Intent takeImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // Ensure that there's a camera activity to handle the intent
-        if (takeImageIntent.resolveActivity(this.getPackageManager()) != null) {
+        if (takeImageIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
@@ -213,31 +262,26 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST_CODE)
-        {
+        if (requestCode == CAMERA_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
 
                 //Textviews preview & delete visibility set to VISIBLE
                 textViewPreview.setVisibility(View.VISIBLE);
                 textViewDelete.setVisibility(View.VISIBLE);
             }
-        }
-        else if (requestCode == GALLERY_REQUEST_CODE)
-        {
-            if (requestCode == Activity.RESULT_OK) {
+        } else if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 Uri contentUri = data.getData();
 
-                String imageName=getFileExtension(contentUri);
+                String imageName = getFileExtension(contentUri);
 
                 currentPicturePath = getPathFromUri(contentUri);
 
-                if(currentPicturePath != null || !currentPicturePath.isEmpty())
-                {
+                if (currentPicturePath != null || !(currentPicturePath.isEmpty())) {
                     //Textviews preview & delete visibility set to VISIBLE
                     textViewPreview.setVisibility(View.VISIBLE);
                     textViewDelete.setVisibility(View.VISIBLE);
                 }
-
             }
         }
     }
@@ -258,7 +302,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
 
     private String getPathFromUri(Uri selectionImageUri) {
         String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = this.managedQuery(selectionImageUri, projection, null, null, null);
+        Cursor cursor = managedQuery(selectionImageUri, projection, null, null, null);
         int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(columnIndex);
@@ -268,5 +312,14 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 3);
+        } else {
+            startActivity(new Intent(this, LocationActivity.class));
+        }
     }
 }

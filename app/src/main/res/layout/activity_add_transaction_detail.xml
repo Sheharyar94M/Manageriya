@@ -190,6 +190,7 @@
             app:layout_constraintStart_toEndOf="@id/img_2"
             app:layout_constraintTop_toTopOf="@id/img_2"
             android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/img_2"
             app:layout_constraintWidth_percent="0.8"
             android:hint="Add Tag"
@@ -231,10 +232,12 @@
         <TextView
             android:id="@+id/txt_location_add"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/img_3"
             app:layout_constraintTop_toTopOf="@id/img_3"
             android:layout_marginStart="@dimen/_10sdp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_3"
             app:layout_constraintWidth_percent="0.8"
             android:hint="Enter Location"
@@ -306,7 +309,7 @@
             app:layout_constraintTop_toTopOf="@id/constraint_receipt"
             app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/_200sdp"
+            android:layout_marginStart="@dimen/_180sdp"
             android:visibility="gone"/>
 
         <TextView
@@ -320,7 +323,7 @@
             app:layout_constraintTop_toTopOf="@id/constraint_receipt"
             app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
             app:layout_constraintStart_toEndOf="@id/txt_preview_add"
-            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:visibility="gone"/>
 
 
