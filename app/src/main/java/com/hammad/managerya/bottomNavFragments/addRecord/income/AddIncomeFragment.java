@@ -1,6 +1,6 @@
 package com.hammad.managerya.bottomNavFragments.addRecord.income;
 
-import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY;
+import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -110,7 +110,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
     {
         editTextEnterAmount=view.findViewById(R.id.edittext_add_income);
         //setting the hint as currency and zero
-        editTextEnterAmount.setHint(CURRENCY +"0");
+        editTextEnterAmount.setHint(CURRENCY_ +"0");
 
         recyclerView=view.findViewById(R.id.recycler_add_income);
 
