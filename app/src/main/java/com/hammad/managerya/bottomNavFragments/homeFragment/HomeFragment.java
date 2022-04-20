@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private RecyclerView recyclerViewRecentBudget;
 
     //string for inner circle of pie graph
-    public static String currency="$ ";
+    public static String CURRENCY ="$ ";
     String spend="\nSpend";
 
     public  static final int[] COLORS_PALETTE_1 = {
@@ -107,8 +107,8 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         textViewCurrencyExpense =view.findViewById(R.id.text_view_currency_2);
 
         //setting the currency to relevant textviews
-        textViewCurrencyIncome.setText(currency);
-        textViewCurrencyExpense.setText(currency);
+        textViewCurrencyIncome.setText(CURRENCY);
+        textViewCurrencyExpense.setText(CURRENCY);
 
         pieChart = view.findViewById(R.id.pie_chart);
 
@@ -221,7 +221,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart.setHoleColor(Color.parseColor("#06a6ff"));
         pieChart.setUsePercentValues(true);
 
-        pieChart.setCenterText(currency.concat("70").concat(spend));
+        pieChart.setCenterText(CURRENCY.concat("70").concat(spend));
         pieChart.setCenterTextColor(Color.WHITE);
         pieChart.setCenterTextSize(13);
         pieChart.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));

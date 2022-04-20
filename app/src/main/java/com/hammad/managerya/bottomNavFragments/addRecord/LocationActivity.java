@@ -207,7 +207,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GPS_REQUEST_CODE) {
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            //getting the current location
+            getCurrentLocation();
         }
     }
 }

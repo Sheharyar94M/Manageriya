@@ -1,5 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.addRecord.income;
 
+import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
 
-public class AddIncomeFragment extends Fragment {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.IncomeAdapterInterface {
 
     private EditText editTextEnterAmount;
     private RecyclerView recyclerView;
@@ -27,6 +32,15 @@ public class AddIncomeFragment extends Fragment {
     //condition for handling click listener of expansion layout
     private int clickValue=0;
 
+    //this is used to check if any recyclerview item is selected or not
+    private int recyclerItemPosition=-1;
+
+    //this string stores the category name of recyclerview item
+    private String categoryName="";
+
+    //string to save the current date
+    private String currentDate;
+
     private int[] eightImagesList={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
                              R.drawable.freelance,R.drawable.gifts_received,R.drawable.investment,R.drawable.loan_recived };
 
@@ -35,14 +49,6 @@ public class AddIncomeFragment extends Fragment {
                                 R.drawable.pension,R.drawable.pocket_money,R.drawable.salary,R.drawable.savings,
                                 R.drawable.tuition };
 
-    /*private int[] eightImagesList={ R.drawable.allowance_100,R.drawable.bonus_100,R.drawable.business_profit_100,R.drawable.commission_100,
-            R.drawable.freelance_100,R.drawable.gifts_received_100,R.drawable.investment_100,R.drawable.loan_recived_100 };
-
-    private int[] thirteenImagesList={ R.drawable.allowance_100,R.drawable.bonus_100,R.drawable.business_profit_100,R.drawable.commission_100,
-            R.drawable.freelance_100,R.drawable.gifts_received_100,R.drawable.investment_100,R.drawable.loan_recived_100,
-            R.drawable.pension_100,R.drawable.pocket_money_100,R.drawable.salary_100,R.drawable.savings_100,
-            R.drawable.tuition_100 };*/
-
 
     private String[] eightCatNameList={"Allowance","Bonus","Business\nProfit","Commission",
             "Freelance","Gifts\nReceived","Investment","Loan\nReceived"};
@@ -50,6 +56,7 @@ public class AddIncomeFragment extends Fragment {
     private String[] thirteenCatNameList={"Allowance","Bonus","Business\nProfit","Commission",
             "Freelance","Gifts\nReceived","Investment","Loan\nReceived",
     "Pension","Pocket\nMoney","Salary","Savings","Tuition"};
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,22 +75,30 @@ public class AddIncomeFragment extends Fragment {
             if(clickValue == 0)
             {
                 showMore();
-            }
 
+                //setting the selected recyclerview item position to null
+                recyclerItemPosition = -1;
+
+                //setting the selected category name to empty
+                categoryName="";
+            }
             else if(clickValue == 1)
             {
                 showLess();
+
+                //setting the selected recyclerview item position to null
+                recyclerItemPosition = -1;
+
+                //setting the selected category name to empty
+                categoryName="";
             }
         });
 
+        //get the current date
+        getCurrentDate();
+
         //button details click listener
-        buttonDetails.setOnClickListener(v -> {
-
-            Intent intent=new Intent(requireContext(), ActivityAddTransactionDetail.class);
-            intent.putExtra("fragment","income");
-            startActivity(intent);
-
-        });
+        buttonDetails.setOnClickListener(v ->  buttonDetailsClickListener());
 
         //button finish click listener
         buttonFinish.setOnClickListener(v -> Toast.makeText(requireContext(), "Finish", Toast.LENGTH_SHORT).show());
@@ -94,6 +109,8 @@ public class AddIncomeFragment extends Fragment {
     private void initializeViews(View view)
     {
         editTextEnterAmount=view.findViewById(R.id.edittext_add_income);
+        //setting the hint as currency and zero
+        editTextEnterAmount.setHint(CURRENCY +"0");
 
         recyclerView=view.findViewById(R.id.recycler_add_income);
 
@@ -112,8 +129,38 @@ public class AddIncomeFragment extends Fragment {
         GridLayoutManager layoutManager =new GridLayoutManager(requireContext(),4);
         recyclerView.setLayoutManager(layoutManager);
 
-        AddIncomeAdapter incomeAdapter=new AddIncomeAdapter(requireContext(),numArray,catName);
+        AddIncomeAdapter incomeAdapter=new AddIncomeAdapter(requireContext(),numArray,catName,this::onIncomeItemClicked);
         recyclerView.setAdapter(incomeAdapter);
+    }
+
+    private void buttonDetailsClickListener()
+    {
+        boolean boolEditText=true,boolRecyclerItem=true;
+
+        if (editTextEnterAmount.getText().toString().isEmpty())
+        {
+            Toast.makeText(requireContext(), "Enter amount", Toast.LENGTH_SHORT).show();
+            boolEditText=false;
+        }
+        if(recyclerItemPosition < 0)
+        {
+            Toast.makeText(requireContext(), "select any Income category", Toast.LENGTH_SHORT).show();
+            boolRecyclerItem=false;
+        }
+
+        if(boolEditText && boolRecyclerItem)
+        {
+            boolEditText=false;
+            boolRecyclerItem=false;
+
+            Intent intent=new Intent(requireContext(), ActivityAddTransactionDetail.class);
+            intent.putExtra("fragment","income");
+            intent.putExtra("incomeAmount",editTextEnterAmount.getText().toString());
+            intent.putExtra("incomeCat",categoryName);
+            intent.putExtra("incomeDate",currentDate);
+            startActivity(intent);
+        }
+
     }
 
     private void showMore()
@@ -134,4 +181,17 @@ public class AddIncomeFragment extends Fragment {
         clickValue=0;
     }
 
+    @Override
+    public void onIncomeItemClicked(int position, String catName) {
+        recyclerItemPosition=position;
+        categoryName=catName;
+    }
+
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+         currentDate= dateFormat.format(calendar.getTime());
+
+    }
 }

@@ -20,11 +20,13 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
     int[] imagesList;
     String[] catNameList;
     int selectedPosition=-1;
+    ExpenseInterfaceListener mExpenseInterfaceListener;
 
-    public AddExpenseAdapter(Context context, int[] imagesList, String[] catNameList) {
+    public AddExpenseAdapter(Context context, int[] imagesList, String[] catNameList,ExpenseInterfaceListener interfaceListener) {
         this.context = context;
         this.imagesList = imagesList;
         this.catNameList = catNameList;
+        this.mExpenseInterfaceListener = interfaceListener;
     }
 
     @NonNull
@@ -32,7 +34,7 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
     public AddExpenseAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(context);
         View view=inflater.inflate(R.layout.layout_recyclerview_item,parent,false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mExpenseInterfaceListener);
     }
 
     @Override
@@ -45,6 +47,9 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
         //click listener
         holder.imageCatImage.setOnClickListener(view -> {
 
+            //passing the position to interface
+            mExpenseInterfaceListener.onExpenseItemClicked(holder.getAdapterPosition(),holder.textCatName.getText().toString());
+
             if (selectedPosition == holder.getAdapterPosition()) {
                 selectedPosition = -1;
                 notifyDataSetChanged();
@@ -54,14 +59,10 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
             selectedPosition = holder.getAdapterPosition();
             notifyDataSetChanged();
 
-            //showing toast
-            Toast.makeText(context, holder.textCatName.getText(), Toast.LENGTH_SHORT).show();
 
         });
 
-
         //highlight the selected item
-
         if(selectedPosition == holder.getAdapterPosition())
         {
             holder.imageCatImage.setBackgroundResource(R.drawable.drawable_recycler_highlight);
@@ -81,12 +82,18 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
 
         private ImageView imageCatImage;
         private TextView textCatName;
+        private ExpenseInterfaceListener expenseInterfaceListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,ExpenseInterfaceListener expenseInterfaceListener) {
             super(itemView);
 
             imageCatImage=itemView.findViewById(R.id.img_recycler);
             textCatName=itemView.findViewById(R.id.text_recycler);
+            this.expenseInterfaceListener = expenseInterfaceListener;
         }
+    }
+
+    public interface ExpenseInterfaceListener{
+        void onExpenseItemClicked(int position, String catName);
     }
 }

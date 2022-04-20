@@ -21,11 +21,13 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
     String[] catNameList;
 
     int selectedPosition=-1;
+    private IncomeAdapterInterface mIncomeAdapterInterface;
 
-    public AddIncomeAdapter(Context context, int[] imagesList, String[] catNameList) {
+    public AddIncomeAdapter(Context context, int[] imagesList, String[] catNameList,IncomeAdapterInterface adapterInterface) {
         this.context = context;
         this.imagesList = imagesList;
         this.catNameList = catNameList;
+        this.mIncomeAdapterInterface = adapterInterface;
     }
 
     @NonNull
@@ -33,7 +35,7 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
     public AddIncomeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.layout_recyclerview_item,parent,false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mIncomeAdapterInterface);
     }
 
     @Override
@@ -46,6 +48,9 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
         //click listener
         holder.imageCatImage.setOnClickListener(view -> {
 
+            //passing the position to interface
+            mIncomeAdapterInterface.onIncomeItemClicked(holder.getAdapterPosition(),holder.textCatName.getText().toString());
+
             if (selectedPosition == holder.getAdapterPosition()) {
                 selectedPosition = -1;
                 notifyDataSetChanged();
@@ -55,14 +60,9 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
             selectedPosition = holder.getAdapterPosition();
             notifyDataSetChanged();
 
-            //showing toast
-            Toast.makeText(context, holder.textCatName.getText(), Toast.LENGTH_SHORT).show();
-
         });
 
-
         //highlight the selected item
-
         if(selectedPosition == holder.getAdapterPosition())
         {
             holder.imageCatImage.setBackgroundResource(R.drawable.drawable_recycler_highlight);
@@ -82,12 +82,18 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
 
         private ImageView imageCatImage;
         private TextView textCatName;
+        private IncomeAdapterInterface incomeAdapterInterface;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,IncomeAdapterInterface incomeAdapterInterface) {
             super(itemView);
 
             imageCatImage=itemView.findViewById(R.id.img_recycler);
             textCatName=itemView.findViewById(R.id.text_recycler);
+            this.incomeAdapterInterface=incomeAdapterInterface;
         }
+    }
+
+    public interface IncomeAdapterInterface{
+        void onIncomeItemClicked(int position, String catName);
     }
 }

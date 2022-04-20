@@ -57,7 +57,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         String fragmentCalled = fragmentIntent.getStringExtra("fragment");
 
         //the intent function
-        getIntentData(fragmentCalled);
+        getIntentData(fragmentIntent,fragmentCalled);
 
         //getting the current location address
         getLocationIntentData();
@@ -110,13 +110,25 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         buttonFinish = findViewById(R.id.button_finish);
     }
 
-    private void getIntentData(String fragmentCalled) {
+    private void getIntentData(Intent intent,String fragmentCalled) {
         if (fragmentCalled != null)
         {
-            if (fragmentCalled.equals("expense")) {
+            if (fragmentCalled.equals("expense"))
+            {
+                //getting the amount and date from Add Expense Fragment
+                textViewAmount.setText(intent.getStringExtra("expenseAmount"));
+                textViewAmount.append(" -");
+                textViewCategoryName.setText(intent.getStringExtra("expenseCat"));
+                textViewDate.setText(intent.getStringExtra("expenseDate"));
                 textViewAmount.setTextColor(Color.RED);
-                textViewAmount.setText("7000-");
-            } else if (fragmentCalled.equals("income")) {
+            }
+            else if (fragmentCalled.equals("income"))
+            {
+                //getting the amount and date from Add Income Fragment
+                textViewAmount.setText(intent.getStringExtra("incomeAmount"));
+                textViewAmount.append( " +");
+                textViewCategoryName.setText(intent.getStringExtra("incomeCat"));
+                textViewDate.setText(intent.getStringExtra("incomeDate"));
                 textViewAmount.setTextColor(Color.GREEN);
             }
         }
