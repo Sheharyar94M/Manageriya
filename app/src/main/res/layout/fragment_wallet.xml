@@ -218,4 +218,39 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/txt_1_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transactions for "
+        android:textStyle="bold"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_3_frag_wallet"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_month_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="APR 2022"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_3_frag_wallet"
+        app:layout_constraintStart_toEndOf="@id/txt_1_wallet"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_recent_trans_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_45sdp"
+        app:layout_constraintTop_toBottomOf="@id/txt_1_wallet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,16 +4,201 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#eff0f0"
     tools:context=".bottomNavFragments.savingFragment.SavingFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_1_saving"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/drawable_recent_trans_activity"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saving Goals"
+            android:textSize="@dimen/_20ssp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/century_gothic"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_55sdp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_2_saving"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Saving Fragment"
-        android:textSize="@dimen/_20ssp"
+        android:background="@drawable/edit_text_white_background"
+        app:layout_constraintWidth_percent="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.26">
+
+        <TextView
+            android:id="@+id/txt_total_saving_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Savings"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txt_total_saved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"/>
+
+        <TextView
+            android:id="@+id/txt_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"/>
+
+        <TextView
+            android:id="@+id/txt_total_saving_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="140"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/txt_slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_saving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_total_saving_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:flow_horizontalGap="@dimen/_3sdp"
+            app:constraint_referenced_ids="txt_currency,txt_total_saved,txt_slash,txt_total_saving_goal"/>
+        
+        <TextView
+            android:id="@+id/txt_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remaining Savings: "
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="#959494"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/flow_saving"/>
+
+        <TextView
+            android:id="@+id/txt_currency_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            app:layout_constraintStart_toEndOf="@id/txt_2"
+            app:layout_constraintTop_toBottomOf="@id/flow_saving"/>
+
+        <TextView
+            android:id="@+id/txt_remaining_saving_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_3sdp"
+            app:layout_constraintStart_toEndOf="@id/txt_currency_2"
+            app:layout_constraintTop_toBottomOf="@id/flow_saving"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_savings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:progress="30"
+            android:max="140"
+            app:trackThickness="@dimen/_10sdp"
+            app:trackCornerRadius="@dimen/_20sdp"
+            app:trackColor="@color/colorGrey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_currency_2"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txt_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Saving Goals"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/constraint_2_saving"
+        app:layout_constraintStart_toStartOf="@id/constraint_2_saving"/>
+
+    <TextView
+        android:id="@+id/txt_create_saving"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CREATE"
+        android:textAllCaps="true"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/button_create_saving"
+        android:padding="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="@id/txt_3"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_savings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
+        app:layout_constraintTop_toBottomOf="@id/txt_3"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

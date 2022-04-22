@@ -28,12 +28,12 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
     //we set the default position to 10, so that the current month is highlighted when appliation is loaded
     int selectedPosition = 10;
 
-    //for getting the current date so that the current month can be highlighted
-    String currentDate;
+    private OnMonthClickListener mOnMonthClickListener;
 
-    public MonthAdapter(Context context, List<String> stringList) {
+    public MonthAdapter(Context context, List<String> stringList,OnMonthClickListener onMonthClickListener) {
         this.context = context;
         this.monthsList = stringList;
+        this.mOnMonthClickListener = onMonthClickListener;
     }
 
     @NonNull
@@ -41,7 +41,7 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
     public MonthAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.layout_month_reycycler_view, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mOnMonthClickListener);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
             selectedPosition = position;
             notifyDataSetChanged();
 
-            //showing toast
-            Toast.makeText(context, holder.textView.getText(), Toast.LENGTH_SHORT).show();
+            //interface calling
+            mOnMonthClickListener.onMonthSelected(holder.textView.getText().toString());
 
         });
 
@@ -94,13 +94,19 @@ public class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.MyViewHolder
 
         ConstraintLayout constraintLayout;
         TextView textView;
+        OnMonthClickListener onMonthClickListener;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,OnMonthClickListener monthClickListener) {
             super(itemView);
 
             constraintLayout = itemView.findViewById(R.id.constraint_month_recycler);
             textView = itemView.findViewById(R.id.text_view_month_recycler);
+            this.onMonthClickListener=monthClickListener;
         }
+    }
+
+    public interface OnMonthClickListener{
+        void onMonthSelected(String monthName);
     }
 
 }

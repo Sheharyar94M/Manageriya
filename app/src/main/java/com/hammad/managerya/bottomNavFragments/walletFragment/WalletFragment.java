@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 
 import java.text.SimpleDateFormat;
@@ -21,14 +23,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class WalletFragment extends Fragment {
+public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClickListener,HomeFragTransAdapter.RecentTransInterface {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewMonth;
     private ImageView imageViewInsights;
     private TextView textViewBudget,textViewBudgetCurrency,textViewSpend,textViewSpendCurrency,textViewPercentage;
 
     //months string list
     private List<String> monthsList = new ArrayList<>();
+
+    private RecyclerView recyclerViewRecentTransaction;
+    private TextView textViewCurrentMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,11 +49,14 @@ public class WalletFragment extends Fragment {
         //setting the month recyclerview
         setMonthRecyclerView();
 
+        //recent transaction recyclerview
+        setRecentTransactionRecyclerview();
+
         return view;
     }
 
     private void initialViews(View view) {
-        recyclerView=view.findViewById(R.id.recycler_view_months_wallet);
+        recyclerViewMonth =view.findViewById(R.id.recycler_view_months_wallet);
         imageViewInsights=view.findViewById(R.id.image_view_insights_wallet);
 
         //textviews
@@ -60,9 +68,14 @@ public class WalletFragment extends Fragment {
 
         textViewPercentage=view.findViewById(R.id.text_view_percentage_wallet);
 
+        textViewCurrentMonth=view.findViewById(R.id.txt_month_wallet);
+
         //setting the currency of budget & spend
         textViewBudgetCurrency.setText(CURRENCY_);
         textViewSpendCurrency.setText(CURRENCY_);
+
+        //recent transaction recyclerview
+        recyclerViewRecentTransaction=view.findViewById(R.id.recycler_recent_trans_wallet);
     }
 
     private void getMonthsList() {
@@ -97,13 +110,36 @@ public class WalletFragment extends Fragment {
     private void setMonthRecyclerView() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewMonth.setLayoutManager(layoutManager);
 
-        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList);
-        recyclerView.setAdapter(monthAdapter);
+        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList,this);
+        recyclerViewMonth.setAdapter(monthAdapter);
 
         //scroll recyclerview to last month (current month = last month -1)
         int newPosition = monthsList.size() - 1;
-        recyclerView.scrollToPosition(newPosition);
+        recyclerViewMonth.scrollToPosition(newPosition);
+    }
+
+    //month adapter click listener
+    @Override
+    public void onMonthSelected(String monthName) {
+
+        //setting the current month to textview
+        textViewCurrentMonth.setText(monthName);
+    }
+
+    private void setRecentTransactionRecyclerview(){
+
+        LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
+        recyclerViewRecentTransaction.setLayoutManager(layoutManager);
+
+        HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(requireContext(),this,7);
+        recyclerViewRecentTransaction.setAdapter(recentTransAdapter);
+    }
+
+    //recent transaction adapter click listener
+    @Override
+    public void onRecentTransClick(int position) {
+        Toast.makeText(requireContext(), "Position: "+position, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,6 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,13 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
     Context context;
     private RecentTransInterface mRecentTransInterface;
+    private int count;
 
-    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface) {
+    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface,int lengthCount) {
         this.context = context;
         this.mRecentTransInterface=recentTransInterface;
+        this.count=lengthCount;
+        Log.i("COUNT_1", "count: "+count);
     }
 
     @NonNull
@@ -39,7 +43,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
     @Override
     public int getItemCount() {
-        return 3;
+        return count;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

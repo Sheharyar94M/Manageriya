@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_10sdp"
+    android:background="@drawable/white_border_recycler"
+    android:layout_marginBottom="@dimen/_15sdp">
+
+    <ImageView
+        android:id="@+id/img_saving"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:src="@drawable/bonus"
+        android:scaleType="centerInside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_cat_saving"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bonus"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_13ssp"
+        android:layout_marginStart="@dimen/_50sdp"
+        app:layout_constraintStart_toEndOf="@id/img_saving"
+        app:layout_constraintTop_toTopOf="@id/img_saving"/>
+
+    <TextView
+        android:id="@+id/text_currency_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="@dimen/_10sdp"/>
+
+    <TextView
+        android:id="@+id/text_amount_saved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="190"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="@dimen/_10sdp" />
+
+    <TextView
+        android:id="@+id/text_goal_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="500"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/_10sdp" />
+
+    <TextView
+        android:id="@+id/text_slash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/_10sdp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_recycler_saving"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/txt_cat_saving"
+        app:layout_constraintStart_toStartOf="@id/txt_cat_saving"
+        app:constraint_referenced_ids="text_currency_1,text_amount_saved,text_slash,text_goal_amount"
+        app:flow_horizontalGap="@dimen/_3sdp"/>
+
+    <TextView
+        android:id="@+id/text_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remaining Savings: "
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="#959494"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:layout_constraintTop_toBottomOf="@id/flow_recycler_saving"
+        app:layout_constraintStart_toEndOf="@id/img_saving"/>
+
+    <TextView
+        android:id="@+id/text_currency_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="@id/text_3"
+        android:layout_marginStart="@dimen/_3sdp"
+        app:layout_constraintStart_toEndOf="@id/text_3"/>
+
+
+    <TextView
+        android:id="@+id/text_remaining_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="310"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="@id/text_3"
+        app:layout_constraintStart_toEndOf="@id/text_currency_2"/>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_saving_recycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.8"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:progress="190"
+        android:max="500"
+        app:trackThickness="@dimen/_10sdp"
+        app:trackCornerRadius="@dimen/_20sdp"
+        app:trackColor="@color/colorGrey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_currency_2"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

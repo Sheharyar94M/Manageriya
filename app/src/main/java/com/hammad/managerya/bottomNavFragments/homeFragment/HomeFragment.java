@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeFragTransAdapter.RecentTransInterface {
+public class HomeFragment extends Fragment implements HomeFragTransAdapter.RecentTransInterface, MonthAdapter.OnMonthClickListener {
 
     private TextView textViewCurrentDate;
     private TextView textViewTotalIncome, textViewSpend, textViewPercentage;
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity(),this);
+        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity(),this,3);
         recyclerViewRecentTransaction.setAdapter(adapter);
     }
 
@@ -138,7 +139,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewMonth.setLayoutManager(layoutManager);
 
-        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList);
+        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList,this);
         recyclerViewMonth.setAdapter(monthAdapter);
 
         //scroll recyclerview to last month (current month = last month -1)
@@ -284,5 +285,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         intent.putExtras(bundle);
 
         startActivity(intent,bundle);
+    }
+
+    //months adapter click listener
+    @Override
+    public void onMonthSelected(String monthName) {
+        Toast.makeText(requireContext(), monthName, Toast.LENGTH_SHORT).show();
     }
 }
