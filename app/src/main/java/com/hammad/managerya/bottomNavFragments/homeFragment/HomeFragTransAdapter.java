@@ -24,7 +24,6 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         this.context = context;
         this.mRecentTransInterface=recentTransInterface;
         this.count=lengthCount;
-        Log.i("COUNT_1", "count: "+count);
     }
 
     @NonNull

@@ -2,6 +2,7 @@ package com.hammad.managerya.bottomNavFragments.walletFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     private RecyclerView recyclerViewRecentTransaction;
     private TextView textViewCurrentMonth;
 
+    private ImageView imageViewHistory,imageViewBudget;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -51,6 +54,12 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
         //recent transaction recyclerview
         setRecentTransactionRecyclerview();
+
+        //history click listener
+        imageViewHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
+
+        //budget click listener
+        imageViewBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(),BudgetActivity.class)));
 
         return view;
     }
@@ -76,6 +85,10 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
         //recent transaction recyclerview
         recyclerViewRecentTransaction=view.findViewById(R.id.recycler_recent_trans_wallet);
+
+        //imageview History & Budget
+        imageViewHistory=view.findViewById(R.id.img_history_wallet);
+        imageViewBudget=view.findViewById(R.id.img_budget_wallet);
     }
 
     private void getMonthsList() {

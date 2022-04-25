@@ -177,11 +177,11 @@
 
     <TextView
         android:id="@+id/txt_create_saving"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_50sdp"
         android:layout_height="wrap_content"
         android:text="CREATE"
         android:textAllCaps="true"
-        android:textSize="@dimen/_13ssp"
+        android:textSize="@dimen/_12ssp"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@drawable/button_create_saving"

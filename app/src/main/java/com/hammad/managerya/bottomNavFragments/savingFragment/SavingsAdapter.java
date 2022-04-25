@@ -1,4 +1,4 @@
-package com.hammad.managerya;
+package com.hammad.managerya.bottomNavFragments.savingFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.hammad.managerya.R;
 
 public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHolder> {
 
