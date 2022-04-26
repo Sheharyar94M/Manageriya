@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
+import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -148,7 +150,12 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     @Override
     public void onRecentTransClick(int position) {
 
-        Toast.makeText(this, "Position: "+position, Toast.LENGTH_SHORT).show();
+        Intent intent=new Intent(this, ViewTransDetailsActivity.class);
+        //creating the bundle object
+        Bundle bundle=new Bundle();
+        bundle.putInt("position",position);
+        intent.putExtras(bundle);
+        startActivity(intent,bundle);
     }
 
     @Override

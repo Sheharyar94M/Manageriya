@@ -2,6 +2,7 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.hammad.managerya.ActivitySavingTransaction;
 import com.hammad.managerya.R;
 
 public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingClickListener {
@@ -34,7 +36,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
         initializeView(view);
 
         //create saving transaction click listener
-        createSavingTransaction.setOnClickListener(v -> Toast.makeText(requireContext(), "Clicked", Toast.LENGTH_SHORT).show());
+        createSavingTransaction.setOnClickListener(v -> startActivity(new Intent(requireContext(),ActivitySavingGoal.class)));
 
         //setting the recyclerview
         setupRecyclerview();
@@ -75,6 +77,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
     //Savings Adapter click listener
     @Override
     public void onSavingItemClicked(int position) {
+        startActivity(new Intent(requireContext(), ActivitySavingTransaction.class));
         Toast.makeText(requireContext(), "Position: "+position, Toast.LENGTH_SHORT).show();
     }
 }

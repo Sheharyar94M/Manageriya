@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
+            android:name=".ActivitySavingTransaction"
+            android:exported="false" />
+        <activity
+            android:name=".bottomNavFragments.savingFragment.ActivitySavingGoal"
+            android:exported="false" />
+        <activity
             android:name=".bottomNavFragments.walletFragment.BudgetActivity"
             android:exported="false" />
         <activity
