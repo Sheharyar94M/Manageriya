@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ActivitySavingTransaction"
+    tools:context=".bottomNavFragments.savingFragment.ActivitySavingTransaction"
     android:background="#eff0f0">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/gradient_toolbar"
             app:title="Add Saving Transaction"
-            app:titleMarginStart="@dimen/_100sdp"
+            app:titleMarginStart="@dimen/_70sdp"
             app:titleTextColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -94,7 +94,8 @@
         android:background="@drawable/button_finish_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

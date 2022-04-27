@@ -41,20 +41,20 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     //string to save the current date
     private String currentDate;
 
-    private int eightImagesList[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
+    public static final int EIGHT_IMAGE_LIST_EXPENSE[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
             R.drawable.electronics, R.drawable.education, R.drawable.family, R.drawable.food};
 
-    private int twentyFourImagesList[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
+    public static final int TWENTY_FOUR_IMAGE_LIST_EXPENSE[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
             R.drawable.electronics, R.drawable.education, R.drawable.family, R.drawable.food,
             R.drawable.fuel, R.drawable.grocery, R.drawable.health, R.drawable.home_e,
             R.drawable.installment, R.drawable.insurance, R.drawable.loan_paid, R.drawable.medical,
             R.drawable.mobile, R.drawable.office, R.drawable.other_expenses, R.drawable.rent_paid,
             R.drawable.shopping, R.drawable.transport, R.drawable.travel, R.drawable.wedding};
 
-    private String[] eightCatNameList = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
+    public static final String[] EIGHT_CAT_LIST_EXPENSE = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
             "Electronics", "Education", "Family", "Food"};
 
-    private String[] twentyFourCatNameList = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
+    public static final String[] TWENTY_FOUR_CAT_LIST_EXPENSE = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
             "Electronics", "Education", "Family", "Food"
             , "Fuel", "Grocery", "Health", "Home"
             , "Installment", "Insurance", "Loan\nPaid", "Medical"
@@ -71,7 +71,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
         initializeView(view);
 
         //setting the recycler view
-        setRecyclerView(eightImagesList, eightCatNameList);
+        setRecyclerView(EIGHT_IMAGE_LIST_EXPENSE, EIGHT_CAT_LIST_EXPENSE);
 
         //image view more click listener
         imageViewExpand.setOnClickListener(v -> {
@@ -136,7 +136,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     }
 
     private void showMore() {
-        setRecyclerView(twentyFourImagesList, twentyFourCatNameList);
+        setRecyclerView(TWENTY_FOUR_IMAGE_LIST_EXPENSE, TWENTY_FOUR_CAT_LIST_EXPENSE);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_up);
 
@@ -144,7 +144,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     }
 
     private void showLess() {
-        setRecyclerView(eightImagesList, eightCatNameList);
+        setRecyclerView(EIGHT_IMAGE_LIST_EXPENSE, EIGHT_CAT_LIST_EXPENSE);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_down);
 

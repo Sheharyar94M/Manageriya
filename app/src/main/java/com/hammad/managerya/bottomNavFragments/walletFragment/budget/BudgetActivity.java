@@ -1,7 +1,8 @@
-package com.hammad.managerya.bottomNavFragments.walletFragment;
+package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         setBudgetRecyclerview();
 
         //create budget click listener
-        textViewCreateBudget.setOnClickListener(view -> Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show());
+        textViewCreateBudget.setOnClickListener(view -> startActivity(new Intent(this, ActivityCreateBudget.class)));
     }
 
     private void setToolbar()
@@ -170,5 +171,6 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     public void onBudgetItemClicked(int position) {
 
         Toast.makeText(this, "Position: "+position, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ActivityBudgetHistory.class));
     }
 }

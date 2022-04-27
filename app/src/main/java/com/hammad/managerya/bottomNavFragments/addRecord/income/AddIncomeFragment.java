@@ -41,19 +41,19 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
     //string to save the current date
     private String currentDate;
 
-    private int[] eightImagesList={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
+    private int[] EIGHT_IMAGE_LIST_INCOME ={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
                              R.drawable.freelance,R.drawable.gifts_received,R.drawable.investment,R.drawable.loan_recived };
 
-    private int[] thirteenImagesList={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
+    private int[] THIRTEEN_IMAGE_LIST_INCOME ={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
                                 R.drawable.freelance,R.drawable.gifts_received,R.drawable.investment,R.drawable.loan_recived,
                                 R.drawable.pension,R.drawable.pocket_money,R.drawable.salary,R.drawable.savings,
                                 R.drawable.tuition };
 
 
-    private String[] eightCatNameList={"Allowance","Bonus","Business\nProfit","Commission",
+    private String[] EIGHT_CAT_LIST_INCOME ={"Allowance","Bonus","Business\nProfit","Commission",
             "Freelance","Gifts\nReceived","Investment","Loan\nReceived"};
 
-    private String[] thirteenCatNameList={"Allowance","Bonus","Business\nProfit","Commission",
+    private String[] THIRTEEN_CAT_LIST_INCOME ={"Allowance","Bonus","Business\nProfit","Commission",
             "Freelance","Gifts\nReceived","Investment","Loan\nReceived",
     "Pension","Pocket\nMoney","Salary","Savings","Tuition"};
 
@@ -67,7 +67,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         initializeViews(view);
 
         //setting the recycler view
-        setRecyclerView(eightImagesList,eightCatNameList);
+        setRecyclerView(EIGHT_IMAGE_LIST_INCOME, EIGHT_CAT_LIST_INCOME);
 
         //image view more click listener
         imageViewExpand.setOnClickListener(v -> {
@@ -165,7 +165,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
 
     private void showMore()
     {
-        setRecyclerView(thirteenImagesList,thirteenCatNameList);
+        setRecyclerView(THIRTEEN_IMAGE_LIST_INCOME, THIRTEEN_CAT_LIST_INCOME);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_up);
 
@@ -174,7 +174,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
 
     private void showLess()
     {
-        setRecyclerView(eightImagesList,eightCatNameList );
+        setRecyclerView(EIGHT_IMAGE_LIST_INCOME, EIGHT_CAT_LIST_INCOME);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_down);
 

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
+import com.hammad.managerya.bottomNavFragments.walletFragment.history.HistoryActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         imageViewHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
 
         //budget click listener
-        imageViewBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(),BudgetActivity.class)));
+        imageViewBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(), BudgetActivity.class)));
 
         return view;
     }

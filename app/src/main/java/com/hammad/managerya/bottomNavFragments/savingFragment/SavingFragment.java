@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.hammad.managerya.ActivitySavingTransaction;
 import com.hammad.managerya.R;
 
 public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingClickListener {

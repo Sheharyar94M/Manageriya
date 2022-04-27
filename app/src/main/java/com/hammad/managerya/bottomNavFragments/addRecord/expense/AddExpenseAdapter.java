@@ -1,6 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.addRecord.expense;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,8 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
         //click listener
         holder.imageCatImage.setOnClickListener(view -> {
 
-            //passing the position to interface
-            mExpenseInterfaceListener.onExpenseItemClicked(holder.getAdapterPosition(),holder.textCatName.getText().toString());
+            /*//passing the position to interface
+            mExpenseInterfaceListener.onExpenseItemClicked(selectedPosition,holder.textCatName.getText().toString());*/
 
             if (selectedPosition == holder.getAdapterPosition()) {
                 selectedPosition = -1;
@@ -58,6 +59,9 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
 
             selectedPosition = holder.getAdapterPosition();
             notifyDataSetChanged();
+
+            //passing the position to interface
+            mExpenseInterfaceListener.onExpenseItemClicked(selectedPosition,holder.textCatName.getText().toString());
 
 
         });

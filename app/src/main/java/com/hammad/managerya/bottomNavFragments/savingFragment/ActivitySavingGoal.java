@@ -1,5 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.savingFragment;
 
+import static com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseFragment.TWENTY_FOUR_CAT_LIST_EXPENSE;
+import static com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseFragment.TWENTY_FOUR_IMAGE_LIST_EXPENSE;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.DialogInterface;
@@ -195,7 +197,7 @@ public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseA
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
-        AddExpenseAdapter adapter=new AddExpenseAdapter(this,twentyFourImagesList,twentyFourCatNameList,this);
+        AddExpenseAdapter adapter=new AddExpenseAdapter(this,TWENTY_FOUR_IMAGE_LIST_EXPENSE,TWENTY_FOUR_CAT_LIST_EXPENSE,this);
         recyclerView.setAdapter(adapter);
     }
 

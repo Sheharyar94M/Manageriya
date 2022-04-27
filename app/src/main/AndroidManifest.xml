@@ -16,16 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
-            android:name=".ActivitySavingTransaction"
+            android:name=".bottomNavFragments.walletFragment.budget.ActivityBudgetHistory"
+            android:exported="false" />
+        <activity
+            android:name=".bottomNavFragments.walletFragment.budget.ActivityCreateBudget"
+            android:exported="false" />
+        <activity
+            android:name=".bottomNavFragments.savingFragment.ActivitySavingTransaction"
             android:exported="false" />
         <activity
             android:name=".bottomNavFragments.savingFragment.ActivitySavingGoal"
             android:exported="false" />
         <activity
-            android:name=".bottomNavFragments.walletFragment.BudgetActivity"
+            android:name=".bottomNavFragments.walletFragment.budget.BudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".bottomNavFragments.walletFragment.HistoryActivity"
+            android:name=".bottomNavFragments.walletFragment.history.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".bottomNavFragments.addRecord.LocationActivity"

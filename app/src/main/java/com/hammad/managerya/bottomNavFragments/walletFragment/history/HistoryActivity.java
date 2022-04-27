@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.walletFragment;
+package com.hammad.managerya.bottomNavFragments.walletFragment.history;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
