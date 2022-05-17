@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private RecyclerView recyclerViewRecentBudget;
 
     //string for inner circle of pie graph
-    public static String CURRENCY_ ="$ ";
+    public static String CURRENCY_ ="PKR ";
     String spend="\nSpend";
 
     public  static final int[] COLORS_PALETTE_1 = {

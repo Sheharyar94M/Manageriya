@@ -50,7 +50,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
         //setting the currency to the textviews
         textViewCurrency1.setText(CURRENCY_);
-        textViewCurrency1.setText(CURRENCY_);
+        textViewCurrency2.setText(CURRENCY_);
 
         textViewTotalSaved=view.findViewById(R.id.txt_total_saved);
         textViewTotalSavingGoal=view.findViewById(R.id.txt_total_saving_goal);

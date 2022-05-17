@@ -6,15 +6,156 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".bottomNavFragments.loanFragment.LoanFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_1_loan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.15"
+        android:background="@drawable/button_finish_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loan Fragment"
-        android:textSize="@dimen/_20ssp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_2_loan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.7"
+        android:background="#eff0f0"
+        app:layout_constraintTop_toBottomOf="@id/cons_1_loan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_3_loan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/drawable_loan_curve"
+        app:layout_constraintTop_toTopOf="@id/cons_2_loan"
+        android:layout_marginTop="@dimen/_250sdp"/>
+
+    <Button
+        android:id="@+id/button_add"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/button_finish_background"
+        android:text="Add Consumer"
+        android:drawableEnd="@drawable/ic_round_person"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_marginTop="@dimen/_130sdp"
+        app:layout_constraintTop_toTopOf="@id/cons_3_loan"
+        app:layout_constraintBottom_toBottomOf="@id/cons_3_loan"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_loan"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.6"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_75sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cons_1_loan"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_4_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_add">
+
+        <TextView
+            android:id="@+id/txt_sent_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Sent"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorGrey"
+            android:textAllCaps="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txt_currency_1_loan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="@id/txt_sent_1"
+            app:layout_constraintTop_toBottomOf="@id/txt_sent_1"/>
+
+        <TextView
+            android:id="@+id/txt_total_sent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2000"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/txt_currency_1_loan"
+            app:layout_constraintTop_toBottomOf="@id/txt_sent_1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_5_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_add">
+
+        <TextView
+            android:id="@+id/txt_borrowed_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Borrowed"
+            android:textSize="@dimen/_12ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorGrey"
+            android:textAllCaps="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txt_currency_2_loan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/colorRed"
+            app:layout_constraintStart_toStartOf="@id/txt_borrowed_1"
+            app:layout_constraintTop_toBottomOf="@id/txt_borrowed_1"/>
+
+        <TextView
+            android:id="@+id/txt_total_borrowed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="800"
+            android:textStyle="bold"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/colorRed"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/txt_currency_2_loan"
+            app:layout_constraintTop_toBottomOf="@id/txt_borrowed_1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
