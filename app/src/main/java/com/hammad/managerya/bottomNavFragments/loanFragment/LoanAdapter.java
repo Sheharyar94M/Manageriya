@@ -44,15 +44,16 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewNameCharacter,textViewName,textViewCurrency,textViewAmount;
+        TextView textViewNameCharacter,textViewName,textViewCurrency,textViewAmount,textViewDate;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textViewNameCharacter=itemView.findViewById(R.id.txt_1_loan);
+            textViewNameCharacter=itemView.findViewById(R.id.text_1_loan);
             textViewName=itemView.findViewById(R.id.text_2_loan);
             textViewCurrency=itemView.findViewById(R.id.text_3_loan);
             textViewAmount=itemView.findViewById(R.id.text_4_loan);
+            textViewDate=itemView.findViewById(R.id.text_5_loan);
         }
     }
 }

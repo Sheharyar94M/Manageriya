@@ -8,7 +8,6 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,13 +21,14 @@ import com.hammad.managerya.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddConsumerActivity extends AppCompatActivity implements ContactAdapter.OnContactInterfaceListener {
+public class AddConsumerActivity extends AppCompatActivity {
 
     List<ContactModel> contactModelList = new ArrayList<>();
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private TextInputEditText editTextSearch;
     private ContactAdapter adapter;
+    private ContactModel contactModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,9 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
 
         //getting the contact list
         getContactList();
+
+        //searching contact names
+        searchContactName();
 
     }
 
@@ -85,11 +88,21 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
+
+                contactModel=new ContactModel();
+
                 contactId = cursor.getLong(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
                 name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 phoneNo = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                contactModelList.add(new ContactModel(contactId, name, phoneNo, getContactLetters(name)));
+                contactModel.setContactId(contactId);
+                contactModel.setContactName(name);
+                contactModel.setPhoneNo(phoneNo);
+                contactModel.setContactLetters(getContactLetters(name));
+
+                //for removing the duplicate contacts
+                removeDuplicateContacts();
+
             }
 
             //setting the recyclerview
@@ -113,18 +126,70 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
     }
 
     private void setRecyclerView() {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ContactAdapter(this, contactModelList, this);
+        adapter = new ContactAdapter(this, contactModelList/*, this*/);
         recyclerView.setAdapter(adapter);
     }
 
-    //Contact Adapter click listener
-    @Override
-    public void onContactClick(int position) {
-        Toast.makeText(this, "Name: " + contactModelList.get(position).getContactName(), Toast.LENGTH_SHORT).show();
+    //for searching the contact name
+    private void searchContactName() {
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                //calling the adapter setSearchedText
+                adapter.setSearchText(editable.toString());
+
+                //calling the filter function
+                filter(editable.toString());
+            }
+        });
+    }
+
+    private void filter(String text) {
+
+        List<ContactModel> searchContactName=new ArrayList<>();
+
+        for(ContactModel modelItem:contactModelList){
+
+            if(modelItem.getContactName().toLowerCase().contains(text.toLowerCase())){
+
+                searchContactName.add(modelItem);
+            }
+        }
+
+        adapter.filteredNote(searchContactName);
+    }
+
+    private void removeDuplicateContacts() {
+        int flag = 0;
+
+        if (contactModelList.size() == 0) {
+            contactModelList.add(contactModel);
+        }
+
+        for (int i = 0; i < contactModelList.size(); i++) {
+
+            if (contactModelList.get(i).getContactId() == contactModel.getContactId()) {
+                flag = 0;
+                break;
+            } else {
+                flag = 1;
+            }
+        }
+
+        if (flag == 1) {
+            contactModelList.add(contactModel);
+        }
     }
 
 }

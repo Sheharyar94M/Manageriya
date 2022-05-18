@@ -1,7 +1,5 @@
 package com.hammad.managerya.bottomNavFragments.loanFragment;
 
-import java.util.Set;
-
 public class ContactModel {
 
     private long contactId;
@@ -9,14 +7,7 @@ public class ContactModel {
     private String phoneNo;
     private String contactLetters;
 
-
-
-    public ContactModel(long contactId,  String contactName, String phoneNo, String contactLetters) {
-        this.contactId = contactId;
-        this.contactName = contactName;
-        this.phoneNo = phoneNo;
-        this.contactLetters = contactLetters;
-    }
+    public ContactModel() {}
 
     public long getContactId() {
         return contactId;
@@ -26,7 +17,6 @@ public class ContactModel {
         this.contactId = contactId;
     }
 
-
     public String getContactName() {
         return contactName;
     }
@@ -34,7 +24,6 @@ public class ContactModel {
     public void setContactName(String contactName) {
         this.contactName = contactName;
     }
-
 
     public String getPhoneNo() {
         return phoneNo;

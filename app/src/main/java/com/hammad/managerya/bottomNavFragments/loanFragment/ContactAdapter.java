@@ -1,10 +1,12 @@
 package com.hammad.managerya.bottomNavFragments.loanFragment;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,14 +20,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     Context context;
     List<ContactModel> contactModelList;
-    OnContactInterfaceListener mOnInterfaceListener;
+    String searchedContactName;
 
-    public ContactAdapter(Context context, List<ContactModel> contactModelList,OnContactInterfaceListener interfaceListener) {
+    public ContactAdapter(Context context, List<ContactModel> contactModelList) {
         this.context = context;
         this.contactModelList = contactModelList;
-        this.mOnInterfaceListener=interfaceListener;
-
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -33,19 +32,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     public ContactAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         View view=layoutInflater.inflate(R.layout.layout_contact_recycler,parent,false);
-        return new MyViewHolder(view,mOnInterfaceListener);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.MyViewHolder holder, int position) {
-
         ContactModel item = contactModelList.get(position);
+
+        //for filtering name
+        String content= item.getContactName().toLowerCase();
+
+        if (searchedContactName != null && !searchedContactName.isEmpty())
+        {
+            String htmlText = content.replace(searchedContactName, "<font color='#ff0000'>" + searchedContactName + "</font>");
+            holder.textViewName.setText(Html.fromHtml(htmlText));
+        }
+        else
+        {
+            holder.textViewName.setText(item.getContactName());
+        }
 
         holder.textViewLetters.setText(item.getContactLetters());
 
-        holder.textViewName.setText(item.getContactName());
-
         holder.textViewPhoneNo.setText(item.getPhoneNo());
+
+        //contact click listener
+        holder.constraintLayout.setOnClickListener( view -> {
+            Toast.makeText(context, "Name: "+item.getContactName()+"\nPhone NO: "+item.getPhoneNo(), Toast.LENGTH_SHORT).show();
+        });
 
     }
 
@@ -54,13 +68,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         return contactModelList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder
-    {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout constraintLayout;
         TextView textViewLetters,textViewName,textViewPhoneNo,textViewContactStatus;
-        OnContactInterfaceListener onContactInterfaceListener;
 
-        public MyViewHolder(@NonNull View itemView,OnContactInterfaceListener onContactInterfaceListener) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             constraintLayout=itemView.findViewById(R.id.constraint_contact);
@@ -68,19 +80,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             textViewName=itemView.findViewById(R.id.txt_contact_name);
             textViewPhoneNo=itemView.findViewById(R.id.txt_contact_no);
             textViewContactStatus=itemView.findViewById(R.id.txt_contact_status);
-
-            this.onContactInterfaceListener=onContactInterfaceListener;
-
-            //click listener
-            constraintLayout.setOnClickListener(view -> {
-                onContactInterfaceListener.onContactClick(getAdapterPosition());
-            });
-
         }
     }
 
-    public interface OnContactInterfaceListener{
-        void onContactClick(int position);
+    //for searching contact
+    public void filteredNote(List<ContactModel> contactModel) {
+        contactModelList = contactModel;
+        notifyDataSetChanged();
+    }
+
+    public String setSearchText(String text) {
+        return this.searchedContactName = text;
     }
 
 }
