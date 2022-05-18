@@ -224,7 +224,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart.setHoleColor(Color.parseColor("#06a6ff"));
         pieChart.setUsePercentValues(true);
 
-        pieChart.setCenterText(CURRENCY_.concat("70").concat(spend));
+        pieChart.setCenterText(CURRENCY_.concat("100").concat(spend));
         pieChart.setCenterTextColor(Color.WHITE);
         pieChart.setCenterTextSize(13);
         pieChart.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -233,7 +233,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart.setDrawEntryLabels(false);
         /*pieChart.setEntryLabelTextSize(12);
         pieChart.setEntryLabelColor(Color.WHITE);*/
-
 
         pieChart.getDescription().setEnabled(false);
 
@@ -249,34 +248,18 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         legend.setOrientation(Legend.LegendOrientation.VERTICAL);
         legend.setDrawInside(false);
         legend.setEnabled(true);*/
-        pieChart.getDescription();
 
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-
+                //highlights the selected pie chart slice
+                Toast.makeText(requireContext(),pieEntries.get((int) h.getX()).getLabel() , Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected() {
-
             }
         });
-
-
-       /* pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                int hi=h.getDataIndex();
-                Log.i("ITEM_1", "index : "+hi);
-                *//*Log.i("ITEM_1", "value : "+pieEntries.get(hi).getLabel());*//*
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });*/
 
     }
 
