@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.loanFragment;
+package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
 
 public class ContactModel {
 

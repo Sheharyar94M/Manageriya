@@ -1,12 +1,12 @@
-package com.hammad.managerya.bottomNavFragments.loanFragment;
+package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -58,7 +58,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
         //contact click listener
         holder.constraintLayout.setOnClickListener( view -> {
-            Toast.makeText(context, "Name: "+item.getContactName()+"\nPhone NO: "+item.getPhoneNo(), Toast.LENGTH_SHORT).show();
+
+            Intent contactIntent=new Intent(context, ConsumerDetailActivity.class);
+            contactIntent.putExtra("conName",item.getContactName());
+            contactIntent.putExtra("conPhone",item.getPhoneNo());
+            contactIntent.putExtra("conLetters",item.getContactLetters());
+            context.startActivity(contactIntent);
+
+            //Toast.makeText(context, "Name: "+item.getContactName()+"\nPhone NO: "+item.getPhoneNo(), Toast.LENGTH_SHORT).show();
         });
 
     }

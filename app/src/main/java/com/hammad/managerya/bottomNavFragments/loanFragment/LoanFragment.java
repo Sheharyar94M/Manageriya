@@ -8,13 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hammad.managerya.R;
-
-import java.security.Permission;
+import com.hammad.managerya.bottomNavFragments.loanFragment.contact.AddConsumerActivity;
 
 public class LoanFragment extends Fragment {
 
@@ -106,6 +103,6 @@ public class LoanFragment extends Fragment {
 
     private void addConsumer()
     {
-        startActivity(new Intent(requireContext(),AddConsumerActivity.class));
+        startActivity(new Intent(requireContext(), AddConsumerActivity.class));
     }
 }

@@ -257,8 +257,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             }
 
             @Override
-            public void onNothingSelected() {
-            }
+            public void onNothingSelected() {}
         });
 
     }
