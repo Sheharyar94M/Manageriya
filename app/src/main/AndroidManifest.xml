@@ -17,10 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
+            android:name=".AddLoanTransactionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".bottomNavFragments.loanFragment.contact.ConsumerDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".bottomNavFragments.loanFragment.contact.AddConsumerActivity"
+            android:name=".bottomNavFragments.loanFragment.contact.addContact.AddConsumerActivity"
             android:exported="false" />
         <activity
             android:name=".bottomNavFragments.walletFragment.budget.ActivityBudgetHistory"

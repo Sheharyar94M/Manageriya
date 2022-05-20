@@ -14,4 +14,10 @@
     <color name="colorRed">#dc2816</color>
 
     <color name="colorGrey">#CACACA</color>
+
+    <color name="colorLightRed">#fcf2f1</color>
+
+    <color name="colorLightGreen">#f3f9f7</color>
+
+    <color name="colorLightBlue">#f9fdff</color>
 </resources>

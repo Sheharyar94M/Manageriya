@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
+package com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 
 import java.util.List;
 

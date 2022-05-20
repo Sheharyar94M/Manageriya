@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AddLoanTransactionActivity"
+    android:background="#eff0f0">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_add_loan_trans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_add_loan_trans"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/gradient_toolbar"
+        app:title="Lend"
+        app:titleMarginStart="@dimen/_50sdp"
+        app:titleTextColor="@color/white"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <EditText
+        android:id="@+id/edit_text_amount"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:imeOptions="actionDone"
+        android:background="@drawable/square_edit_text"
+        app:layout_constraintTop_toBottomOf="@id/appbar_add_loan_trans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/edit_text_detail"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:gravity="start|center"
+        android:paddingStart="@dimen/_10sdp"
+        android:hint="Detail (optional)"
+        android:imeOptions="actionDone"
+        android:background="@drawable/square_edit_text"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+   <TextView
+       android:id="@+id/txt_date"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="@dimen/_25sdp"
+       android:drawableStart="@drawable/ic_calendar_large"
+       android:drawableTint="@color/black"
+       android:text="\t\t18th May, 22"
+       android:gravity="center"
+       android:padding="@dimen/_8sdp"
+       android:background="@drawable/edit_text_white_background"
+       android:textStyle="bold"
+       android:textSize="@dimen/_12ssp"
+       app:layout_constraintStart_toStartOf="@id/edit_text_detail"
+       app:layout_constraintTop_toBottomOf="@id/edit_text_detail"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.9"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:background="@drawable/drawable_round_red_button"
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

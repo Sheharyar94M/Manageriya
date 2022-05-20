@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
+package com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

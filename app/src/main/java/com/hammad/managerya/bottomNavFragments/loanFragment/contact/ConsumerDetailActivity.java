@@ -2,7 +2,6 @@ package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,14 +9,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hammad.managerya.AddLoanTransactionActivity;
+import com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact.ConsumerTransactionAdapter;
 import com.hammad.managerya.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsumerDetailActivity extends AppCompatActivity {
 
@@ -29,6 +33,9 @@ public class ConsumerDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerViewTransactions;
     private AppCompatButton buttonLend,buttonBorrowed;
 
+    private ConsumerTransactionAdapter consumerTransAdapter;
+    List<String> stringList=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +46,9 @@ public class ConsumerDetailActivity extends AppCompatActivity {
 
         //getting intent data from ContactAdapter
         getIntentData();
+
+        //recyclerview
+        setRecyclerView();
 
         //buttons click listeners
         buttonsClickListener();
@@ -88,15 +98,14 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         textViewContactName.setOnClickListener(view -> contactDetailDialog());
 
         //button lend
-        buttonLend.setOnClickListener(view -> Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show());
+        buttonLend.setOnClickListener(view -> amountLend());
 
         //button borrowed
-        buttonBorrowed.setOnClickListener(view -> Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show());
+        buttonBorrowed.setOnClickListener(view -> amountBorrowed());
 
     }
 
-    private void contactDetailDialog()
-    {
+    private void contactDetailDialog() {
         //Alert Dialog views
         TextView textViewName,textViewPhoneNo;
         Button buttonOK;
@@ -125,6 +134,42 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         //button OK click listener
         buttonOK.setOnClickListener(v -> dialog.dismiss());
 
+    }
+
+    private void setRecyclerView() {
+        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        recyclerViewTransactions.setLayoutManager(layoutManager);
+
+        //scroll recyclerview to last entered item position
+        int newPosition=stringList.size() - 1;
+        recyclerViewTransactions.scrollToPosition(newPosition);
+
+        consumerTransAdapter=new ConsumerTransactionAdapter(this,stringList);
+        recyclerViewTransactions.setAdapter(consumerTransAdapter);
+    }
+
+    // scroll the recyclerview to newly entered position
+    private void adapterPosition() {
+        int newPosition=stringList.size() - 1;
+        consumerTransAdapter.notifyItemInserted(newPosition);
+        recyclerViewTransactions.scrollToPosition(newPosition);
+    }
+
+    private void amountLend() {
+        /*stringList.add("Lend");
+        adapterPosition();*/
+        Intent intent=new Intent(this, AddLoanTransactionActivity.class);
+        intent.putExtra("type","lend");
+        startActivity(intent);
+
+    }
+
+    private void amountBorrowed() {
+        /*stringList.add("Borrow");
+        adapterPosition();*/
+        Intent intent=new Intent(this, AddLoanTransactionActivity.class);
+        intent.putExtra("type","borrow");
+        startActivity(intent);
     }
 
 }

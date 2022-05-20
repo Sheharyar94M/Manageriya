@@ -118,6 +118,8 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //recyclerview recent
         recyclerViewRecentBudget =view.findViewById(R.id.recycler_view_recent);
 
+
+
     }
 
     private void getCurrentDate() {

@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hammad.managerya.R;
-import com.hammad.managerya.bottomNavFragments.loanFragment.contact.AddConsumerActivity;
+import com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact.AddConsumerActivity;
 
 public class LoanFragment extends Fragment {
 
