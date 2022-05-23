@@ -41,6 +41,9 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
     //string to save the current date
     private String currentDate;
 
+    //string to save the current dateTime
+    private String currentDateTime;
+
     private int[] EIGHT_IMAGE_LIST_INCOME ={ R.drawable.allowance,R.drawable.bonus,R.drawable.business_profit,R.drawable.commission,
                              R.drawable.freelance,R.drawable.gifts_received,R.drawable.investment,R.drawable.loan_recived };
 
@@ -106,8 +109,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         return view;
     }
 
-    private void initializeViews(View view)
-    {
+    private void initializeViews(View view) {
         editTextEnterAmount=view.findViewById(R.id.edittext_add_income);
         //setting the hint as currency and zero
         editTextEnterAmount.setHint(CURRENCY_ +"0");
@@ -124,8 +126,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         editTextEnterAmount.bringToFront();
     }
 
-    private void setRecyclerView(int numArray[], String[] catName)
-    {
+    private void setRecyclerView(int numArray[], String[] catName) {
         GridLayoutManager layoutManager =new GridLayoutManager(requireContext(),4);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -133,22 +134,21 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         recyclerView.setAdapter(incomeAdapter);
     }
 
-    private void buttonDetailsClickListener()
-    {
+    private void buttonDetailsClickListener() {
         boolean boolEditText=true,boolRecyclerItem=true;
 
         if (editTextEnterAmount.getText().toString().isEmpty())
         {
-            Toast.makeText(requireContext(), "Enter amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show();
             boolEditText=false;
         }
-        if(recyclerItemPosition < 0)
+        else if(recyclerItemPosition < 0)
         {
-            Toast.makeText(requireContext(), "select any Income category", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "select Income Category", Toast.LENGTH_SHORT).show();
             boolRecyclerItem=false;
         }
 
-        if(boolEditText && boolRecyclerItem)
+        else if(boolEditText && boolRecyclerItem)
         {
             boolEditText=false;
             boolRecyclerItem=false;
@@ -158,6 +158,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
             intent.putExtra("incomeAmount",editTextEnterAmount.getText().toString());
             intent.putExtra("incomeCat",categoryName);
             intent.putExtra("incomeDate",currentDate);
+            intent.putExtra("incomeDateTime",currentDateTime);
             startActivity(intent);
         }
 
@@ -191,7 +192,10 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
-         currentDate= dateFormat.format(calendar.getTime());
+        currentDate= dateFormat.format(calendar.getTime());
+
+        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+        currentDateTime=dateTimeFormat.format(calendar.getTime());
 
     }
 }

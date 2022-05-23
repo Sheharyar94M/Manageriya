@@ -41,6 +41,9 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     //string to save the current date
     private String currentDate;
 
+    //string to save current date time
+    private String currentDateTime;
+
     public static final int EIGHT_IMAGE_LIST_EXPENSE[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
             R.drawable.electronics, R.drawable.education, R.drawable.family, R.drawable.food};
 
@@ -155,15 +158,15 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
         boolean boolEditText = true, boolRecyclerItem = true;
 
         if (editTextEnterAmount.getText().toString().isEmpty()) {
-            Toast.makeText(requireContext(), "Enter amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show();
             boolEditText = false;
         }
-        if (recyclerItemPosition < 0) {
-            Toast.makeText(requireContext(), "select any Expense category", Toast.LENGTH_SHORT).show();
+        else if (recyclerItemPosition < 0) {
+            Toast.makeText(requireContext(), "select Expense Category", Toast.LENGTH_SHORT).show();
             boolRecyclerItem = false;
         }
 
-        if (boolEditText && boolRecyclerItem) {
+        else if (boolEditText && boolRecyclerItem) {
             boolEditText = false;
             boolRecyclerItem = false;
 
@@ -172,6 +175,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
             intent.putExtra("expenseAmount",editTextEnterAmount.getText().toString());
             intent.putExtra("expenseCat",categoryName);
             intent.putExtra("expenseDate",currentDate);
+            intent.putExtra("expenseDateTime",currentDateTime);
             startActivity(intent);
         }
     }
@@ -187,6 +191,9 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
         currentDate= dateFormat.format(calendar.getTime());
+
+        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+        currentDateTime=dateTimeFormat.format(calendar.getTime());
 
     }
 }

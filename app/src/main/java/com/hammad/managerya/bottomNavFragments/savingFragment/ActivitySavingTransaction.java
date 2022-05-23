@@ -2,12 +2,6 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +13,12 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
@@ -33,7 +33,7 @@ public class ActivitySavingTransaction extends AppCompatActivity {
     private AppCompatButton buttonAddTransaction;
     private Toolbar toolbar;
 
-    private String dateToSet;
+    private String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +95,9 @@ public class ActivitySavingTransaction extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
-        dateToSet = dateFormat.format(calendar.getTime());
+        currentDate = dateFormat.format(calendar.getTime());
 
-        textViewDate.setText("\t\t" + dateToSet);
+        textViewDate.setText("\t\t" + currentDate);
     }
 
     private void dateAlertDialog() {

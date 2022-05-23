@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+         <TextView
             android:id="@+id/text_view_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,6 +27,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txt_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="optional details"
+            android:textSize="@dimen/_10ssp"
+            android:padding="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_date"
+            app:layout_constraintStart_toStartOf="@id/text_view_date"
+            android:visibility="gone"/>
+
+        <TextView
             android:id="@+id/text_bal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +48,7 @@
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@color/colorLightGreen"
-            app:layout_constraintTop_toBottomOf="@id/text_view_date"
+            app:layout_constraintTop_toBottomOf="@id/txt_details"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
@@ -48,7 +60,7 @@
             android:padding="@dimen/_3sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@color/colorLightGreen"
-            app:layout_constraintTop_toBottomOf="@id/text_view_date"
+            app:layout_constraintTop_toBottomOf="@id/txt_details"
             app:layout_constraintStart_toEndOf="@id/text_bal"/>
 
         <TextView
@@ -60,7 +72,7 @@
             android:padding="@dimen/_3sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@color/colorLightGreen"
-            app:layout_constraintTop_toBottomOf="@id/text_view_date"
+            app:layout_constraintTop_toBottomOf="@id/txt_details"
             app:layout_constraintStart_toEndOf="@id/txt_currency_1_cons"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

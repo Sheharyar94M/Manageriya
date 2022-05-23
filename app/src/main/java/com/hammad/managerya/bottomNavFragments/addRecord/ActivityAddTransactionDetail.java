@@ -44,6 +44,9 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     private EditText editTextDescription, editTextTag;
     private AppCompatButton buttonFinish;
 
+    //string to save the current datetime
+    private String currentDateTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +124,9 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 textViewCategoryName.setText(intent.getStringExtra("expenseCat"));
                 textViewDate.setText(intent.getStringExtra("expenseDate"));
                 textViewAmount.setTextColor(Color.RED);
+
+                //getting the current dateTime from intent
+                currentDateTime=intent.getStringExtra("expenseDateTime");
             }
             else if (fragmentCalled.equals("income"))
             {
@@ -130,6 +136,9 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 textViewCategoryName.setText(intent.getStringExtra("incomeCat"));
                 textViewDate.setText(intent.getStringExtra("incomeDate"));
                 textViewAmount.setTextColor(Color.GREEN);
+
+                //getting the current dateTime from intent
+                currentDateTime=intent.getStringExtra("incomeDateTime");
             }
         }
     }

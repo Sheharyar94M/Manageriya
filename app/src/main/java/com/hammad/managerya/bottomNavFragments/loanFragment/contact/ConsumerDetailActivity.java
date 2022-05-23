@@ -16,7 +16,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hammad.managerya.AddLoanTransactionActivity;
 import com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact.ConsumerTransactionAdapter;
 import com.hammad.managerya.R;
 
@@ -34,7 +33,7 @@ public class ConsumerDetailActivity extends AppCompatActivity {
     private AppCompatButton buttonLend,buttonBorrowed;
 
     private ConsumerTransactionAdapter consumerTransAdapter;
-    List<String> stringList=new ArrayList<>();
+    List<LoanDetailModel> loanDetailList =new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +86,12 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         //setting the details to textviews
         textViewContactLetter.setText(contactLetters);
         textViewContactName.setText(contactName);
+
+        //getting the intent data from AddLoanTransactionActivity
+        if(intent.getStringExtra("btnType") != null)
+        {
+            getLoanTransactionData(intent);
+        }
     }
 
     private void buttonsClickListener() {
@@ -141,35 +146,46 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         recyclerViewTransactions.setLayoutManager(layoutManager);
 
         //scroll recyclerview to last entered item position
-        int newPosition=stringList.size() - 1;
+        int newPosition= loanDetailList.size() - 1;
         recyclerViewTransactions.scrollToPosition(newPosition);
 
-        consumerTransAdapter=new ConsumerTransactionAdapter(this,stringList);
+        consumerTransAdapter=new ConsumerTransactionAdapter(this, loanDetailList);
         recyclerViewTransactions.setAdapter(consumerTransAdapter);
     }
 
     // scroll the recyclerview to newly entered position
     private void adapterPosition() {
-        int newPosition=stringList.size() - 1;
+        int newPosition= loanDetailList.size() - 1;
         consumerTransAdapter.notifyItemInserted(newPosition);
         recyclerViewTransactions.scrollToPosition(newPosition);
     }
 
     private void amountLend() {
-        /*stringList.add("Lend");
-        adapterPosition();*/
         Intent intent=new Intent(this, AddLoanTransactionActivity.class);
-        intent.putExtra("type","lend");
+        intent.putExtra("type","Lend");
         startActivity(intent);
-
+        finish();
     }
 
     private void amountBorrowed() {
-        /*stringList.add("Borrow");
-        adapterPosition();*/
         Intent intent=new Intent(this, AddLoanTransactionActivity.class);
-        intent.putExtra("type","borrow");
+        intent.putExtra("type","Borrow");
         startActivity(intent);
+        finish();
+    }
+
+    private void getLoanTransactionData(Intent intent) {
+        LoanDetailModel loanModel=new LoanDetailModel();
+
+        loanModel.setTransactionType(intent.getStringExtra("btnType"));
+        loanModel.setLoanAmount(intent.getStringExtra("amount"));
+        loanModel.setLoanTransDate(intent.getStringExtra("transDate"));
+        loanModel.setOptionalLoanDetail(intent.getStringExtra("loanDetails"));
+
+        loanDetailList.add(loanModel);
+
+        //calling the recyclerview
+        setRecyclerView();
     }
 
 }

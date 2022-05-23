@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
-            android:name=".AddLoanTransactionActivity"
+            android:name=".bottomNavFragments.loanFragment.contact.AddLoanTransactionActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity

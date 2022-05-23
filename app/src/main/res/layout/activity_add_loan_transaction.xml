@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AddLoanTransactionActivity"
+    tools:context=".bottomNavFragments.loanFragment.contact.AddLoanTransactionActivity"
     android:background="#eff0f0">
 
     <com.google.android.material.appbar.AppBarLayout
