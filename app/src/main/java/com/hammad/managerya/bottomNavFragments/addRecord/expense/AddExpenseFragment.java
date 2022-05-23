@@ -177,6 +177,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
             intent.putExtra("expenseDate",currentDate);
             intent.putExtra("expenseDateTime",currentDateTime);
             startActivity(intent);
+            getActivity().finish();
         }
     }
 

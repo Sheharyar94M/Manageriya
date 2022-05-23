@@ -94,7 +94,6 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         buttonFinish.setOnClickListener(view -> finish());
     }
 
-
     private void initializeViews() {
 
         textViewCategoryName = findViewById(R.id.txt_cat_add);
@@ -213,6 +212,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
 
                 if (requestCode == 3 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startActivity(new Intent(this, LocationActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
                 }
@@ -341,6 +341,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 3);
         } else {
             startActivity(new Intent(this, LocationActivity.class));
+            finish();
         }
     }
 }

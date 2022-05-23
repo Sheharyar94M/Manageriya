@@ -160,6 +160,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
             intent.putExtra("incomeDate",currentDate);
             intent.putExtra("incomeDateTime",currentDateTime);
             startActivity(intent);
+            getActivity().finish();
         }
 
     }

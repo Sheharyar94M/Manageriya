@@ -33,6 +33,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
@@ -54,6 +55,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     //string to save location address
     String locationAddress;
 
+    MarkerOptions markerOptions;
+
+    /*
+        this object contains the current marker position
+        on location change, the previous marker is removed and new marker is inserted
+    */
+    Marker marker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +74,13 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         //initialize views
         initializeView();
 
+        //instantiating marker options
+        markerOptions = new MarkerOptions();
+
         //button select location click listener
         buttonSelectLocation.setOnClickListener(view -> {
 
-            Intent locationIntent=new Intent(this, ActivityAddTransactionDetail.class);
+            Intent locationIntent=new Intent(LocationActivity.this, ActivityAddTransactionDetail.class);
             locationIntent.putExtra("location",locationAddress);
             startActivity(locationIntent);
             finish();
@@ -122,6 +134,35 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
+
+        //map click listener
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                //this removes the previous marker
+                marker.remove();
+
+                marker = mGoogleMap.addMarker(markerOptions
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker()));
+
+
+                //getting the address of current LatLng
+                Geocoder geocoder=new Geocoder(LocationActivity.this,Locale.getDefault());
+
+                try {
+                    List<Address> addresses=geocoder.getFromLocation(latLng.latitude, latLng.longitude,1);
+                    locationAddress=addresses.get(0).getAddressLine(0);
+
+                    //setting the current address to textview
+                    textViewLocationAddress.setText(locationAddress);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     //GoogleApiClient interface functions
@@ -153,7 +194,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 mGoogleMap.moveCamera(cameraUpdate);
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                mGoogleMap.addMarker(new MarkerOptions()
+                marker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .icon(BitmapDescriptorFactory.defaultMarker()));
 
@@ -210,5 +251,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             //getting the current location
             getCurrentLocation();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
