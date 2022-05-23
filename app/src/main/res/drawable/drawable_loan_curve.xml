@@ -7,7 +7,7 @@
     </item>
 
     <item
-        android:top="@dimen/_100sdp"
+        android:top="@dimen/_140sdp"
         android:bottom="0dp"
         android:left="-70dp"
         android:right="-70dp">

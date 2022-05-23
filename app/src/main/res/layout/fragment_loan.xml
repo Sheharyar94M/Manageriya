@@ -70,9 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_add">
+        app:layout_constraintTop_toBottomOf="@id/recycler_loan">
 
         <TextView
             android:id="@+id/txt_sent_1"
@@ -82,7 +81,7 @@
             android:textAlignment="center"
             android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
-            android:textColor="@color/colorGrey"
+            android:textColor="#6E6D6D"
             android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -106,7 +105,7 @@
             android:textStyle="bold"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/colorGreen"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintStart_toEndOf="@id/txt_currency_1_loan"
             app:layout_constraintTop_toBottomOf="@id/txt_sent_1"/>
 
@@ -117,9 +116,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_add">
+        app:layout_constraintTop_toBottomOf="@id/recycler_loan">
 
         <TextView
             android:id="@+id/txt_borrowed_1"
@@ -129,7 +127,7 @@
             android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textColor="@color/colorGrey"
+            android:textColor="#6E6D6D"
             android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -153,7 +151,7 @@
             android:textStyle="bold"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/colorRed"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintStart_toEndOf="@id/txt_currency_2_loan"
             app:layout_constraintTop_toBottomOf="@id/txt_borrowed_1"/>
 
