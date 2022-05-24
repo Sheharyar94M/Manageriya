@@ -1,32 +1,32 @@
 package com.hammad.managerya.bottomNavFragments.addRecord.expense;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
+
+import java.util.List;
 
 
 public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.MyViewHolder> {
 
     Context context;
-    int[] imagesList;
-    String[] catNameList;
     int selectedPosition=-1;
     ExpenseInterfaceListener mExpenseInterfaceListener;
 
-    public AddExpenseAdapter(Context context, int[] imagesList, String[] catNameList,ExpenseInterfaceListener interfaceListener) {
+    List<ExpenseCategoryEntity> expenseCategoryList;
+
+    public AddExpenseAdapter(Context context, List<ExpenseCategoryEntity> list,ExpenseInterfaceListener interfaceListener) {
         this.context = context;
-        this.imagesList = imagesList;
-        this.catNameList = catNameList;
+        this.expenseCategoryList = list;
         this.mExpenseInterfaceListener = interfaceListener;
     }
 
@@ -41,15 +41,14 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
     @Override
     public void onBindViewHolder(@NonNull AddExpenseAdapter.MyViewHolder holder, int position) {
 
-        holder.imageCatImage.setImageResource(imagesList[position]);
+        ExpenseCategoryEntity item=expenseCategoryList.get(position);
 
-        holder.textCatName.setText(catNameList[position]);
+        holder.imageCatImage.setImageResource(item.getExpenseCatIconName());
+
+        holder.textCatName.setText(item.getExpenseCatName());
 
         //click listener
         holder.imageCatImage.setOnClickListener(view -> {
-
-            /*//passing the position to interface
-            mExpenseInterfaceListener.onExpenseItemClicked(selectedPosition,holder.textCatName.getText().toString());*/
 
             if (selectedPosition == holder.getAdapterPosition()) {
                 selectedPosition = -1;
@@ -62,7 +61,6 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
 
             //passing the position to interface
             mExpenseInterfaceListener.onExpenseItemClicked(selectedPosition,holder.textCatName.getText().toString());
-
 
         });
 
@@ -79,7 +77,7 @@ public class AddExpenseAdapter extends RecyclerView.Adapter<AddExpenseAdapter.My
 
     @Override
     public int getItemCount() {
-        return imagesList.length;
+        return expenseCategoryList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -191,5 +191,4 @@ public class AddConsumerActivity extends AppCompatActivity {
             contactModelList.add(contactModel);
         }
     }
-
 }

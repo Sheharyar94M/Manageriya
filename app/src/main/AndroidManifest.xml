@@ -54,7 +54,7 @@
             android:name=".bottomNavFragments.addRecord.AddRecordActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".mainActivity.HomeScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,9 +3,6 @@ package com.hammad.managerya.bottomNavFragments.addRecord;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -30,13 +27,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hammad.managerya.R;
-import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,23 +40,19 @@ import java.util.Locale;
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int GPS_REQUEST_CODE = 10;
-    private Toolbar toolbar;
-    private TextView textViewLocationAddress;
-    private AppCompatButton buttonSelectLocation;
-
-    private GoogleMap mGoogleMap;
-    private FusedLocationProviderClient mLocationClient;
-
     //string to save location address
     String locationAddress;
-
     MarkerOptions markerOptions;
-
     /*
         this object contains the current marker position
         on location change, the previous marker is removed and new marker is inserted
     */
     Marker marker;
+    private Toolbar toolbar;
+    private TextView textViewLocationAddress;
+    private AppCompatButton buttonSelectLocation;
+    private GoogleMap mGoogleMap;
+    private FusedLocationProviderClient mLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +71,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         //button select location click listener
         buttonSelectLocation.setOnClickListener(view -> {
 
-            Intent locationIntent=new Intent(LocationActivity.this, ActivityAddTransactionDetail.class);
-            locationIntent.putExtra("location",locationAddress);
+            Intent locationIntent = new Intent(LocationActivity.this, ActivityAddTransactionDetail.class);
+            locationIntent.putExtra("location", locationAddress);
             startActivity(locationIntent);
             finish();
         });
@@ -148,11 +139,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
 
                 //getting the address of current LatLng
-                Geocoder geocoder=new Geocoder(LocationActivity.this,Locale.getDefault());
+                Geocoder geocoder = new Geocoder(LocationActivity.this, Locale.getDefault());
 
                 try {
-                    List<Address> addresses=geocoder.getFromLocation(latLng.latitude, latLng.longitude,1);
-                    locationAddress=addresses.get(0).getAddressLine(0);
+                    List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    locationAddress = addresses.get(0).getAddressLine(0);
 
                     //setting the current address to textview
                     textViewLocationAddress.setText(locationAddress);
@@ -188,28 +179,33 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             if (task.isSuccessful()) {
                 Location location = task.getResult();
 
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
-                mGoogleMap.moveCamera(cameraUpdate);
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-                marker = mGoogleMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .icon(BitmapDescriptorFactory.defaultMarker()));
-
-                //getting the address of current location
-                Geocoder geocoder=new Geocoder(this,Locale.getDefault());
-
                 try {
-                    List<Address> addresses=geocoder.getFromLocation(location.getLatitude(), location.getLongitude(),1);
-                    locationAddress=addresses.get(0).getAddressLine(0);
+
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
+                    mGoogleMap.moveCamera(cameraUpdate);
+                    mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+                    marker = mGoogleMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.defaultMarker()));
+
+                    //getting the address of current location
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+
+                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    locationAddress = addresses.get(0).getAddressLine(0);
 
                     //setting the current address to textview
                     textViewLocationAddress.setText(locationAddress);
 
-                } catch (IOException e) {
+                } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
+
+                    //jugaru method for handling the NullPointerException of getLastLocation() where getLatitude() & getLongitude() have null values
+                    getCurrentLocation();
                 }
 
             }

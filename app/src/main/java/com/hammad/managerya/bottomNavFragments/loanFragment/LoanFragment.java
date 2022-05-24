@@ -104,5 +104,6 @@ public class LoanFragment extends Fragment {
     private void addConsumer()
     {
         startActivity(new Intent(requireContext(), AddConsumerActivity.class));
+        getActivity().finish();
     }
 }

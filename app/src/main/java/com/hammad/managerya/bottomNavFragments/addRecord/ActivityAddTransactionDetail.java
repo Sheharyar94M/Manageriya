@@ -7,11 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -28,17 +28,20 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeDetailEntity;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ActivityAddTransactionDetail extends AppCompatActivity {
 
     public static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
-    public String currentPicturePath;
+
     private TextView textViewCategoryName, textViewAmount, textViewDate, textViewLocation, textViewReceipt;
     private TextView textViewPreview, textViewDelete;
     private EditText editTextDescription, editTextTag;
@@ -47,6 +50,16 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     //string to save the current datetime
     private String currentDateTime;
 
+    //for saving category id from intent
+    private int categoryId;
+
+    //strings for saving the income details
+    private String currentPicturePath;
+    private String description,tag,locationAddress;
+
+    //Database instance
+    private RoomDBHelper database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +67,9 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
 
         //initialize views
         initializeViews();
+
+        //initialize database helper class
+        database=RoomDBHelper.getInstance(this);
 
         //getting the intent which will differentiate from which fragment the activity is called
         Intent fragmentIntent = getIntent();
@@ -65,8 +81,19 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         //getting the current location address
         getLocationIntentData();
 
+        //getting the current date and time
+        getCurrentDateTime();
+
         //textview location click listener
         textViewLocation.setOnClickListener(view -> checkLocationPermission());
+
+        //long click on textViewLocation for deleting the set address
+        textViewLocation.setOnLongClickListener(view -> {
+
+            textViewLocation.setText("");
+            locationAddress = "";
+            return true;
+        });
 
         //textview receipt click listener
         textViewReceipt.setOnClickListener(view -> selectImage());
@@ -91,7 +118,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         });
 
         //button finish click listener
-        buttonFinish.setOnClickListener(view -> finish());
+        buttonFinish.setOnClickListener(view -> buttonFinishClickListener());
     }
 
     private void initializeViews() {
@@ -122,10 +149,11 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 textViewAmount.append(" -");
                 textViewCategoryName.setText(intent.getStringExtra("expenseCat"));
                 textViewDate.setText(intent.getStringExtra("expenseDate"));
-                textViewAmount.setTextColor(Color.RED);
+                textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
 
-                //getting the current dateTime from intent
-                currentDateTime=intent.getStringExtra("expenseDateTime");
+                //getting the expense category id
+                categoryId=intent.getIntExtra("expenseCatId",0);
+
             }
             else if (fragmentCalled.equals("income"))
             {
@@ -134,12 +162,20 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 textViewAmount.append( " +");
                 textViewCategoryName.setText(intent.getStringExtra("incomeCat"));
                 textViewDate.setText(intent.getStringExtra("incomeDate"));
-                textViewAmount.setTextColor(Color.GREEN);
+                textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
 
-                //getting the current dateTime from intent
-                currentDateTime=intent.getStringExtra("incomeDateTime");
+                //getting the income category id
+                categoryId=intent.getIntExtra("incomeCatId",0);
+
             }
         }
+    }
+
+    private void getCurrentDateTime() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+        currentDateTime=dateTimeFormat.format(calendar.getTime());
     }
 
     private void getLocationIntentData() {
@@ -329,10 +365,23 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         return cursor.getString(columnIndex);
     }
 
+    /*
+        onBackPressed we will save transaction to database.
+        The if & else if conditions are used to specify the data to be saved to income/expense database table
+        'if' is for Income Details, and 'else if' is for Expense Details
+    */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+
+        if(textViewAmount.getText().toString().contains("+"))
+        {
+            Log.i("HELLO_123", "onBackPressed income cat");
+        }
+        else if(textViewAmount.getText().toString().contains("-"))
+        {
+            Log.i("HELLO_123", "onBackPressed expense cat");
+        }
     }
 
     private void checkLocationPermission() {
@@ -343,5 +392,45 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
             startActivity(new Intent(this, LocationActivity.class));
             finish();
         }
+    }
+
+    private void buttonFinishClickListener() {
+
+        //getting the values
+        description = editTextDescription.getText().toString();
+        tag = editTextTag.getText().toString();
+        locationAddress = textViewLocation.getText().toString();
+
+        //validating the string variables values
+
+        if(description == null || description.length() == 0) {
+            description = "";
+        }
+
+        if(tag == null || tag.length() == 0) {
+            tag = "";
+        }
+
+        if(locationAddress == null || locationAddress.length() == 0) {
+            locationAddress = "";
+        }
+
+        if(currentPicturePath == null || currentPicturePath.length() == 0) {
+            currentPicturePath = "";
+        }
+
+        //saving the data into database
+        if(textViewAmount.getText().toString().contains("+"))
+        {
+            //saving income details
+            database.incomeDetailDao().addIncomeDetail(new IncomeDetailEntity(categoryId,Integer.parseInt(textViewAmount.getText().toString()),currentDateTime,description,tag,locationAddress,currentPicturePath));
+        }
+        else if(textViewAmount.getText().toString().contains("-"))
+        {
+            //saving expense details
+        }
+
+
+
     }
 }

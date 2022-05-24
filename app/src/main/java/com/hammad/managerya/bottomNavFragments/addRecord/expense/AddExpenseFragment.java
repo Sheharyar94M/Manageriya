@@ -4,6 +4,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
+import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.ExpenseInterfaceListener {
 
@@ -38,31 +43,23 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     //this string stores the category name of recyclerview item
     private String categoryName="";
 
+    //this integer is used to store category id of recyclerview item
+    private int categoryId=-1;
+
     //string to save the current date
     private String currentDate;
 
     //string to save current date time
     private String currentDateTime;
 
-    public static final int EIGHT_IMAGE_LIST_EXPENSE[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
-            R.drawable.electronics, R.drawable.education, R.drawable.family, R.drawable.food};
+    //Database instance
+    private RoomDBHelper database;
 
-    public static final int TWENTY_FOUR_IMAGE_LIST_EXPENSE[] = {R.drawable.bills, R.drawable.charity, R.drawable.committee, R.drawable.entertainment,
-            R.drawable.electronics, R.drawable.education, R.drawable.family, R.drawable.food,
-            R.drawable.fuel, R.drawable.grocery, R.drawable.health, R.drawable.home_e,
-            R.drawable.installment, R.drawable.insurance, R.drawable.loan_paid, R.drawable.medical,
-            R.drawable.mobile, R.drawable.office, R.drawable.other_expenses, R.drawable.rent_paid,
-            R.drawable.shopping, R.drawable.transport, R.drawable.travel, R.drawable.wedding};
+    //this income category list contain first 8 elements
+    private List<ExpenseCategoryEntity> expenseCategoryList=new ArrayList<>();
 
-    public static final String[] EIGHT_CAT_LIST_EXPENSE = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
-            "Electronics", "Education", "Family", "Food"};
-
-    public static final String[] TWENTY_FOUR_CAT_LIST_EXPENSE = {"Bills &\nUtilities", "Charity", "Committee", "Entertain\nment",
-            "Electronics", "Education", "Family", "Food"
-            , "Fuel", "Grocery", "Health", "Home"
-            , "Installment", "Insurance", "Loan\nPaid", "Medical"
-            , "Mobile", "Office", "Other\nExpenses", "Rent\nPaid"
-            , "Shopping", "Transport", "Travel", "Wedding"};
+    //this income category list contains all the elements
+    private List<ExpenseCategoryEntity> expenseCategoryListFull=new ArrayList<>();
 
 
     @Override
@@ -73,8 +70,17 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
         //initialize views
         initializeView(view);
 
+        //initialize database helper class
+        database=RoomDBHelper.getInstance(getContext());
+
+        //getting the income categories list
+        expenseCategoryListFull = database.expenseCategoryDao().getExpenseCategoryList();
+
+        //this list contains the first 8 elements from complete list
+        expenseCategoryList = expenseCategoryListFull.subList(0,8);
+
         //setting the recycler view
-        setRecyclerView(EIGHT_IMAGE_LIST_EXPENSE, EIGHT_CAT_LIST_EXPENSE);
+        setRecyclerView(expenseCategoryList);
 
         //image view more click listener
         imageViewExpand.setOnClickListener(v -> {
@@ -130,16 +136,16 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
         editTextEnterAmount.bringToFront();
     }
 
-    private void setRecyclerView(int numArray[], String[] catName) {
+    private void setRecyclerView(List<ExpenseCategoryEntity> expenseCategoryList) {
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 4);
         recyclerView.setLayoutManager(layoutManager);
 
-        AddExpenseAdapter expenseAdapter = new AddExpenseAdapter(requireContext(), numArray, catName, this::onExpenseItemClicked);
+        AddExpenseAdapter expenseAdapter = new AddExpenseAdapter(requireContext(), expenseCategoryList, this::onExpenseItemClicked);
         recyclerView.setAdapter(expenseAdapter);
     }
 
     private void showMore() {
-        setRecyclerView(TWENTY_FOUR_IMAGE_LIST_EXPENSE, TWENTY_FOUR_CAT_LIST_EXPENSE);
+        setRecyclerView(expenseCategoryListFull);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_up);
 
@@ -147,7 +153,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     }
 
     private void showLess() {
-        setRecyclerView(EIGHT_IMAGE_LIST_EXPENSE, EIGHT_CAT_LIST_EXPENSE);
+        setRecyclerView(expenseCategoryList);
 
         imageViewExpand.setImageResource(R.drawable.ic_arrow_down);
 
@@ -175,6 +181,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
             intent.putExtra("expenseAmount",editTextEnterAmount.getText().toString());
             intent.putExtra("expenseCat",categoryName);
             intent.putExtra("expenseDate",currentDate);
+            intent.putExtra("expenseCatId",categoryId);
             intent.putExtra("expenseDateTime",currentDateTime);
             startActivity(intent);
             getActivity().finish();
@@ -184,7 +191,8 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     @Override
     public void onExpenseItemClicked(int position,String catName) {
         recyclerItemPosition = position;
-        categoryName=catName;
+        categoryName = catName;
+        categoryId = position + 1;
     }
 
     private void getCurrentDate() {

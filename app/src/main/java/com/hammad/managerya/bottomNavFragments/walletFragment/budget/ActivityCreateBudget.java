@@ -1,7 +1,5 @@
 package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 
-import static com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseFragment.TWENTY_FOUR_CAT_LIST_EXPENSE;
-import static com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseFragment.TWENTY_FOUR_IMAGE_LIST_EXPENSE;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.os.Bundle;
@@ -20,7 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseAdapter;
+import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityCreateBudget extends AppCompatActivity implements AddExpenseAdapter.ExpenseInterfaceListener {
 
@@ -31,6 +34,12 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
 
     private String categoryName="";
 
+    //Database instance
+    private RoomDBHelper database;
+
+    //this income category list contain first 8 elements
+    private List<ExpenseCategoryEntity> expenseCategoryList=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +47,12 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
 
         //initialize views
         initializeView();
+
+        //initialize database helper class
+        database=RoomDBHelper.getInstance(this);
+
+        //getting the income categories list
+        expenseCategoryList = database.expenseCategoryDao().getExpenseCategoryList();
 
         //setting the recyclerview
         setRecyclerView();
@@ -84,7 +99,7 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
         GridLayoutManager layoutManager=new GridLayoutManager(this,2,RecyclerView.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
 
-        AddExpenseAdapter expenseAdapter=new AddExpenseAdapter(this, TWENTY_FOUR_IMAGE_LIST_EXPENSE, TWENTY_FOUR_CAT_LIST_EXPENSE,this);
+        AddExpenseAdapter expenseAdapter=new AddExpenseAdapter(this, expenseCategoryList,this);
         recyclerView.setAdapter(expenseAdapter);
     }
 

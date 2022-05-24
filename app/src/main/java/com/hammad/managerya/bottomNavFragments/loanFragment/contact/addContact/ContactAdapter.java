@@ -65,8 +65,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             contactIntent.putExtra("conPhone",item.getPhoneNo());
             contactIntent.putExtra("conLetters",item.getContactLetters());
             context.startActivity(contactIntent);
-
-            //Toast.makeText(context, "Name: "+item.getContactName()+"\nPhone NO: "+item.getPhoneNo(), Toast.LENGTH_SHORT).show();
         });
 
     }

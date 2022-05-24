@@ -6,27 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeCategoryEntity;
+
+import java.util.List;
 
 public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyViewHolder> {
 
     Context context;
-    int[] imagesList;
-    String[] catNameList;
 
     int selectedPosition=-1;
     private IncomeAdapterInterface mIncomeAdapterInterface;
 
-    public AddIncomeAdapter(Context context, int[] imagesList, String[] catNameList,IncomeAdapterInterface adapterInterface) {
+    List<IncomeCategoryEntity> incomeCategoryList;
+
+    public AddIncomeAdapter(Context context, List<IncomeCategoryEntity> incomeCategoryList,IncomeAdapterInterface adapterInterface) {
         this.context = context;
-        this.imagesList = imagesList;
-        this.catNameList = catNameList;
+        this.incomeCategoryList = incomeCategoryList;
         this.mIncomeAdapterInterface = adapterInterface;
     }
 
@@ -41,12 +41,14 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull AddIncomeAdapter.MyViewHolder holder, int position) {
 
-        holder.imageCatImage.setImageResource(imagesList[position]);
+        IncomeCategoryEntity item=incomeCategoryList.get(position);
 
-        holder.textCatName.setText(catNameList[position]);
+        holder.imageViewCat.setImageResource(item.getIncomeCatIconName());
+
+        holder.textCatName.setText(item.getIncomeCatName());
 
         //click listener
-        holder.imageCatImage.setOnClickListener(view -> {
+        holder.imageViewCat.setOnClickListener(view -> {
 
             //passing the position to interface
             mIncomeAdapterInterface.onIncomeItemClicked(holder.getAdapterPosition(),holder.textCatName.getText().toString());
@@ -65,29 +67,29 @@ public class AddIncomeAdapter extends RecyclerView.Adapter<AddIncomeAdapter.MyVi
         //highlight the selected item
         if(selectedPosition == holder.getAdapterPosition())
         {
-            holder.imageCatImage.setBackgroundResource(R.drawable.drawable_recycler_highlight);
+            holder.imageViewCat.setBackgroundResource(R.drawable.drawable_recycler_highlight);
         }
         else {
-            holder.imageCatImage.setBackgroundResource(R.drawable.white_circle_recyclerview);
+            holder.imageViewCat.setBackgroundResource(R.drawable.white_circle_recyclerview);
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return imagesList.length;
+        return incomeCategoryList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageCatImage;
+        private ImageView imageViewCat;
         private TextView textCatName;
         private IncomeAdapterInterface incomeAdapterInterface;
 
         public MyViewHolder(@NonNull View itemView,IncomeAdapterInterface incomeAdapterInterface) {
             super(itemView);
 
-            imageCatImage=itemView.findViewById(R.id.img_recycler);
+            imageViewCat =itemView.findViewById(R.id.img_recycler);
             textCatName=itemView.findViewById(R.id.text_recycler);
             this.incomeAdapterInterface=incomeAdapterInterface;
         }

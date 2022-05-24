@@ -2,4 +2,6 @@
     <string name="app_name">Managerya</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+
+    <string name="categories_saved">Categories Saved</string>
 </resources>
