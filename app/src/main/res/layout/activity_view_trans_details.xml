@@ -52,6 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category Name"
+            android:minLines="2"
+            android:gravity="center"
             android:textStyle="bold"
             android:fontFamily="@font/century_gothic"
             android:textColor="@color/black"
@@ -67,6 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cash"
+            android:visibility="gone"
             android:fontFamily="@font/century_gothic"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
@@ -133,7 +136,7 @@
         app:layout_constraintBottom_toBottomOf="@id/constraint_receipt"
         app:layout_constraintEnd_toEndOf="@id/constraint_receipt"
         android:layout_marginEnd="@dimen/_30sdp"
-        android:visibility="gone"/>
+        android:layout_marginBottom="@dimen/_5sdp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_description"

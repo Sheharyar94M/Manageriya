@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,9 @@ import androidx.core.content.FileProvider;
 
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseDetailEntity;
 import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeDetailEntity;
+import com.hammad.managerya.mainActivity.HomeScreenActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,9 +56,12 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     //for saving category id from intent
     private int categoryId;
 
+    //for saving amount from intent
+    private int transactionAmount=0;
+
     //strings for saving the income details
-    private String currentPicturePath;
-    private String description,tag,locationAddress;
+    private String currentPicturePath="";
+    private String description, tag, locationAddress;
 
     //Database instance
     private RoomDBHelper database;
@@ -69,14 +75,14 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         initializeViews();
 
         //initialize database helper class
-        database=RoomDBHelper.getInstance(this);
+        database = RoomDBHelper.getInstance(this);
 
         //getting the intent which will differentiate from which fragment the activity is called
         Intent fragmentIntent = getIntent();
         String fragmentCalled = fragmentIntent.getStringExtra("fragment");
 
         //the intent function
-        getIntentData(fragmentIntent,fragmentCalled);
+        getIntentData(fragmentIntent, fragmentCalled);
 
         //getting the current location address
         getLocationIntentData();
@@ -139,33 +145,35 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
         buttonFinish = findViewById(R.id.button_finish);
     }
 
-    private void getIntentData(Intent intent,String fragmentCalled) {
-        if (fragmentCalled != null)
-        {
-            if (fragmentCalled.equals("expense"))
-            {
+    private void getIntentData(Intent intent, String fragmentCalled) {
+        if (fragmentCalled != null) {
+            if (fragmentCalled.equals("expense")) {
                 //getting the amount and date from Add Expense Fragment
-                textViewAmount.setText(intent.getStringExtra("expenseAmount"));
+
+                transactionAmount = Integer.parseInt(intent.getStringExtra("expenseAmount"));
+
+                textViewAmount.setText(String.valueOf(transactionAmount));
                 textViewAmount.append(" -");
                 textViewCategoryName.setText(intent.getStringExtra("expenseCat"));
                 textViewDate.setText(intent.getStringExtra("expenseDate"));
                 textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
 
                 //getting the expense category id
-                categoryId=intent.getIntExtra("expenseCatId",0);
+                categoryId = intent.getIntExtra("expenseCatId", 0);
 
-            }
-            else if (fragmentCalled.equals("income"))
-            {
+            } else if (fragmentCalled.equals("income")) {
                 //getting the amount and date from Add Income Fragment
-                textViewAmount.setText(intent.getStringExtra("incomeAmount"));
-                textViewAmount.append( " +");
+
+                transactionAmount = Integer.parseInt(intent.getStringExtra("incomeAmount"));
+
+                textViewAmount.setText(String.valueOf(transactionAmount));
+                textViewAmount.append(" +");
                 textViewCategoryName.setText(intent.getStringExtra("incomeCat"));
                 textViewDate.setText(intent.getStringExtra("incomeDate"));
                 textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
 
                 //getting the income category id
-                categoryId=intent.getIntExtra("incomeCatId",0);
+                categoryId = intent.getIntExtra("incomeCatId", 0);
 
             }
         }
@@ -174,8 +182,8 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     private void getCurrentDateTime() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
-        currentDateTime=dateTimeFormat.format(calendar.getTime());
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        currentDateTime = dateTimeFormat.format(calendar.getTime());
     }
 
     private void getLocationIntentData() {
@@ -374,13 +382,18 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if(textViewAmount.getText().toString().contains("+"))
-        {
-            Log.i("HELLO_123", "onBackPressed income cat");
+        //getting the values
+        description = editTextDescription.getText().toString();
+        tag = editTextTag.getText().toString();
+        locationAddress = textViewLocation.getText().toString();
+
+        if (textViewAmount.getText().toString().contains("+")) {
+            //saving data to income detail
+            database.incomeDetailDao().addIncomeDetail(new IncomeDetailEntity(categoryId, transactionAmount, currentDateTime, description, tag, locationAddress, currentPicturePath));
         }
-        else if(textViewAmount.getText().toString().contains("-"))
-        {
-            Log.i("HELLO_123", "onBackPressed expense cat");
+        else if (textViewAmount.getText().toString().contains("-")) {
+            //saving data to expense detail
+            database.expenseDetailDao().addExpenseDetail(new ExpenseDetailEntity(categoryId, transactionAmount, currentDateTime, description, tag, locationAddress, currentPicturePath));
         }
     }
 
@@ -403,34 +416,52 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
 
         //validating the string variables values
 
-        if(description == null || description.length() == 0) {
+        if (description == null || description.length() == 0) {
             description = "";
         }
 
-        if(tag == null || tag.length() == 0) {
+        if (tag == null || tag.length() == 0) {
             tag = "";
         }
 
-        if(locationAddress == null || locationAddress.length() == 0) {
+        if (locationAddress == null || locationAddress.length() == 0) {
             locationAddress = "";
         }
 
-        if(currentPicturePath == null || currentPicturePath.length() == 0) {
+        if (currentPicturePath == null || currentPicturePath.length() == 0) {
             currentPicturePath = "";
         }
 
         //saving the data into database
-        if(textViewAmount.getText().toString().contains("+"))
+        if (textViewAmount.getText().toString().contains("+"))
         {
             //saving income details
-            database.incomeDetailDao().addIncomeDetail(new IncomeDetailEntity(categoryId,Integer.parseInt(textViewAmount.getText().toString()),currentDateTime,description,tag,locationAddress,currentPicturePath));
+            database.incomeDetailDao().addIncomeDetail(new IncomeDetailEntity(categoryId, transactionAmount, currentDateTime, description, tag, locationAddress, currentPicturePath));
+
+            Toast.makeText(this, "Income Added Successfully", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(ActivityAddTransactionDetail.this, HomeScreenActivity.class));
+                    finish();
+                }
+            }, 1500);
         }
-        else if(textViewAmount.getText().toString().contains("-"))
+        else if (textViewAmount.getText().toString().contains("-"))
         {
             //saving expense details
+            database.expenseDetailDao().addExpenseDetail(new ExpenseDetailEntity(categoryId, transactionAmount, currentDateTime, description, tag, locationAddress, currentPicturePath));
+
+            Toast.makeText(this, "Expense Added Successfully", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(ActivityAddTransactionDetail.this, HomeScreenActivity.class));
+                    finish();
+                }
+            }, 1500);
         }
-
-
-
     }
 }

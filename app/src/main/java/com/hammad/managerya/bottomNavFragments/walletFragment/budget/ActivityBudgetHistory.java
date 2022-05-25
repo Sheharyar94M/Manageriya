@@ -57,7 +57,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         setMonthRecycler();
 
         //recent budget transaction recyclerview
-        setRecentRecycler();
+        //setRecentRecycler();
     }
 
     private void initializeViews() {
@@ -168,8 +168,8 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewRecent.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter adapter=new HomeFragTransAdapter(this,this,3);
-        recyclerViewRecent.setAdapter(adapter);
+       /* HomeFragTransAdapter adapter=new HomeFragTransAdapter(this,this,3);
+        recyclerViewRecent.setAdapter(adapter);*/
     }
 
     //recent transaction adapter listener

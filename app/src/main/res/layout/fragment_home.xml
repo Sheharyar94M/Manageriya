@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/century_gothic"
-            android:text="Budget"
+            android:text="Earning"
             android:textStyle="bold"
             android:textSize="@dimen/_9ssp"
             android:textColor="@color/white"

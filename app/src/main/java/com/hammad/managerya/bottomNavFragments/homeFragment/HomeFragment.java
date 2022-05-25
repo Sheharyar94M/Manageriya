@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,11 +46,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private RecyclerView recyclerViewRecentBudget;
 
     //string for inner circle of pie graph
-    public static String CURRENCY_ ="PKR ";
-    String spend="\nSpend";
+    public static String CURRENCY_ = "PKR ";
+    String spend = "\nSpend";
 
-    public  static final int[] COLORS_PALETTE_1 = {
-            Color.rgb(210, 245, 255),Color.rgb(197, 230, 252),
+    public static final int[] COLORS_PALETTE_1 = {
+            Color.rgb(210, 245, 255), Color.rgb(197, 230, 252),
             Color.rgb(131, 200, 247), Color.rgb(58, 166, 239),
             Color.rgb(29, 152, 255)
     };
@@ -61,6 +65,19 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     //array list for pie chart entries
     ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
+    //recent transaction list
+    List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
+
+    //database
+    RoomDBHelper database;
+
+    //variables for calculating the current earning,spending and percentage
+    private float earning=0,amountSpend=0;
+    private int percentage=0;
+
+    //list to be passed to pie chart
+    List<ExpenseCatDetailModel> pieChartDataList=new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +86,23 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         //initializing views
         initializeViews(view);
+
+        //initializing database instance
+        database = RoomDBHelper.getInstance(requireActivity());
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions();
+
+        //um of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum();
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+
+        //getting the current expenditure
+        getExpenditureDetails();
+
+        //getting sum of expense categories (for pie chart data)
+        getExpenseSumByCategory();
 
         //get current date
         getCurrentDate();
@@ -105,9 +139,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         textViewSpend = view.findViewById(R.id.text_view_total_expense);
         textViewPercentage = view.findViewById(R.id.text_view_percentage);
 
-        textViewCurrencyIncome=view.findViewById(R.id.text_view_currency_1);
+        textViewCurrencyIncome = view.findViewById(R.id.text_view_currency_1);
 
-        textViewCurrencyExpense =view.findViewById(R.id.text_view_currency_2);
+        textViewCurrencyExpense = view.findViewById(R.id.text_view_currency_2);
 
         //setting the currency to relevant textviews
         textViewCurrencyIncome.setText(CURRENCY_);
@@ -116,16 +150,14 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart = view.findViewById(R.id.pie_chart);
 
         //recyclerview recent
-        recyclerViewRecentBudget =view.findViewById(R.id.recycler_view_recent);
-
-
+        recyclerViewRecentBudget = view.findViewById(R.id.recycler_view_recent);
 
     }
 
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         String currentDate = dateFormat.format(calendar.getTime());
 
         textViewCurrentDate.setText(currentDate);
@@ -135,7 +167,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity(),this,3);
+        HomeFragTransAdapter adapter = new HomeFragTransAdapter(requireActivity(), this, recentTranslList);
         recyclerViewRecentTransaction.setAdapter(adapter);
     }
 
@@ -144,7 +176,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewMonth.setLayoutManager(layoutManager);
 
-        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList,this);
+        MonthAdapter monthAdapter = new MonthAdapter(requireActivity(), monthsList, this);
         recyclerViewMonth.setAdapter(monthAdapter);
 
         //scroll recyclerview to last month (current month = last month -1)
@@ -183,17 +215,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
     private void loadPieChartData() {
 
-        pieEntries.add(new PieEntry(0.3f, "Bills"));
-        pieEntries.add(new PieEntry(0.2f, "Grocery"));
-        pieEntries.add(new PieEntry(0.15f, "Fuel"));
-        pieEntries.add(new PieEntry(0.35f, "Health"));
-        pieEntries.add(new PieEntry(0.25f, "Education"));
-
-        /*pieEntries.add(new PieEntry(0.12f, "Transport"));
-        pieEntries.add(new PieEntry(0.28f, "Shopping"));
-        pieEntries.add(new PieEntry(0.30f, "Travel"));
-        pieEntries.add(new PieEntry(0.35f, "Entertainment"));
-        pieEntries.add(new PieEntry(0.40f, "Wedding"));*/
+        //setting the data to pie chart
+        for(int i=0; i<pieChartDataList.size(); i++)
+        {
+            pieEntries.add(new PieEntry(pieChartDataList.get(i).getExpCatAmount() / amountSpend,pieChartDataList.get(i).getExpCatName()));
+        }
 
         ArrayList<Integer> colors = new ArrayList<>();
 
@@ -226,7 +252,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart.setHoleColor(Color.parseColor("#06a6ff"));
         pieChart.setUsePercentValues(true);
 
-        pieChart.setCenterText(CURRENCY_.concat("100").concat(spend));
+        pieChart.setCenterText(CURRENCY_.concat(String.valueOf((int) amountSpend)).concat(spend));
         pieChart.setCenterTextColor(Color.WHITE);
         pieChart.setCenterTextSize(13);
         pieChart.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -255,21 +281,21 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 //highlights the selected pie chart slice
-                Toast.makeText(requireContext(),pieEntries.get((int) h.getX()).getLabel() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), pieEntries.get((int) h.getX()).getLabel(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onNothingSelected() {}
+            public void onNothingSelected() {
+            }
         });
 
     }
 
-    private void setBudgetRecentRecyclerview()
-    {
-        LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false);
+    private void setBudgetRecentRecyclerview() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecentBudget.setLayoutManager(layoutManager);
 
-        RecentAdapter recentAdapter=new RecentAdapter(requireContext());
+        RecentAdapter recentAdapter = new RecentAdapter(requireContext());
         recyclerViewRecentBudget.setAdapter(recentAdapter);
     }
 
@@ -277,20 +303,48 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     @Override
     public void onRecentTransClick(int position) {
 
-        Intent intent=new Intent(requireContext(),ViewTransDetailsActivity.class);
+        HomeRecentTransModel item = recentTranslList.get(position);
 
-        //creating the bundle object
-        Bundle bundle=new Bundle();
-        bundle.putInt("position",position);
+        Intent intent = new Intent(requireContext(), ViewTransDetailsActivity.class);
+        intent.putExtra("type",item.getTransType());
+        intent.putExtra("catName", item.getCatName());
+        intent.putExtra("amount", String.valueOf(item.getTransAmount()));
+        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("desc", item.getTransDesc());
+        intent.putExtra("tag", item.getTransTag());
+        intent.putExtra("loc", item.getTransLocation());
+        intent.putExtra("img", item.getTransImagePath());
 
-        intent.putExtras(bundle);
-
-        startActivity(intent,bundle);
+        startActivity(intent);
     }
 
     //months adapter click listener
     @Override
     public void onMonthSelected(String monthName) {
         Toast.makeText(requireContext(), monthName, Toast.LENGTH_SHORT).show();
+
+        for(HomeRecentTransModel item : recentTranslList)
+        {
+            if(item.getTransDate().contains("May") && item.getTransDate().contains("2022"))
+            {
+                Log.i("HELLO_123", "month: "+monthName);
+                Log.i("HELLO_123", "trnans date: "+item.getTransDate()+"\n\n");
+            }
+        }
+    }
+
+    private void getExpenditureDetails() {
+
+        percentage = (int) ((amountSpend / earning) * 100);
+
+        //setting the values to text views
+        textViewTotalIncome.setText(String.valueOf((int) earning));
+        textViewSpend.setText(String.valueOf((int) amountSpend));
+        textViewPercentage.setText(String.valueOf(percentage));
+        textViewPercentage.append(" %");
+    }
+
+    private void getExpenseSumByCategory() {
+        pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum();
     }
 }

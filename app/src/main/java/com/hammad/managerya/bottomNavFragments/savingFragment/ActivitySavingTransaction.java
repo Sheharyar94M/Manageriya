@@ -94,7 +94,7 @@ public class ActivitySavingTransaction extends AppCompatActivity {
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         currentDate = dateFormat.format(calendar.getTime());
 
         textViewDate.setText("\t\t" + currentDate);

@@ -1,7 +1,6 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 import com.hammad.managerya.R;
+
+import java.util.List;
 
 public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdapter.MyViewHolder> {
 
     Context context;
     private RecentTransInterface mRecentTransInterface;
-    private int count;
 
-    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface,int lengthCount) {
+    List<HomeRecentTransModel> recentTransList;
+
+    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface,List<HomeRecentTransModel> list) {
         this.context = context;
         this.mRecentTransInterface=recentTransInterface;
-        this.count=lengthCount;
+        this.recentTransList = list;
     }
 
     @NonNull
@@ -38,11 +41,39 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
     @Override
     public void onBindViewHolder(@NonNull HomeFragTransAdapter.MyViewHolder holder, int position) {
 
+        //model class item
+        HomeRecentTransModel item= recentTransList.get(position);
+
+        //category icon
+        holder.imageView.setImageResource(item.getCatIcon());
+
+        //category name
+        holder.textViewCategory.setText(item.getCatName());
+
+        //transaction date
+        holder.textViewDate.setText(item.getTransDate());
+
+        //transaction amount
+        holder.textViewAmount.setText(String.valueOf(item.getTransAmount()));
+
+        //checking whether the transaction type is income or expense
+        if(item.getTransType().equals("Income"))
+        {
+            holder.textViewAmount.append(" +");
+            holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorGreen));
+
+        }
+        else if(item.getTransType().equals("Expense"))
+        {
+            holder.textViewAmount.append(" -");
+            holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorRed));
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return count;
+        return recentTransList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -67,12 +98,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
             this.recentTransInterface=recentTransInterface;
 
 
-            constraintLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    recentTransInterface.onRecentTransClick(getAdapterPosition());
-                }
-            });
+            constraintLayout.setOnClickListener(view -> recentTransInterface.onRecentTransClick(getAdapterPosition()));
         }
     }
 

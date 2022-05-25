@@ -159,14 +159,14 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         String currentDate = dateFormat.format(calendar.getTime());
 
         textViewDate.setText("\t\t");
         textViewDate.append(currentDate);
 
         //this is used to save the current date along with time (in case user does not change current date)
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
         currentDateTime=dateFormat1.format(calendar.getTime());
     }
 
@@ -185,14 +185,14 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
                 calendar.set(Calendar.MINUTE,minute);
 
                 //date format for setting selected date to textViewDate
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MMMM dd, yyyy");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MMM dd, yyyy");
                 String selectedDate=simpleDateFormat.format(calendar.getTime());
 
                 textViewDate.setText("\t\t");
                 textViewDate.append(selectedDate);
 
                 //selected date and time
-                SimpleDateFormat dateFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+                SimpleDateFormat dateFormat=new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
                 selectedDateTime =dateFormat.format(calendar.getTime());
             };
 

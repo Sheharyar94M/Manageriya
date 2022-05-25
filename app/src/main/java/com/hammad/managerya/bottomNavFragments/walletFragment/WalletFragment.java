@@ -40,6 +40,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
     private ImageView imageViewHistory,imageViewBudget;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -55,7 +57,7 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         setMonthRecyclerView();
 
         //recent transaction recyclerview
-        setRecentTransactionRecyclerview();
+        //setRecentTransactionRecyclerview();
 
         //history click listener
         imageViewHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
@@ -148,8 +150,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(requireContext(),this,7);
-        recyclerViewRecentTransaction.setAdapter(recentTransAdapter);
+        /*HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(requireContext(),this,7);
+        recyclerViewRecentTransaction.setAdapter(recentTransAdapter);*/
     }
 
     //recent transaction adapter click listener

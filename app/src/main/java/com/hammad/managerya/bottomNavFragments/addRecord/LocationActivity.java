@@ -131,7 +131,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onMapClick(LatLng latLng) {
                 //this removes the previous marker
-                marker.remove();
+                if(marker != null)
+                {
+                    marker.remove();
+                }
 
                 marker = mGoogleMap.addMarker(markerOptions
                         .position(latLng)

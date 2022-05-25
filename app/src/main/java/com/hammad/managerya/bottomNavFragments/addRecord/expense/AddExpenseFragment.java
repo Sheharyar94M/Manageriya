@@ -4,6 +4,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.addRecord.ActivityAddTransactionDetail;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
+import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseDetailEntity;
+import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeDetailEntity;
+import com.hammad.managerya.mainActivity.HomeScreenActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -114,7 +118,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
         buttonDetails.setOnClickListener(v -> buttonDetailsClickListener());
 
         //button finish click listener
-        buttonFinish.setOnClickListener(v -> Toast.makeText(requireContext(), "Finish", Toast.LENGTH_SHORT).show());
+        buttonFinish.setOnClickListener(v -> buttonFinishClickListener());
 
         return view;
     }
@@ -182,7 +186,6 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
             intent.putExtra("expenseCat",categoryName);
             intent.putExtra("expenseDate",currentDate);
             intent.putExtra("expenseCatId",categoryId);
-            intent.putExtra("expenseDateTime",currentDateTime);
             startActivity(intent);
             getActivity().finish();
         }
@@ -198,11 +201,41 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         currentDate= dateFormat.format(calendar.getTime());
 
-        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
         currentDateTime=dateTimeFormat.format(calendar.getTime());
 
+    }
+
+    private void buttonFinishClickListener(){
+        boolean boolEditText=true,boolRecyclerItem=true;
+
+        if (editTextEnterAmount.getText().toString().isEmpty()) {
+            Toast.makeText(requireContext(), "Enter Amount", Toast.LENGTH_SHORT).show();
+            boolEditText=false;
+        }
+        else if(recyclerItemPosition < 0) {
+            Toast.makeText(requireContext(), "select Expense Category", Toast.LENGTH_SHORT).show();
+            boolRecyclerItem=false;
+        }
+        else if(boolEditText && boolRecyclerItem) {
+            boolEditText = false;
+            boolRecyclerItem = false;
+
+            //saving data in database
+            database.expenseDetailDao().addExpenseDetail(new ExpenseDetailEntity(categoryId,Integer.valueOf(editTextEnterAmount.getText().toString()),currentDateTime,"","","",""));
+
+            Toast.makeText(requireContext(), "Expense Added Successfully", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(getActivity(), HomeScreenActivity.class));
+                    getActivity().finish();
+                }
+            },1500);
+        }
     }
 }

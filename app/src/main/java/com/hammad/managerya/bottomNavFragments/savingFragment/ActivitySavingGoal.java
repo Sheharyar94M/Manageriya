@@ -125,7 +125,7 @@ public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseA
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         dateToSet = dateFormat.format(calendar.getTime());
 
         textViewTargetDate.setText("\t\t" + dateToSet);

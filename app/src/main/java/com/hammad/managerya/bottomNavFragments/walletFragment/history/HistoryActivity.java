@@ -2,12 +2,6 @@ package com.hammad.managerya.bottomNavFragments.walletFragment.history;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
@@ -56,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         setMonthRecyclerView();
 
         //set recent transaction recyclerview
-        setRecentTransRecyclerview();
+        //setRecentTransRecyclerview();
 
         //setting the spinner
         setSpinner();
@@ -142,8 +142,8 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransaction.setLayoutManager(layoutManager);
 
-        HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(this,this,3);
-        recyclerViewTransaction.setAdapter(recentTransAdapter);
+        /*HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(this,this,3);
+        recyclerViewTransaction.setAdapter(recentTransAdapter);*/
     }
 
     //recent transaction click listener
