@@ -3,6 +3,7 @@ package com.hammad.managerya.bottomNavFragments.homeFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,7 +95,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //getting the list of all recent transaction (income & expense)
         recentTranslList = database.homeFragmentDao().getAllTransactions();
 
-        //um of total income
+        //sum of total income
         earning = database.incomeDetailDao().getTotalIncomeSum();
         //sum of total expense
         amountSpend = database.expenseDetailDao().getTotalExpenseSum();
@@ -159,6 +161,14 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         String currentDate = dateFormat.format(calendar.getTime());
+
+        //working on time for Room DB
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            SimpleDateFormat dateFormat1=new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
+            String currentDate1=dateFormat1.format(calendar.getTime());
+            Log.i("HELLO_123", "date 1: "+currentDate1);
+        }
+
 
         textViewCurrentDate.setText(currentDate);
     }
@@ -323,14 +333,16 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     public void onMonthSelected(String monthName) {
         Toast.makeText(requireContext(), monthName, Toast.LENGTH_SHORT).show();
 
-        for(HomeRecentTransModel item : recentTranslList)
+        Log.i("HELLO_123", "onMonthSelected called");
+
+        /*for(HomeRecentTransModel item : recentTranslList)
         {
             if(item.getTransDate().contains("May") && item.getTransDate().contains("2022"))
             {
                 Log.i("HELLO_123", "month: "+monthName);
                 Log.i("HELLO_123", "trnans date: "+item.getTransDate()+"\n\n");
             }
-        }
+        }*/
     }
 
     private void getExpenditureDetails() {

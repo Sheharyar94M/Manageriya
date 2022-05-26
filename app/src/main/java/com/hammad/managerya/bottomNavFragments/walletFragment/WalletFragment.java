@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
+import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.history.HistoryActivity;
 
@@ -30,7 +33,7 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
     private RecyclerView recyclerViewMonth;
     private ImageView imageViewInsights;
-    private TextView textViewBudget,textViewBudgetCurrency,textViewSpend,textViewSpendCurrency,textViewPercentage;
+    private TextView textViewEarning,textViewBudgetCurrency,textViewSpend,textViewSpendCurrency,textViewPercentage;
 
     //months string list
     private List<String> monthsList = new ArrayList<>();
@@ -40,7 +43,15 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
     private ImageView imageViewHistory,imageViewBudget;
 
+    //recent transaction list
+    List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
 
+    //database
+    RoomDBHelper database;
+
+    //variables for calculating the current earning,spending and percentage
+    private float earning=0,amountSpend=0;
+    private int percentage=0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,14 +61,29 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //initialize views
         initialViews(view);
 
+        //initializing database instance
+        database = RoomDBHelper.getInstance(requireContext());
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions();
+
+        //sum of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum();
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+
+
         //get the months list
         getMonthsList();
+
+        //getting the details of expenditure
+        getExpenditureDetails();
 
         //setting the month recyclerview
         setMonthRecyclerView();
 
         //recent transaction recyclerview
-        //setRecentTransactionRecyclerview();
+        setRecentTransactionRecyclerview();
 
         //history click listener
         imageViewHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
@@ -73,7 +99,7 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         imageViewInsights=view.findViewById(R.id.image_view_insights_wallet);
 
         //textviews
-        textViewBudget=view.findViewById(R.id.text_budget_wallet);
+        textViewEarning =view.findViewById(R.id.text_budget_wallet);
         textViewBudgetCurrency=view.findViewById(R.id.currency_1_wallet);
 
         textViewSpend=view.findViewById(R.id.text_spend_wallet);
@@ -93,6 +119,14 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //imageview History & Budget
         imageViewHistory=view.findViewById(R.id.img_history_wallet);
         imageViewBudget=view.findViewById(R.id.img_budget_wallet);
+
+        //setting the current month to textview
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy");
+        String currentDate = dateFormat.format(calendar.getTime());
+
+        textViewCurrentMonth.setText(currentDate);
     }
 
     private void getMonthsList() {
@@ -150,13 +184,36 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
-        /*HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(requireContext(),this,7);
-        recyclerViewRecentTransaction.setAdapter(recentTransAdapter);*/
+        HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(requireContext(),this,recentTranslList);
+        recyclerViewRecentTransaction.setAdapter(recentTransAdapter);
     }
 
     //recent transaction adapter click listener
     @Override
     public void onRecentTransClick(int position) {
-        Toast.makeText(requireContext(), "Position: "+position, Toast.LENGTH_SHORT).show();
+        HomeRecentTransModel item = recentTranslList.get(position);
+
+        Intent intent = new Intent(requireContext(), ViewTransDetailsActivity.class);
+        intent.putExtra("type",item.getTransType());
+        intent.putExtra("catName", item.getCatName());
+        intent.putExtra("amount", String.valueOf(item.getTransAmount()));
+        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("desc", item.getTransDesc());
+        intent.putExtra("tag", item.getTransTag());
+        intent.putExtra("loc", item.getTransLocation());
+        intent.putExtra("img", item.getTransImagePath());
+
+        startActivity(intent);
+    }
+
+    private void getExpenditureDetails() {
+
+        percentage = (int) ((amountSpend / earning) * 100);
+
+        //setting the values to text views
+        textViewEarning.setText(String.valueOf((int) earning));
+        textViewSpend.setText(String.valueOf((int) amountSpend));
+        textViewPercentage.setText(String.valueOf(percentage));
+        textViewPercentage.append(" %");
     }
 }

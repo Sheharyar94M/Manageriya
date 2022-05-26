@@ -127,6 +127,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:text="Remaining Budget: "
+            app:layout_constraintHorizontal_bias="0.4"
             android:textColor="#959494"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold"

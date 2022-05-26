@@ -68,7 +68,7 @@
                 android:fontFamily="@font/century_gothic"
                 android:text="34"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_24ssp"
+                android:textSize="@dimen/_20ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/currency_1_wallet"
                 app:layout_constraintTop_toBottomOf="@id/recycler_view_months_wallet" />
@@ -80,7 +80,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/century_gothic"
                 android:padding="@dimen/_3sdp"
-                android:text="Budget"
+                android:text="Earning"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp"
                 android:textStyle="normal"
@@ -97,7 +97,7 @@
                 android:textSize="@dimen/_16ssp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.65"
+                app:layout_constraintHorizontal_bias="0.55"
                 app:layout_constraintStart_toEndOf="@id/currency_1_wallet"
                 app:layout_constraintTop_toTopOf="@id/currency_1_wallet" />
 
@@ -121,6 +121,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/century_gothic"
                 android:text="70%"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="#F8F5F5"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toEndOf="@id/text_spend_wallet"

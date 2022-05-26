@@ -4,13 +4,13 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import java.util.List;
 public class HistoryActivity extends AppCompatActivity implements MonthAdapter.OnMonthClickListener, HomeFragTransAdapter.RecentTransInterface, AdapterView.OnItemSelectedListener {
 
     private RecyclerView recyclerViewMonth,recyclerViewTransaction;
-    private TextView textViewCurrency,textViewAmount,textViewNoOfTrans;
+    private TextView textViewCurrency, textViewBalance,textViewNoOfTrans;
 
     private List<String> monthsList=new ArrayList<>();
     private Spinner spinner;
@@ -39,7 +41,16 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     private Toolbar toolbar;
 
     //for Spinner
-    String[] dateSortList={"Date (Ascending)","Date (Descending)"};
+    String[] dateSortList={"Date (Descending)", "Date (Ascending)"};
+
+    //variables for calculating the current earning,spending and remaining balance
+    private float earning=0, expense =0,remainingBalance=0;
+
+    //Room DB
+    private RoomDBHelper database;
+
+    //recent transaction list
+    private List<HomeRecentTransModel> recentTransList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,24 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
 
         //initialize views
         initializeViews();
+
+        //initializing database instances
+        database = RoomDBHelper.getInstance(this);
+
+        //getting the total sum of income
+        earning = database.incomeDetailDao().getTotalIncomeSum();
+
+        //getting the total sum of expense
+        expense = database.expenseDetailDao().getTotalExpenseSum();
+
+        //remaining balance
+        remainingBalance = earning - expense;
+
+        //setting the remaining balance value to textview balance
+        textViewBalance.setText(String.valueOf((int) remainingBalance));
+
+        int a =(int) 100-140;
+        Log.i("HELLO_123", "onCreate: "+a);
 
         //get the months list
         getMonthsList();
@@ -84,7 +113,7 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         //setting the currency
         textViewCurrency.setText(CURRENCY_);
 
-        textViewAmount=findViewById(R.id.text_amount_history);
+        textViewBalance =findViewById(R.id.text_amount_history);
         textViewNoOfTrans=findViewById(R.id.text_monthly_trans);
 
         //spinner
@@ -137,25 +166,36 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     @Override
     public void onMonthSelected(String monthName) {}
 
-    private void setRecentTransRecyclerview()
+    private void setRecentTransRecyclerview(List<HomeRecentTransModel> list)
     {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransaction.setLayoutManager(layoutManager);
 
-        /*HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(this,this,3);
-        recyclerViewTransaction.setAdapter(recentTransAdapter);*/
+        HomeFragTransAdapter recentTransAdapter=new HomeFragTransAdapter(this,this,list);
+        recyclerViewTransaction.setAdapter(recentTransAdapter);
+
+        //setting the list size to textview no of transactions
+        textViewNoOfTrans.setText(String.valueOf(list.size()));
     }
 
     //recent transaction click listener
     @Override
     public void onRecentTransClick(int position) {
 
-        Intent intent=new Intent(this, ViewTransDetailsActivity.class);
-        //creating the bundle object
-        Bundle bundle=new Bundle();
-        bundle.putInt("position",position);
-        intent.putExtras(bundle);
-        startActivity(intent,bundle);
+        HomeRecentTransModel item = recentTransList.get(position);
+
+        Intent intent = new Intent(this, ViewTransDetailsActivity.class);
+
+        intent.putExtra("type",item.getTransType());
+        intent.putExtra("catName", item.getCatName());
+        intent.putExtra("amount", String.valueOf(item.getTransAmount()));
+        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("desc", item.getTransDesc());
+        intent.putExtra("tag", item.getTransTag());
+        intent.putExtra("loc", item.getTransLocation());
+        intent.putExtra("img", item.getTransImagePath());
+
+        startActivity(intent);
     }
 
     @Override
@@ -183,11 +223,15 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         switch (position)
         {
             case 0:
-                Toast.makeText(this, dateSortList[0], Toast.LENGTH_SHORT).show();
+                recentTransList = database.homeFragmentDao().getAllTransactions();
+                //setting the list to recycler view
+                setRecentTransRecyclerview(recentTransList);
                 break;
 
             case 1:
-                Toast.makeText(this, dateSortList[1], Toast.LENGTH_SHORT).show();
+                recentTransList = database.homeFragmentDao().getAllTransactionsByASC();
+                //setting the list to recycler view
+                setRecentTransRecyclerview(recentTransList);
                 break;
         }
     }
