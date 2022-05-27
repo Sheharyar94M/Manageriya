@@ -11,21 +11,24 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdapter.MyViewHolder> {
 
     Context context;
+    List<HomeRecentTransModel> recentTransList;
     private RecentTransInterface mRecentTransInterface;
 
-    List<HomeRecentTransModel> recentTransList;
-
-    public HomeFragTransAdapter(Context context,RecentTransInterface recentTransInterface,List<HomeRecentTransModel> list) {
+    public HomeFragTransAdapter(Context context, RecentTransInterface recentTransInterface, List<HomeRecentTransModel> list) {
         this.context = context;
-        this.mRecentTransInterface=recentTransInterface;
+        this.mRecentTransInterface = recentTransInterface;
         this.recentTransList = list;
     }
 
@@ -33,16 +36,16 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
     @Override
     public HomeFragTransAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater inflater=LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.layout_home_fragment_recyclerview,parent,false);
-        return new MyViewHolder(view,mRecentTransInterface);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.layout_home_fragment_recyclerview, parent, false);
+        return new MyViewHolder(view, mRecentTransInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HomeFragTransAdapter.MyViewHolder holder, int position) {
 
         //model class item
-        HomeRecentTransModel item= recentTransList.get(position);
+        HomeRecentTransModel item = recentTransList.get(position);
 
         //category icon
         holder.imageView.setImageResource(item.getCatIcon());
@@ -51,20 +54,18 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         holder.textViewCategory.setText(item.getCatName());
 
         //transaction date
-        holder.textViewDate.setText(item.getTransDate());
+        //holder.textViewDate.setText(item.getTransDate());
+        holder.textViewDate.setText(getConvertedDate(item.getTransDate()));
 
         //transaction amount
         holder.textViewAmount.setText(String.valueOf(item.getTransAmount()));
 
         //checking whether the transaction type is income or expense
-        if(item.getTransType().equals("Income"))
-        {
+        if (item.getTransType().equals("Income")) {
             holder.textViewAmount.append(" +");
             holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorGreen));
 
-        }
-        else if(item.getTransType().equals("Expense"))
-        {
+        } else if (item.getTransType().equals("Expense")) {
             holder.textViewAmount.append(" -");
             holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorRed));
         }
@@ -76,34 +77,56 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         return recentTransList.size();
     }
 
+    public interface RecentTransInterface {
+        void onRecentTransClick(int position);
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout constraintLayout;
         ImageView imageView;
-        TextView textViewCategory,textViewCash,textViewAmount,textViewDate;
+        TextView textViewCategory, textViewCash, textViewAmount, textViewDate;
         RecentTransInterface recentTransInterface;
 
-        public MyViewHolder(@NonNull View itemView,RecentTransInterface recentTransInterface) {
+        public MyViewHolder(@NonNull View itemView, RecentTransInterface recentTransInterface) {
             super(itemView);
 
-            constraintLayout=itemView.findViewById(R.id.constraint_home_frag_recycler);
+            constraintLayout = itemView.findViewById(R.id.constraint_home_frag_recycler);
 
-            imageView=itemView.findViewById(R.id.img_home_frag_recycler);
+            imageView = itemView.findViewById(R.id.img_home_frag_recycler);
 
-            textViewCategory=itemView.findViewById(R.id.text_view_cat_home_frag_recycler);
-            textViewCash=itemView.findViewById(R.id.text_view_cash_home_frag_recycler);
-            textViewAmount=itemView.findViewById(R.id.text_view_amount_home_frag_recycler);
-            textViewDate=itemView.findViewById(R.id.text_view_date_home_frag_recycler);
+            textViewCategory = itemView.findViewById(R.id.text_view_cat_home_frag_recycler);
+            textViewCash = itemView.findViewById(R.id.text_view_cash_home_frag_recycler);
+            textViewAmount = itemView.findViewById(R.id.text_view_amount_home_frag_recycler);
+            textViewDate = itemView.findViewById(R.id.text_view_date_home_frag_recycler);
 
-            this.recentTransInterface=recentTransInterface;
+            this.recentTransInterface = recentTransInterface;
 
 
             constraintLayout.setOnClickListener(view -> recentTransInterface.onRecentTransClick(getAdapterPosition()));
         }
     }
 
-    public interface RecentTransInterface
-    {
-        void onRecentTransClick(int position);
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+        2022-05-27 11:05:32 to May 27, 2022 11:05 am
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

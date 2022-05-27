@@ -178,7 +178,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         currentDate= dateFormat.format(calendar.getTime());
 
-        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        SimpleDateFormat dateTimeFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         currentDateTime=dateTimeFormat.format(calendar.getTime());
 
     }

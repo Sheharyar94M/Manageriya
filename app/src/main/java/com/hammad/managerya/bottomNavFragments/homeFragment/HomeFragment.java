@@ -3,7 +3,6 @@ package com.hammad.managerya.bottomNavFragments.homeFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,13 +30,36 @@ import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeFragTransAdapter.RecentTransInterface, MonthAdapter.OnMonthClickListener {
 
+    public static final int[] COLORS_PALETTE_1 = {
+            Color.rgb(210, 245, 255), Color.rgb(197, 230, 252),
+            Color.rgb(131, 200, 247), Color.rgb(58, 166, 239),
+            Color.rgb(29, 152, 255)
+    };
+    public static final int[] COLORS_PALETTE_2 = {
+            Color.rgb(87, 187, 248), Color.rgb(3, 138, 231),
+            Color.rgb(5, 159, 249), Color.rgb(4, 151, 243),
+            Color.rgb(187, 217, 249)
+    };
+    //string for inner circle of pie graph
+    public static String CURRENCY_ = "PKR ";
+    String spend = "\nSpend";
+    //array list for pie chart entries
+    ArrayList<PieEntry> pieEntries = new ArrayList<>();
+    //recent transaction list
+    List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
+    //database
+    RoomDBHelper database;
+    //list to be passed to pie chart
+    List<ExpenseCatDetailModel> pieChartDataList = new ArrayList<>();
     private TextView textViewCurrentDate;
     private TextView textViewTotalIncome, textViewSpend, textViewPercentage;
     private TextView textViewCurrencyIncome, textViewCurrencyExpense;
@@ -46,40 +67,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private List<String> monthsList = new ArrayList<>();
     private PieChart pieChart;
     private RecyclerView recyclerViewRecentBudget;
-
-    //string for inner circle of pie graph
-    public static String CURRENCY_ = "PKR ";
-    String spend = "\nSpend";
-
-    public static final int[] COLORS_PALETTE_1 = {
-            Color.rgb(210, 245, 255), Color.rgb(197, 230, 252),
-            Color.rgb(131, 200, 247), Color.rgb(58, 166, 239),
-            Color.rgb(29, 152, 255)
-    };
-
-    public static final int[] COLORS_PALETTE_2 = {
-            Color.rgb(87, 187, 248), Color.rgb(3, 138, 231),
-            Color.rgb(5, 159, 249), Color.rgb(4, 151, 243),
-            Color.rgb(187, 217, 249)
-    };
-
-
-    //array list for pie chart entries
-    ArrayList<PieEntry> pieEntries = new ArrayList<>();
-
-    //recent transaction list
-    List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
-
-    //database
-    RoomDBHelper database;
-
     //variables for calculating the current earning,spending and percentage
-    private float earning=0,amountSpend=0;
-    private int percentage=0;
-
-    //list to be passed to pie chart
-    List<ExpenseCatDetailModel> pieChartDataList=new ArrayList<>();
-
+    private float earning = 0, amountSpend = 0;
+    private int percentage = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -162,14 +152,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         String currentDate = dateFormat.format(calendar.getTime());
 
-        //working on time for Room DB
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            SimpleDateFormat dateFormat1=new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
-            String currentDate1=dateFormat1.format(calendar.getTime());
-            Log.i("HELLO_123", "date 1: "+currentDate1);
-        }
-
-
         textViewCurrentDate.setText(currentDate);
     }
 
@@ -226,9 +208,8 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private void loadPieChartData() {
 
         //setting the data to pie chart
-        for(int i=0; i<pieChartDataList.size(); i++)
-        {
-            pieEntries.add(new PieEntry(pieChartDataList.get(i).getExpCatAmount() / amountSpend,pieChartDataList.get(i).getExpCatName()));
+        for (int i = 0; i < pieChartDataList.size(); i++) {
+            pieEntries.add(new PieEntry(pieChartDataList.get(i).getExpCatAmount() / amountSpend, pieChartDataList.get(i).getExpCatName()));
         }
 
         ArrayList<Integer> colors = new ArrayList<>();
@@ -316,10 +297,10 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         HomeRecentTransModel item = recentTranslList.get(position);
 
         Intent intent = new Intent(requireContext(), ViewTransDetailsActivity.class);
-        intent.putExtra("type",item.getTransType());
+        intent.putExtra("type", item.getTransType());
         intent.putExtra("catName", item.getCatName());
         intent.putExtra("amount", String.valueOf(item.getTransAmount()));
-        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("date", getConvertedDate(item.getTransDate()));
         intent.putExtra("desc", item.getTransDesc());
         intent.putExtra("tag", item.getTransTag());
         intent.putExtra("loc", item.getTransLocation());
@@ -358,5 +339,27 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
     private void getExpenseSumByCategory() {
         pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum();
+    }
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+        2022-05-27 11:05:32 to May 27, 2022 11:05 am
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

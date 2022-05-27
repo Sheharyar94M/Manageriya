@@ -24,9 +24,11 @@ import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTra
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.history.HistoryActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClickListener,HomeFragTransAdapter.RecentTransInterface {
@@ -197,7 +199,7 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         intent.putExtra("type",item.getTransType());
         intent.putExtra("catName", item.getCatName());
         intent.putExtra("amount", String.valueOf(item.getTransAmount()));
-        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("date", getConvertedDate(item.getTransDate()));
         intent.putExtra("desc", item.getTransDesc());
         intent.putExtra("tag", item.getTransTag());
         intent.putExtra("loc", item.getTransLocation());
@@ -215,5 +217,27 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         textViewSpend.setText(String.valueOf((int) amountSpend));
         textViewPercentage.setText(String.valueOf(percentage));
         textViewPercentage.append(" %");
+    }
+
+    /*
+       This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+       2022-05-27 11:05:32 to May 27, 2022 11:05 am
+   */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

@@ -166,7 +166,7 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
         textViewDate.append(currentDate);
 
         //this is used to save the current date along with time (in case user does not change current date)
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         currentDateTime=dateFormat1.format(calendar.getTime());
     }
 
@@ -192,7 +192,7 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
                 textViewDate.append(selectedDate);
 
                 //selected date and time
-                SimpleDateFormat dateFormat=new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 selectedDateTime =dateFormat.format(calendar.getTime());
             };
 

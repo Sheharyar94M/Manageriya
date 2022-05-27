@@ -25,9 +25,11 @@ import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity implements MonthAdapter.OnMonthClickListener, HomeFragTransAdapter.RecentTransInterface, AdapterView.OnItemSelectedListener {
@@ -74,9 +76,6 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
 
         //setting the remaining balance value to textview balance
         textViewBalance.setText(String.valueOf((int) remainingBalance));
-
-        int a =(int) 100-140;
-        Log.i("HELLO_123", "onCreate: "+a);
 
         //get the months list
         getMonthsList();
@@ -189,7 +188,7 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         intent.putExtra("type",item.getTransType());
         intent.putExtra("catName", item.getCatName());
         intent.putExtra("amount", String.valueOf(item.getTransAmount()));
-        intent.putExtra("date", item.getTransDate());
+        intent.putExtra("date", getConvertedDate(item.getTransDate()));
         intent.putExtra("desc", item.getTransDesc());
         intent.putExtra("tag", item.getTransTag());
         intent.putExtra("loc", item.getTransLocation());
@@ -251,5 +250,27 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+       This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+       2022-05-27 11:05:32 to May 27, 2022 11:05 am
+   */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }
