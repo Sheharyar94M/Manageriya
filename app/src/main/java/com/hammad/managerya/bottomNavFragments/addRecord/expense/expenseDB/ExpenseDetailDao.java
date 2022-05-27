@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
 import java.util.List;
 
@@ -23,4 +24,12 @@ public interface ExpenseDetailDao {
     //category wise sum of expense categories
     @Query("SELECT expense_category.expense_cat_id AS expCatId,expense_category.expense_cat_name AS expCatName,sum(expense_amount) AS expCatAmount from expense_detail INNER JOIN expense_category ON expense_category.expense_cat_id = expense_detail.expense_det_cat_id group by expense_category.expense_cat_id")
     List<ExpenseCatDetailModel> getExpenseCategoriesSum();
+
+    //search expense detail by category id
+    @Query("Select sum(expense_amount) from expense_detail where expense_det_cat_id= :catId")
+    int getExpenseCategorySum(int catId);
+
+    //query for retrieving Expense details transaction searched by category id
+    @Query("select expense_detail.expense_det_cat_id as catId,expense_category.expense_cat_name as catName,expense_category.expense_icon_name as catIcon,expense_detail.expense_amount as transAmount, expense_detail.expense_date as transDate,expense_detail.expense_desc as transDesc,expense_detail.expense_tag as transTag,expense_detail.expense_location as transLocation,expense_detail.expense_img_path as transImagePath, \"Expense\" as transType from expense_category inner join expense_detail on expense_category.expense_cat_id=expense_detail.expense_det_cat_id where expense_det_cat_id= :catId ORDER by transDate DESC")
+    List<HomeRecentTransModel> getExpenseDetailById(int catId);
 }

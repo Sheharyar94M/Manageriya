@@ -10,19 +10,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
+import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityBudgetHistory extends AppCompatActivity implements MonthAdapter.OnMonthClickListener, HomeFragTransAdapter.RecentTransInterface {
@@ -39,6 +45,19 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
     private List<String> monthsList=new ArrayList<>();
 
+    //for saving the budget category id received through intent
+    private int budgetCatId = -1;
+
+    //list which contains the details of particular budget
+    private List<BudgetDetailsModel> budgetDetailList=new ArrayList<>();
+
+    //DB instance
+    private RoomDBHelper database;
+
+    private int budgetSpend=0;
+
+    private List<HomeRecentTransModel> expenseDetailList=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,14 +69,27 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         //initialize views
         initializeViews();
 
+        //initializing database instance
+        database=RoomDBHelper.getInstance(this);
+
+        getIntentData();
+
+        budgetDetailList = database.budgetDao().getBudgetById(budgetCatId);
+
+        //getting the recent transaction list of specific budget categories
+        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId);
+
         //getting the months list
         getMonthsList();
 
         //month recyclerview
         setMonthRecycler();
 
+        //setting the budget details to text views
+        setBudgetDetails(budgetDetailList);
+
         //recent budget transaction recyclerview
-        //setRecentRecycler();
+        setRecentRecycler();
     }
 
     private void initializeViews() {
@@ -168,15 +200,93 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewRecent.setLayoutManager(layoutManager);
 
-       /* HomeFragTransAdapter adapter=new HomeFragTransAdapter(this,this,3);
-        recyclerViewRecent.setAdapter(adapter);*/
+        HomeFragTransAdapter adapter=new HomeFragTransAdapter(this,this,expenseDetailList);
+        recyclerViewRecent.setAdapter(adapter);
+
+        //setting the size of list to textViewTotalNoOfTrans
+        textViewTotalNoOfTrans.setText(String.valueOf(expenseDetailList.size()));
     }
 
     //recent transaction adapter listener
     @Override
     public void onRecentTransClick(int position) {
-        Toast.makeText(this, "Position: "+position, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, ViewTransDetailsActivity.class));
+
+        HomeRecentTransModel item=expenseDetailList.get(position);
+
+        Intent intent = new Intent(this, ViewTransDetailsActivity.class);
+        intent.putExtra("type", item.getTransType());
+        intent.putExtra("catName", item.getCatName());
+        intent.putExtra("amount", String.valueOf(item.getTransAmount()));
+        intent.putExtra("date", getConvertedDate(item.getTransDate()));
+        intent.putExtra("desc", item.getTransDesc());
+        intent.putExtra("tag", item.getTransTag());
+        intent.putExtra("loc", item.getTransLocation());
+        intent.putExtra("img", item.getTransImagePath());
+
+        startActivity(intent);
+    }
+
+    private void getIntentData(){
+        Intent intent=getIntent();
+
+        budgetCatId = intent.getIntExtra("BudgetCatId",-1);
+    }
+
+    private void setBudgetDetails(List<BudgetDetailsModel> list)
+    {
+        BudgetDetailsModel item= list.get(0);
+
+        //getting the sum of spend budget for particular category
+        budgetSpend = getBudgetSpend(budgetCatId);
+
+        //if the category name contain new line literal (\n) then replace that liberal with no space so that the category can be displayed in single line
+        if(item.getBudgetCatName().contains("\n")) {
+            textViewBudgetCatName.setText(item.getBudgetCatName().replace("\n",""));
+        }
+        else if(!(item.getBudgetCatName().contains("\n"))) {
+            textViewBudgetCatName.setText(item.getBudgetCatName());
+        }
+
+        textViewTotalBudget.setText(String.valueOf(item.getBudgetLimit()));
+
+        textViewBudgetSpend.setText(String.valueOf(budgetSpend));
+
+        textViewRemainingBudget.setText(String.valueOf(item.getBudgetLimit() - budgetSpend));
+
+        //setting the progress bar values
+        progressBar.setMax(item.getBudgetLimit());
+        progressBar.setProgress(budgetSpend);
+
+        //textviews of the transactions part
+        textViewBudgetHistoryAmount.setText(String.valueOf(item.getBudgetLimit() - budgetSpend));
+
+    }
+
+    //function for getting the details of particular category (expense transactions)
+    private int getBudgetSpend(int budgetCatId) {
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+    }
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+        2022-05-27 11:05:32 to May 27, 2022 11:05 am
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 
 }

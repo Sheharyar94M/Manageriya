@@ -2,17 +2,25 @@ package com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB;
 
 public class BudgetDetailsModel {
 
-    public String budgetCatId;
+    public int budgetCatId;
     public String budgetCatName;
-    public String budgetLimit;
+    public int budgetIcon;
+    public int budgetLimit;
 
     public BudgetDetailsModel() {}
 
-    public String getBudgetCatId() {
+    public BudgetDetailsModel(int budgetCatId, String budgetCatName, int budgetIcon, int budgetLimit) {
+        this.budgetCatId = budgetCatId;
+        this.budgetCatName = budgetCatName;
+        this.budgetIcon = budgetIcon;
+        this.budgetLimit = budgetLimit;
+    }
+
+    public int getBudgetCatId() {
         return budgetCatId;
     }
 
-    public void setBudgetCatId(String budgetCatId) {
+    public void setBudgetCatId(int budgetCatId) {
         this.budgetCatId = budgetCatId;
     }
 
@@ -24,11 +32,19 @@ public class BudgetDetailsModel {
         this.budgetCatName = budgetCatName;
     }
 
-    public String getBudgetLimit() {
+    public int getBudgetIcon() {
+        return budgetIcon;
+    }
+
+    public void setBudgetIcon(int budgetIcon) {
+        this.budgetIcon = budgetIcon;
+    }
+
+    public int getBudgetLimit() {
         return budgetLimit;
     }
 
-    public void setBudgetLimit(String budgetLimit) {
+    public void setBudgetLimit(int budgetLimit) {
         this.budgetLimit = budgetLimit;
     }
 }

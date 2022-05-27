@@ -9,27 +9,26 @@ import java.io.Serializable;
 @Entity(tableName = "budget")
 public class BudgetEntity implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    private int id;
-
+    @PrimaryKey
     @ColumnInfo(name = "category_id")
     private int categoryId;
 
     @ColumnInfo(name = "category_name")
     private String categoryName;
 
+    @ColumnInfo(name = "category_icon")
+    private int categoryIcon;
+
     @ColumnInfo(name = "budget_limit")
     private int budgetLimit;
 
     public BudgetEntity() {}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public BudgetEntity(int categoryId, String categoryName, int categoryIcon, int budgetLimit) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.categoryIcon = categoryIcon;
+        this.budgetLimit = budgetLimit;
     }
 
     public int getCategoryId() {
@@ -46,6 +45,14 @@ public class BudgetEntity implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public int getCategoryIcon() {
+        return categoryIcon;
+    }
+
+    public void setCategoryIcon(int categoryIcon) {
+        this.categoryIcon = categoryIcon;
     }
 
     public int getBudgetLimit() {

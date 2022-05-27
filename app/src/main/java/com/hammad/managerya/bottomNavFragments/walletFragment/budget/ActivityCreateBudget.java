@@ -2,7 +2,9 @@ package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseAdapter;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,10 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
     private RecyclerView recyclerView;
     private AppCompatButton buttonCreateBudget;
 
+    //for saving budget category details
     private String categoryName="";
+    private int categoryId = -1;
+    private int categoryIcon = -1;
 
     //Database instance
     private RoomDBHelper database;
@@ -87,6 +93,7 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
         switch (item.getItemId()) {
             case R.id.finish_saving_goal:
                 //finish the activity
+                startActivity(new Intent(ActivityCreateBudget.this,BudgetActivity.class));
                 finish();
                 break;
         }
@@ -107,6 +114,8 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
     @Override
     public void onExpenseItemClicked(int position, String catName) {
         categoryName = catName;
+        categoryId = expenseCategoryList.get(position).getExpenseCatId();
+        categoryIcon = expenseCategoryList.get(position).getExpenseCatIconName();
     }
 
     private void createBudget()
@@ -123,7 +132,17 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
         }
         else
         {
-            Toast.makeText(this, "Budget created\n"+"Category: "+categoryName, Toast.LENGTH_LONG).show();
+            //saving the budget
+            database.budgetDao().addBudget(new BudgetEntity(categoryId,categoryName,categoryIcon,Integer.valueOf(editTextAmount.getText().toString())));
+            Toast.makeText(this, "Budget Created Successfully", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(ActivityCreateBudget.this,BudgetActivity.class));
+                    finish();
+                }
+            },1200);
         }
     }
 }

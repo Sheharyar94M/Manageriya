@@ -173,20 +173,20 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         incomeCatList.add(new IncomeCategoryEntity(1,"Allowance",R.drawable.allowance));
 
         incomeCatList.add(new IncomeCategoryEntity(2,"Bonus",R.drawable.bonus));
-        incomeCatList.add(new IncomeCategoryEntity(3,"Business\nProfit",R.drawable.business_profit));
+        incomeCatList.add(new IncomeCategoryEntity(3,"Business \nProfit",R.drawable.business_profit));
 
         incomeCatList.add(new IncomeCategoryEntity(4,"Commission",R.drawable.commission));
 
         incomeCatList.add(new IncomeCategoryEntity(5,"Freelance",R.drawable.freelance));
 
-        incomeCatList.add(new IncomeCategoryEntity(6,"Gifts\nReceived",R.drawable.gifts_received));
+        incomeCatList.add(new IncomeCategoryEntity(6,"Gifts \nReceived",R.drawable.gifts_received));
 
         incomeCatList.add(new IncomeCategoryEntity(7,"Investment",R.drawable.investment));
 
-        incomeCatList.add(new IncomeCategoryEntity(8,"Loan\nReceived",R.drawable.loan_received));
+        incomeCatList.add(new IncomeCategoryEntity(8,"Loan \nReceived",R.drawable.loan_received));
 
         incomeCatList.add(new IncomeCategoryEntity(9,"Pension",R.drawable.pension));
-        incomeCatList.add(new IncomeCategoryEntity(10,"Pocket\nMoney",R.drawable.pocket_money));
+        incomeCatList.add(new IncomeCategoryEntity(10,"Pocket \nMoney",R.drawable.pocket_money));
 
         incomeCatList.add(new IncomeCategoryEntity(11,"Salary",R.drawable.salary));
         incomeCatList.add(new IncomeCategoryEntity(12,"Savings",R.drawable.savings));
@@ -196,7 +196,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     private void expenseCategories() {
 
-        expenseCatList.add(new ExpenseCategoryEntity(1,"Bills &\nUtilities",R.drawable.bills));
+        expenseCatList.add(new ExpenseCategoryEntity(1,"Bills & \nUtilities",R.drawable.bills));
 
         expenseCatList.add(new ExpenseCategoryEntity(2,"Charity", R.drawable.charity));
         expenseCatList.add(new ExpenseCategoryEntity(3,"Committee",R.drawable.committee));
@@ -217,15 +217,15 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         expenseCatList.add(new ExpenseCategoryEntity(13,"Installment",R.drawable.installment));
         expenseCatList.add(new ExpenseCategoryEntity(14,"Insurance",R.drawable.insurance));
 
-        expenseCatList.add(new ExpenseCategoryEntity(15,"Loan\nPaid",R.drawable.loan_paid));
+        expenseCatList.add(new ExpenseCategoryEntity(15,"Loan \nPaid",R.drawable.loan_paid));
 
         expenseCatList.add(new ExpenseCategoryEntity(16,"Medical",R.drawable.medical));
         expenseCatList.add(new ExpenseCategoryEntity(17,"Mobile",R.drawable.mobile));
 
         expenseCatList.add(new ExpenseCategoryEntity(18,"Office",R.drawable.office));
-        expenseCatList.add(new ExpenseCategoryEntity(19,"Other\nExpenses",R.drawable.other_expenses));
+        expenseCatList.add(new ExpenseCategoryEntity(19,"Other \nExpenses",R.drawable.other_expenses));
 
-        expenseCatList.add(new ExpenseCategoryEntity(20,"Rent\nPaid",R.drawable.rent_paid));
+        expenseCatList.add(new ExpenseCategoryEntity(20,"Rent \nPaid",R.drawable.rent_paid));
 
         expenseCatList.add(new ExpenseCategoryEntity(21,"Shopping",R.drawable.shopping));
 

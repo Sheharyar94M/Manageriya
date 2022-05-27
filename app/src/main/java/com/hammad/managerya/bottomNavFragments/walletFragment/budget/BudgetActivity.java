@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +36,12 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     private List<String> monthsList=new ArrayList<>();
 
+    //budget list
+    private List<BudgetDetailsModel> addedBudgetList=new ArrayList<>();
+
+    //database instance
+    private RoomDBHelper database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,12 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //initialize views
         initializeViews();
 
+        //initializing database instance
+        database = RoomDBHelper.getInstance(this);
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList();
+
         //get the month list
         getMonthsList();
 
@@ -55,7 +69,10 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         setBudgetRecyclerview();
 
         //create budget click listener
-        textViewCreateBudget.setOnClickListener(view -> startActivity(new Intent(this, ActivityCreateBudget.class)));
+        textViewCreateBudget.setOnClickListener(view -> {
+            startActivity(new Intent(this, ActivityCreateBudget.class));
+            finish();
+        });
     }
 
     private void setToolbar()
@@ -162,7 +179,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewBudget.setLayoutManager(layoutManager);
 
-        BudgetAdapter budgetAdapter=new BudgetAdapter(this,this);
+        BudgetAdapter budgetAdapter=new BudgetAdapter(this,addedBudgetList,this);
         recyclerViewBudget.setAdapter(budgetAdapter);
     }
 
@@ -170,7 +187,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     @Override
     public void onBudgetItemClicked(int position) {
 
-        Toast.makeText(this, "Position: "+position, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, ActivityBudgetHistory.class));
+        Intent intent=new Intent(this, ActivityBudgetHistory.class);
+        intent.putExtra("BudgetCatId",addedBudgetList.get(position).getBudgetCatId());
+        startActivity(intent);
     }
 }
