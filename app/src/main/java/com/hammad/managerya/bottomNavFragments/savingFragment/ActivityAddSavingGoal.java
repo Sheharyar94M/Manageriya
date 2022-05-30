@@ -2,20 +2,17 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -33,14 +30,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseAdapter.ExpenseInterfaceListener {
+public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpenseAdapter.ExpenseInterfaceListener {
 
     private Toolbar toolbar;
     private EditText editTextEnterAmount, editTextGoalTitle, editTextAddTag;
     private RecyclerView recyclerView;
     private TextView textViewTargetDate;
 
+    //two different date formats are used. One for displaying date and second for saving data in database based on date format
     private String dateToSet;
+    private String dateToSave;
 
     private AppCompatButton buttonCreateGoal;
 
@@ -53,7 +52,7 @@ public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saving_goal);
+        setContentView(R.layout.activity_add_saving_goal);
 
         //setting the toolbar
         setToolbar();
@@ -132,7 +131,7 @@ public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseA
     }
 
     private void dateAlertDialog() {
-        final String[] date = {""};
+        /*final String[] date = {""};
 
         CalendarView calendarView;
 
@@ -188,7 +187,26 @@ public class ActivitySavingGoal extends AppCompatActivity implements AddExpenseA
         });
 
         builder.create();
-        builder.show();
+        builder.show();*/
+
+        Log.i("HELLO_123", "dateAlertDialog: clicked");
+
+        final Calendar calendar1=Calendar.getInstance();
+
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
+                /*calendar.set(Calendar.YEAR,i);*/
+                calendar1.set(Calendar.YEAR,i);
+                calendar1.set(Calendar.MONTH,i1);
+                calendar1.set(Calendar.DAY_OF_MONTH,i2);
+                Log.i("HELLO_123", "i: "+i+"\ni1: "+i1+"\ni2: "+i2);
+
+            }
+        };
+        new DatePickerDialog(ActivityAddSavingGoal.this,dateSetListener,calendar1.get(Calendar.YEAR),calendar1.get(Calendar.MINUTE),calendar1.get(Calendar.DAY_OF_MONTH));
+
     }
 
     private void setRecyclerView()

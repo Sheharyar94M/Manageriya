@@ -19,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/gradient_toolbar"
             app:title="History"
-            app:titleMarginStart="@dimen/_110sdp"
+            app:titleMarginStart="@dimen/_90sdp"
             app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>

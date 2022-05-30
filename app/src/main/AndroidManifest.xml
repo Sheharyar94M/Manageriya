@@ -17,9 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
+            android:name=".bottomNavFragments.savingFragment.ActivitySavingTransactionDetail"
+            android:exported="false" />
+        <activity
             android:name=".bottomNavFragments.loanFragment.contact.AddLoanTransactionActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".bottomNavFragments.loanFragment.contact.ConsumerDetailActivity"
             android:exported="false" />
@@ -33,10 +36,10 @@
             android:name=".bottomNavFragments.walletFragment.budget.ActivityCreateBudget"
             android:exported="false" />
         <activity
-            android:name=".bottomNavFragments.savingFragment.ActivitySavingTransaction"
+            android:name=".bottomNavFragments.savingFragment.ActivityAddSavingTransaction"
             android:exported="false" />
         <activity
-            android:name=".bottomNavFragments.savingFragment.ActivitySavingGoal"
+            android:name=".bottomNavFragments.savingFragment.ActivityAddSavingGoal"
             android:exported="false" />
         <activity
             android:name=".bottomNavFragments.walletFragment.budget.BudgetActivity"
@@ -49,7 +52,7 @@
             android:exported="false" />
         <activity
             android:name=".bottomNavFragments.addRecord.ActivityAddTransactionDetail"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".bottomNavFragments.addRecord.AddRecordActivity"
             android:exported="false" />

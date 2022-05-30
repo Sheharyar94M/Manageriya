@@ -26,7 +26,7 @@ import com.hammad.managerya.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ActivitySavingTransaction extends AppCompatActivity {
+public class ActivityAddSavingTransaction extends AppCompatActivity {
 
     private EditText editTextTrans;
     private TextView textViewDate;
@@ -38,7 +38,7 @@ public class ActivitySavingTransaction extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saving_transaction);
+        setContentView(R.layout.activity_add_saving_transaction);
 
         //initialize views
         initializeViews();

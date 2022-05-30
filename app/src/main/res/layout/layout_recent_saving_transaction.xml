@@ -1,0 +1,86 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraint__1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/img__1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/charity_50"
+        android:scaleType="fitCenter"
+        android:background="@drawable/home_fragment_circular_recycle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_category"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/century_gothic"
+        android:text="Saving Goal Title"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        android:minLines="2"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintStart_toEndOf="@id/img__1"
+        app:layout_constraintTop_toTopOf="@id/img__1"/>
+
+    <TextView
+        android:id="@+id/text_date_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/century_gothic"
+        android:text="April 7, 2022"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/img__1"
+        app:layout_constraintEnd_toStartOf="@id/img_more"/>
+
+    <TextView
+        android:id="@+id/text_currency_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/century_gothic"
+        android:text="$"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/text_amount_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/century_gothic"
+        android:text="7000"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"/>
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="text_currency_,text_amount_"
+        app:flow_horizontalGap="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="@id/img__1"
+        app:layout_constraintEnd_toStartOf="@id/img_more"/>
+
+    <ImageView
+        android:id="@+id/img_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_more"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/flow"
+        app:layout_constraintBottom_toBottomOf="@id/text_date_"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

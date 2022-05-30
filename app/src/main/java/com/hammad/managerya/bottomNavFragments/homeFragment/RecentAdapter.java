@@ -1,6 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -9,12 +10,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.ActivityBudgetHistory;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +37,23 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
             ,"#7405fc","#8905fc","#a205fc","#c305fc","#e005fc","#fc05fc","#fc05e0"
             ,"#fc0599","#fc0558","#fc0543","#fc052e","#fc0522","#fc0505");
 
-    public RecentAdapter(Context context) {
+    private List<BudgetDetailsModel> addedBudgetList;
+
+    private float budgetSpend;
+    private float budgetTotal;
+
+    private RoomDBHelper database;
+
+    private int percentage;
+
+    public RecentAdapter(Context context,List<BudgetDetailsModel> list) {
         this.context = context;
+        this.addedBudgetList = list;
+        this.budgetSpend = 0;
+        this.budgetTotal = 0;
+        this.percentage = 0;
+
+        database = RoomDBHelper.getInstance(context);
     }
 
     @NonNull
@@ -47,17 +67,56 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull RecentAdapter.MyViewHolder holder, int position) {
 
+        BudgetDetailsModel item = addedBudgetList.get(position);
+
+        //for getting details of particular category expenses (which is budget spent for that category)
+        budgetSpend = getBudgetSpend(item.getBudgetCatId());
+
+        //total budget of category
+        budgetTotal = item.getBudgetLimit();
+
+        //setting the values
+        holder.imageViewIcon.setImageResource(item.getBudgetIcon());
+
+        //if the category name contain new line literal (\n) then replace that liberal with no space so that the category can be displayed in single line
+        if(item.getBudgetCatName().contains("\n")) {
+            holder.textViewCat.setText(item.getBudgetCatName().replace("\n",""));
+        }
+        else if(!(item.getBudgetCatName().contains("\n"))) {
+            holder.textViewCat.setText(item.getBudgetCatName());
+        }
+
+        holder.textViewAmount.setText(String.valueOf((int) budgetSpend));
+        holder.textViewAmount.append(" of ");
+        holder.textViewAmount.append(String.valueOf((int) budgetTotal));
+
         //random color code from colorsList
         colorCode =colorsList.get(random.nextInt(colorsList.size()));
 
         //set the randomly generated color as progress tint
         holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor(colorCode)));
 
+        //setting the progress bar values
+        holder.progressBar.setMax(item.getBudgetLimit());
+        holder.progressBar.setProgress((int) budgetSpend);
+
+        //for percentage
+        percentage = (int) ((budgetSpend / budgetTotal) * 100);
+        holder.textViewPercentage.setText(String.valueOf(percentage));
+        holder.textViewPercentage.append(" %");
+
+        //itemview click listener
+        holder.constraintLayout.setOnClickListener(view -> {
+            Intent intent=new Intent(context, ActivityBudgetHistory.class);
+            intent.putExtra("BudgetCatId",item.getBudgetCatId());
+            context.startActivity(intent);
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return addedBudgetList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -80,5 +139,11 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
             progressBar=itemView.findViewById(R.id.progress_recent_frag_home);
         }
+    }
+
+    //function for getting the details of particular category (expense transactions)
+    private int getBudgetSpend(int budgetCatId) {
+
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
     }
 }

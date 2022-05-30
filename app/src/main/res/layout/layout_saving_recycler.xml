@@ -20,7 +20,7 @@
         android:id="@+id/txt_cat_saving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bonus"
+        android:text="Saving Title"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/_13ssp"

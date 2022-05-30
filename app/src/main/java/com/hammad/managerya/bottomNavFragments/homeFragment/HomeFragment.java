@@ -29,6 +29,7 @@ import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,9 +68,13 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private List<String> monthsList = new ArrayList<>();
     private PieChart pieChart;
     private RecyclerView recyclerViewRecentBudget;
+
     //variables for calculating the current earning,spending and percentage
     private float earning = 0, amountSpend = 0;
     private int percentage = 0;
+
+    //budget list
+    private List<BudgetDetailsModel> addedBudgetList=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +89,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         //getting the list of all recent transaction (income & expense)
         recentTranslList = database.homeFragmentDao().getAllTransactions();
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList();
 
         //sum of total income
         earning = database.incomeDetailDao().getTotalIncomeSum();
@@ -286,7 +294,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecentBudget.setLayoutManager(layoutManager);
 
-        RecentAdapter recentAdapter = new RecentAdapter(requireContext());
+        RecentAdapter recentAdapter = new RecentAdapter(requireContext(),addedBudgetList);
         recyclerViewRecentBudget.setAdapter(recentAdapter);
     }
 

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".bottomNavFragments.savingFragment.ActivitySavingTransactionDetail"
+    android:background="#eff0f0">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_saving_trans_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_saving_trans_detail"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/gradient_toolbar"
+            app:title="Saving Detail"
+            app:titleTextColor="@color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_1_saving_trans"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/drawable_recent_trans_activity"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_2_saving_trans"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_white_background"
+        app:layout_constraintWidth_percent="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.26">
+
+        <ImageView
+            android:id="@+id/img_saving_detail"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/charity_50"
+            android:scaleType="fitCenter"
+            android:background="@drawable/home_fragment_circular_recycle"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txt_cat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:text="Saving Goal Title"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintStart_toEndOf="@id/img_saving_detail"
+            app:layout_constraintTop_toTopOf="@id/img_saving_detail"/>
+
+        <TextView
+            android:id="@+id/txt_saving_date_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:text="Target Date: "
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintStart_toEndOf="@id/img_saving_detail"
+            app:layout_constraintTop_toTopOf="@id/txt_saving_date_2"
+            app:layout_constraintBottom_toBottomOf="@id/txt_saving_date_2"/>
+
+        <TextView
+            android:id="@+id/txt_saving_date_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:text="30 May 2022"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/_5sdp"
+            app:layout_constraintStart_toEndOf="@+id/txt_saving_date_1"
+            app:layout_constraintBottom_toBottomOf="@id/img_saving_detail"/>
+
+        <TextView
+            android:id="@+id/text_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:text="Saved:"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="@id/img_saving_detail"
+            app:layout_constraintTop_toBottomOf="@id/img_saving_detail" />
+
+        <TextView
+            android:id="@+id/text_currency_saving_trans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+            android:text="$"/>
+
+        <TextView
+            android:id="@+id/total_saving"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+            android:text="4000" />
+
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="/" />
+
+        <TextView
+            android:id="@+id/total_saving_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="10000" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow_saving_trans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="text_currency_saving_trans,total_saving,slash,total_saving_goal"
+            app:flow_horizontalGap="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/_7sdp"
+            app:layout_constraintStart_toEndOf="@id/text_1"
+            app:layout_constraintTop_toTopOf="@id/text_1"/>
+
+        <TextView
+            android:id="@+id/percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="31%"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintTop_toTopOf="@id/flow_saving_trans"
+            app:layout_constraintEnd_toEndOf="@id/progress_savings_detail"/>
+
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_savings_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:progress="30"
+            android:max="140"
+            app:trackThickness="@dimen/_10sdp"
+            app:trackCornerRadius="@dimen/_20sdp"
+            app:trackColor="@color/colorGrey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/flow_saving_trans"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txt_3_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recent Transactions"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@id/cons_2_saving_trans"
+        app:layout_constraintStart_toStartOf="@id/cons_2_saving_trans"/>
+
+    <TextView
+        android:id="@+id/txt_create_saving_trans"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="wrap_content"
+        android:text="CREATE"
+        android:textAllCaps="true"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/button_create_saving"
+        android:padding="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="@id/txt_3_"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_recent_saving_trans"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_create_saving_trans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_40sdp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

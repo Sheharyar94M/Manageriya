@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -58,6 +57,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
     private List<HomeRecentTransModel> expenseDetailList=new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +89,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         setBudgetDetails(budgetDetailList);
 
         //recent budget transaction recyclerview
-        setRecentRecycler();
+        setRecentRecyclerView();
     }
 
     private void initializeViews() {
@@ -196,7 +196,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         Toast.makeText(this, monthName, Toast.LENGTH_SHORT).show();
     }
 
-    private void setRecentRecycler() {
+    private void setRecentRecyclerView() {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewRecent.setLayoutManager(layoutManager);
 
@@ -205,6 +205,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
         //setting the size of list to textViewTotalNoOfTrans
         textViewTotalNoOfTrans.setText(String.valueOf(expenseDetailList.size()));
+
     }
 
     //recent transaction adapter listener

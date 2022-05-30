@@ -23,7 +23,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
     private TextView textViewCurrency1,textViewCurrency2;
     private TextView textViewTotalSaved,textViewTotalSavingGoal,textViewRemainingSavingAmount;
     private LinearProgressIndicator progressBar;
-    private TextView createSavingTransaction;
+    private TextView createSavingGoal;
     private RecyclerView recyclerViewSavings;
 
     @Override
@@ -35,7 +35,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
         initializeView(view);
 
         //create saving transaction click listener
-        createSavingTransaction.setOnClickListener(v -> startActivity(new Intent(requireContext(),ActivitySavingGoal.class)));
+        createSavingGoal.setOnClickListener(v -> startActivity(new Intent(requireContext(), ActivityAddSavingGoal.class)));
 
         //setting the recyclerview
         setupRecyclerview();
@@ -59,7 +59,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
         progressBar=view.findViewById(R.id.progress_savings);
 
-        createSavingTransaction =view.findViewById(R.id.txt_create_saving);
+        createSavingGoal =view.findViewById(R.id.txt_create_saving_goal);
 
         recyclerViewSavings=view.findViewById(R.id.recycler_savings);
     }
@@ -76,7 +76,7 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
     //Savings Adapter click listener
     @Override
     public void onSavingItemClicked(int position) {
-        startActivity(new Intent(requireContext(), ActivitySavingTransaction.class));
+        startActivity(new Intent(requireContext(), ActivitySavingTransactionDetail.class));
         Toast.makeText(requireContext(), "Position: "+position, Toast.LENGTH_SHORT).show();
     }
 }

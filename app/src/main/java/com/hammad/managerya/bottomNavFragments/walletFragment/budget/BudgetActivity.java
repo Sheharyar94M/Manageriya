@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +28,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     private Toolbar toolbar;
     private LinearProgressIndicator progressBar;
-    private TextView textViewCurrency1,textViewCurrency2,textViewBudgetSpend,textViewTotalBudget,textViewRemainingBudget;
+    private TextView textViewCurrency1,textViewCurrency2, textViewTotalBudgetSpend, textViewTotalBudgetAllocated, textViewTotalRemainingBudget;
     private TextView textViewCreateBudget;
 
     private RecyclerView recyclerViewMonth,recyclerViewBudget;
@@ -41,6 +40,10 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     //database instance
     private RoomDBHelper database;
+
+    //variables for saving info related to total budget expenditure
+    private int totalBudgetAllocated = 0;
+    private int totalBudgetSpend = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +71,22 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //budget recyclerview
         setBudgetRecyclerview();
 
+        //traversing the addedBudgetList for total sum of budget categories and budget spend
+        for (int i=0; i < addedBudgetList.size(); i++)
+        {
+            totalBudgetAllocated += addedBudgetList.get(i).getBudgetLimit();
+            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId());
+        }
+
         //create budget click listener
         textViewCreateBudget.setOnClickListener(view -> {
             startActivity(new Intent(this, ActivityCreateBudget.class));
             finish();
         });
+
+        //setting the total budget info
+        setTotalBudgetInfo(totalBudgetAllocated,totalBudgetSpend);
+
     }
 
     private void setToolbar()
@@ -115,9 +129,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         textViewCurrency1.setText(CURRENCY_);
         textViewCurrency2.setText(CURRENCY_);
 
-        textViewBudgetSpend=findViewById(R.id.txt_total_budget_spend);
-        textViewTotalBudget=findViewById(R.id.txt_total_budget);
-        textViewRemainingBudget=findViewById(R.id.txt_remaining_budget_amount);
+        textViewTotalBudgetSpend =findViewById(R.id.txt_total_budget_spend);
+        textViewTotalBudgetAllocated =findViewById(R.id.txt_total_budget);
+        textViewTotalRemainingBudget =findViewById(R.id.txt_remaining_budget_amount);
 
         textViewCreateBudget=findViewById(R.id.txt_create_budget);
 
@@ -190,5 +204,25 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         Intent intent=new Intent(this, ActivityBudgetHistory.class);
         intent.putExtra("BudgetCatId",addedBudgetList.get(position).getBudgetCatId());
         startActivity(intent);
+    }
+
+    //function for getting the details of particular category (expense transactions)
+    private int getBudgetSpend(int budgetCatId) {
+
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+    }
+
+    private void setTotalBudgetInfo(int totalAllocatedBudget,int totalSpendBudget) {
+
+        //setting the values to textviews
+        textViewTotalBudgetAllocated.setText(String.valueOf(totalAllocatedBudget));
+
+        textViewTotalBudgetSpend.setText(String.valueOf(totalBudgetSpend));
+
+        textViewTotalRemainingBudget.setText(String.valueOf(totalBudgetAllocated - totalBudgetSpend));
+
+        //setting progressbar values
+        progressBar.setMax(totalAllocatedBudget);
+        progressBar.setProgress(totalSpendBudget);
     }
 }

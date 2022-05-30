@@ -50,7 +50,7 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
-        TextView textViewCategoryName,textViewCurrency1,textViewCurrency2;
+        TextView textViewSavingTitle,textViewCurrency1,textViewCurrency2;
         TextView textViewGoalAmount,textViewAmountSaved,textViewRemainingAmount;
         LinearProgressIndicator progressBar;
 
@@ -61,7 +61,7 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
 
             imageView=itemView.findViewById(R.id.img_saving);
 
-            textViewCategoryName=itemView.findViewById(R.id.txt_cat_saving);
+            textViewSavingTitle =itemView.findViewById(R.id.txt_cat_saving);
 
             textViewCurrency1=itemView.findViewById(R.id.text_currency_1);
             textViewAmountSaved=itemView.findViewById(R.id.text_amount_saved);
@@ -75,7 +75,7 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
             //initializing interface instance
             this.onSavingClickListener=onSavingClickListener;
 
-            //click listener
+            //interface click listener
             itemView.setOnClickListener(view -> mOnSavingClickListener.onSavingItemClicked(getAdapterPosition()));
 
         }
