@@ -13,6 +13,7 @@
         android:layout_height="@dimen/_40sdp"
         android:src="@drawable/bonus"
         android:scaleType="centerInside"
+        android:background="@drawable/home_fragment_circular_recycle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -24,8 +25,8 @@
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/_13ssp"
-        android:layout_marginStart="@dimen/_50sdp"
-        app:layout_constraintStart_toEndOf="@id/img_saving"
+        app:layout_constraintStart_toStartOf="@id/text_3"
+        app:layout_constraintEnd_toEndOf="@id/text_saving_target_date"
         app:layout_constraintTop_toTopOf="@id/img_saving"/>
 
     <TextView
@@ -73,8 +74,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@id/txt_cat_saving"
-        app:layout_constraintStart_toStartOf="@id/txt_cat_saving"
+        app:layout_constraintTop_toBottomOf="@id/text_3"
+        app:layout_constraintStart_toStartOf="@id/text_3"
+        app:layout_constraintEnd_toEndOf="@+id/text_saving_target_date"
         app:constraint_referenced_ids="text_currency_1,text_amount_saved,text_slash,text_goal_amount"
         app:flow_horizontalGap="@dimen/_3sdp"/>
 
@@ -82,38 +84,27 @@
         android:id="@+id/text_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remaining Savings: "
+        android:text="Target Date:"
         android:textSize="@dimen/_13ssp"
         android:textStyle="bold"
         android:textColor="#959494"
-        android:layout_marginTop="@dimen/_15sdp"
-        app:layout_constraintTop_toBottomOf="@id/flow_recycler_saving"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_25sdp"
+        app:layout_constraintTop_toBottomOf="@id/txt_cat_saving"
         app:layout_constraintStart_toEndOf="@id/img_saving"/>
 
+
     <TextView
-        android:id="@+id/text_currency_2"
+        android:id="@+id/text_saving_target_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="S"
+        android:text="May 30, 2022"
         android:textSize="@dimen/_13ssp"
         android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:textColor="@color/colorPrimaryVariant"
         app:layout_constraintTop_toTopOf="@id/text_3"
-        android:layout_marginStart="@dimen/_3sdp"
         app:layout_constraintStart_toEndOf="@id/text_3"/>
-
-
-    <TextView
-        android:id="@+id/text_remaining_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="310"
-        android:textSize="@dimen/_13ssp"
-        android:textStyle="bold"
-        android:layout_marginStart="@dimen/_3sdp"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="@id/text_3"
-        app:layout_constraintStart_toEndOf="@id/text_currency_2"/>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_saving_recycler"
@@ -129,7 +120,7 @@
         app:trackColor="@color/colorGrey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_currency_2"/>
+        app:layout_constraintTop_toBottomOf="@id/flow_recycler_saving"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

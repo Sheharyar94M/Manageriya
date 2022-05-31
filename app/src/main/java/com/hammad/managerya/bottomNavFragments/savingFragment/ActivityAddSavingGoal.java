@@ -3,7 +3,10 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,24 +16,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
-import com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseAdapter;
-import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingEntity;
+import com.hammad.managerya.mainActivity.HomeScreenActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpenseAdapter.ExpenseInterfaceListener {
+public class ActivityAddSavingGoal extends AppCompatActivity implements SavingCategoryAdapter.OnSavingCategoryListener {
 
     private Toolbar toolbar;
     private EditText editTextEnterAmount, editTextGoalTitle, editTextAddTag;
@@ -46,8 +51,11 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpen
     //Database instance
     private RoomDBHelper database;
 
-    //this income category list contain first 8 elements
-    private List<ExpenseCategoryEntity> expenseCategoryList=new ArrayList<>();
+    //integer for saving the category icon
+    private int categoryIcon = 0;
+
+    //saving categories list
+    List<SavingCategoryModel> savingCategoryList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +69,10 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpen
         initialViews();
 
         //initialize database helper class
-        database=RoomDBHelper.getInstance(this);
+        database = RoomDBHelper.getInstance(this);
 
         //getting the income categories list
-        expenseCategoryList = database.expenseCategoryDao().getExpenseCategoryList();
+        savingCategoriesList();
 
         //get current date and display it in edit text date
         getCurrentDate();
@@ -76,9 +84,10 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpen
         setRecyclerView();
 
         //button click listener
-        buttonCreateGoal.setOnClickListener(view -> savingGoal());
+        buttonCreateGoal.setOnClickListener(view -> saveGoal());
 
     }
+
 
     private void setToolbar() {
         toolbar = findViewById(R.id.toolbar_saving_goal);
@@ -117,7 +126,7 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpen
 
         recyclerView = findViewById(R.id.recycler_add_saving_goal);
 
-        buttonCreateGoal=findViewById(R.id.button_saving_goal);
+        buttonCreateGoal = findViewById(R.id.button_saving_goal);
 
     }
 
@@ -128,121 +137,111 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements AddExpen
         dateToSet = dateFormat.format(calendar.getTime());
 
         textViewTargetDate.setText("\t\t" + dateToSet);
+
+        //date to be saved in database in format (yyyy-MM-dd)
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        dateToSave = dateFormat1.format(calendar.getTime());
+
+        Log.i("DATE_1", "current display date: "+dateToSet);
+        Log.i("DATE_1", "current DB date: "+dateToSave);
+    }
+
+    private void savingCategoriesList() {
+
+        /*savingCategoryList.add(new SavingCategoryModel(,"Appliances"));*/
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.education,"Education"));
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.electronics,"Electronics"));
+        /*savingCategoryList.add(new SavingCategoryModel(,"Emergency"));*/
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.family,"Family"));
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.gifts_received,"Gifts"));
+
+        /*savingCategoryList.add(new SavingCategoryModel(,"Hajj"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.home_e,"Home"));
+
+        /*savingCategoryList.add(new SavingCategoryModel(,"Other"));
+
+        savingCategoryList.add(new SavingCategoryModel(,"Party"));
+        savingCategoryList.add(new SavingCategoryModel(,"Personal"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.investment,"Profit"));
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.shopping,"Shopping"));
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.travel,"Travel"));
+
+        /*savingCategoryList.add(new SavingCategoryModel(,"Vehicle"));*/
+
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.wedding,"Wedding "));
+
     }
 
     private void dateAlertDialog() {
-        /*final String[] date = {""};
+        Calendar calendar = Calendar.getInstance();
 
-        CalendarView calendarView;
-
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-
-        LayoutInflater layoutInflater=getLayoutInflater();
-        View view=layoutInflater.inflate(R.layout.alert_dialog_calendar,null);
-
-        builder.setView(view)
-                .setPositiveButton("Select Date", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        //setting the selected date to textview
-                        textViewTargetDate.setText("\t\t" +date[0]);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-        //initializing the calendar view
-        calendarView=view.findViewById(R.id.calendar_view);
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day)
-            {
-                Calendar calendar=Calendar.getInstance();
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day);
 
-                calendar.set(Calendar.MONTH,month);
-                String monthName=new SimpleDateFormat("LLLL").format(calendar.getTime());
+                //setting the date to textview date
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+                dateToSet = sdf.format(calendar.getTime());
 
-                String strDay="";
+                textViewTargetDate.setText("\t\t" + dateToSet);
 
-                if(day < 10)
-                {
-                    strDay="0"+day;
-                }
-                else if(day >= 10)
-                {
-                    strDay=String.valueOf(day);
-                }
+                //date to save in database
+                SimpleDateFormat sdp2 = new SimpleDateFormat("yyyy-MM-dd");
+                dateToSave = sdp2.format(calendar.getTime());
 
-                date[0] =monthName+" "+strDay+", "+year;
-
-                Log.i("DATE_1", "date: "+ date[0]);
-
-            }
-        });
-
-        builder.create();
-        builder.show();*/
-
-        Log.i("HELLO_123", "dateAlertDialog: clicked");
-
-        final Calendar calendar1=Calendar.getInstance();
-
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-
-                /*calendar.set(Calendar.YEAR,i);*/
-                calendar1.set(Calendar.YEAR,i);
-                calendar1.set(Calendar.MONTH,i1);
-                calendar1.set(Calendar.DAY_OF_MONTH,i2);
-                Log.i("HELLO_123", "i: "+i+"\ni1: "+i1+"\ni2: "+i2);
-
+                Log.i("DATE_1", "date picker display date: "+dateToSet);
+                Log.i("DATE_1", "date picker DB date: "+dateToSave);
             }
         };
-        new DatePickerDialog(ActivityAddSavingGoal.this,dateSetListener,calendar1.get(Calendar.YEAR),calendar1.get(Calendar.MINUTE),calendar1.get(Calendar.DAY_OF_MONTH));
+
+        new DatePickerDialog(ActivityAddSavingGoal.this, onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 
-    private void setRecyclerView()
-    {
-        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+    private void setRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        AddExpenseAdapter adapter=new AddExpenseAdapter(this,expenseCategoryList,this);
+        SavingCategoryAdapter adapter=new SavingCategoryAdapter(this,savingCategoryList,this);
         recyclerView.setAdapter(adapter);
     }
 
+    //SavingCategoryAdapter interface click listener
     @Override
-    public void onExpenseItemClicked(int position, String catName) {
-        Toast.makeText(this, catName, Toast.LENGTH_SHORT).show();
+    public void onSavingCategoryClick(int position) {
+
+        //saving the category icon to integer variable
+        categoryIcon = savingCategoryList.get(position).getCategoryImage();
     }
 
-    private void savingGoal()
-    {
-        if(editTextEnterAmount.getText().toString().trim().isEmpty())
-        {
+
+    private void saveGoal() {
+        if (editTextEnterAmount.getText().toString().trim().isEmpty()) {
             Snackbar snackbar = Snackbar.make(recyclerView, "Enter amount", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        }
-        else if(editTextGoalTitle.getText().toString().trim().isEmpty())
-        {
+        } else if (editTextGoalTitle.getText().toString().trim().isEmpty()) {
             Snackbar snackbar = Snackbar.make(recyclerView, "Enter Saving Goal Title", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        }
-        else if(editTextAddTag.getText().toString().trim().isEmpty())
-        {
+        } else if (editTextAddTag.getText().toString().trim().isEmpty()) {
             Snackbar snackbar = Snackbar.make(recyclerView, "Add tag", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        }
-        else
-        {
-            Toast.makeText(this, "Saving Goal Added", Toast.LENGTH_SHORT).show();
+        } else {
+
+            //saving the goal to Database
+            database.savingDao().addSavingGoal(new SavingEntity(Integer.valueOf(editTextEnterAmount.getText().toString().trim()),editTextGoalTitle.getText().toString(),editTextAddTag.getText().toString(),categoryIcon,dateToSave));
+            Toast.makeText(this, "Saving Goal Added Successfully", Toast.LENGTH_SHORT).show();
+
+            //1 second delay. After that activity will be finished
+            new Handler().postDelayed(() -> finish(),1000);
         }
     }
+
 }

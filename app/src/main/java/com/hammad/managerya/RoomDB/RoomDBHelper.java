@@ -6,6 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingDao;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingEntity;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingTransactionEntity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDao;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetEntity;
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryDao;
@@ -18,7 +21,7 @@ import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeD
 import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeDetailEntity;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeFragmentDao;
 
-@Database(entities = {IncomeCategoryEntity.class, IncomeDetailEntity.class, ExpenseCategoryEntity.class, ExpenseDetailEntity.class, BudgetEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {IncomeCategoryEntity.class, IncomeDetailEntity.class, ExpenseCategoryEntity.class, ExpenseDetailEntity.class, BudgetEntity.class, SavingEntity.class, SavingTransactionEntity.class}, version = 1, exportSchema = false)
 public abstract class RoomDBHelper extends RoomDatabase {
 
     //create database instance
@@ -51,5 +54,7 @@ public abstract class RoomDBHelper extends RoomDatabase {
     public abstract HomeFragmentDao homeFragmentDao();
 
     public abstract BudgetDao budgetDao();
+
+    public abstract SavingDao savingDao();
 
 }

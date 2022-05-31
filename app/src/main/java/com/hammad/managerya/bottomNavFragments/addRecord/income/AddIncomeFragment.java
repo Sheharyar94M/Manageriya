@@ -79,8 +79,10 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
         //getting the income categories list
         incomeCategoryListFull = database.incomeCategoryDao().getIncomeCategoryList();
 
+
         //this list contains the first 8 elements from complete list
         incomeCategoryList = incomeCategoryListFull.subList(0,8);
+
 
         //setting the recycler view
         setRecyclerView(incomeCategoryList);
@@ -239,7 +241,7 @@ public class AddIncomeFragment extends Fragment implements AddIncomeAdapter.Inco
                     startActivity(new Intent(getActivity(), HomeScreenActivity.class));
                     getActivity().finish();
                 }
-            },1500);
+            },1000);
         }
     }
 }

@@ -4,6 +4,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -16,6 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ActivitySavingTransactionDetail extends AppCompatActivity {
 
@@ -29,6 +35,17 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
 
     private SavingRecentTransAdapter recentTransAdapter;
 
+    //variables for saving the intent data
+    private int id,icon;
+    private String title,date;
+    private float savingGoalAmount;
+
+    //database instance
+    private RoomDBHelper database;
+
+    //integer for sum of saving goal transactions
+    private float amountSaved = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +54,8 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         //initializing toolbar
         toolbar = findViewById(R.id.toolbar_saving_trans_detail);
 
+        //initializing database
+        database = RoomDBHelper.getInstance(this);
 
         //setting the toolbar
         setToolbar();
@@ -44,12 +63,17 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         //initialize views
         initializeViews();
 
+        //get the intent data
+        getIntentData();
+
         //set the recent saving transaction recyclerview
         setRecyclerView();
 
         //create saving transaction
         textViewSavingTransaction.setOnClickListener(view -> {
-            startActivity(new Intent(this,ActivityAddSavingTransaction.class));
+            Intent intent= new Intent(this,ActivityAddSavingTransaction.class);
+            intent.putExtra("id",id);
+            startActivity(intent);
         });
     }
 
@@ -106,5 +130,58 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         recentTransAdapter = new SavingRecentTransAdapter(this);
         recyclerViewSavingTransaction.setAdapter(recentTransAdapter);
 
+    }
+
+    private void getIntentData(){
+
+        Intent intent=getIntent();
+
+        id=intent.getIntExtra("id",-1);
+        savingGoalAmount =intent.getIntExtra("amount",0);
+        icon=intent.getIntExtra("icon",0);
+
+        title=intent.getStringExtra("title");
+        date = intent.getStringExtra("date");
+
+        //retrieving the sum of saving goal transactions
+        amountSaved = database.savingDao().getSavingTransSumById(id);
+
+        //setting the values to views
+        imageViewCategory.setImageResource(icon);
+
+        textViewSavingGoalTitle.setText(title);
+        textViewDate.setText(getConvertedDate(date));
+
+        textViewSavingGoal.setText(String.valueOf((int) savingGoalAmount));
+        textViewAmountSaved.setText(String.valueOf((int) amountSaved));
+        textViewPercentage.setText(String.valueOf((int) ((amountSaved / savingGoalAmount) * 100)));
+        textViewPercentage.append(" %");
+
+        //progress bar
+        progressBar.setProgress((int) amountSaved);
+        progressBar.setMax((int) savingGoalAmount);
+
+    }
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd' to 'MMM dd, yyyy' format
+        2022-05-27 to May 27, 2022
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

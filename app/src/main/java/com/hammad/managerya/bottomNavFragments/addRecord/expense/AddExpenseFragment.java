@@ -235,7 +235,7 @@ public class AddExpenseFragment extends Fragment implements AddExpenseAdapter.Ex
                     startActivity(new Intent(getActivity(), HomeScreenActivity.class));
                     getActivity().finish();
                 }
-            },1500);
+            },1000);
         }
     }
 }

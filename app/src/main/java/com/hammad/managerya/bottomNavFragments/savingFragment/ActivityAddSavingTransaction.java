@@ -2,26 +2,27 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingTransactionEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,7 +34,13 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
     private AppCompatButton buttonAddTransaction;
     private Toolbar toolbar;
 
-    private String currentDate;
+    private String dateToSet;
+    private String dateToSave;
+
+    //for saving the saving goal id
+    private int id;
+
+    private RoomDBHelper database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +50,14 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         //initialize views
         initializeViews();
 
+        //initialize database instance
+        database = RoomDBHelper.getInstance(this);
+
         //setting toolbar
         setToolbar();
+
+        //getting the intent data
+        getIntentData();
 
         //get current date and display it in edit text date
         getCurrentDate();
@@ -91,69 +104,53 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         return true;
     }
 
+    private void getIntentData(){
+
+        Intent intent=getIntent();
+        id = intent.getIntExtra("id",-1);
+    }
+
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        currentDate = dateFormat.format(calendar.getTime());
+        dateToSet = dateFormat.format(calendar.getTime());
 
-        textViewDate.setText("\t\t" + currentDate);
+        textViewDate.setText("\t\t" + dateToSet);
+
+        //date to save in database
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        dateToSave = dateFormat1.format(calendar.getTime());
+
+
     }
 
     private void dateAlertDialog() {
-        final String[] date = {""};
+        Calendar calendar = Calendar.getInstance();
 
-        CalendarView calendarView;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.alert_dialog_calendar, null);
-
-        builder.setView(view)
-                .setPositiveButton("Select Date", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        //setting the selected date to textview
-                        textViewDate.setText("\t\t" + date[0]);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-        //initializing the calendar view
-        calendarView = view.findViewById(R.id.calendar_view);
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                Calendar calendar = Calendar.getInstance();
-
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
-                String monthName = new SimpleDateFormat("LLLL").format(calendar.getTime());
+                calendar.set(Calendar.DAY_OF_MONTH, day);
 
-                String strDay = "";
+                //setting the date to textview date
+                SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
+                dateToSet = sdf.format(calendar.getTime());
 
-                if (day < 10) {
-                    strDay = "0" + day;
-                } else if (day >= 10) {
-                    strDay = String.valueOf(day);
-                }
+                textViewDate.setText("\t\t" + dateToSet);
 
-                date[0] = monthName + " " + strDay + ", " + year;
+                //date to save in database
+                SimpleDateFormat sdp2 = new SimpleDateFormat("yyyy-MM-dd");
+                dateToSave = sdp2.format(calendar.getTime());
 
-                Log.i("DATE_1", "date: " + date[0]);
-
+                Log.i("DATE_12", "date picker display date: "+dateToSet);
+                Log.i("DATE_12", "date picker DB date: "+dateToSave);
             }
-        });
+        };
 
-        builder.create();
-        builder.show();
+        new DatePickerDialog(ActivityAddSavingTransaction.this, onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void addSavingTransaction()
@@ -164,7 +161,18 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         }
         else
         {
+            //saving data into database
+            database.savingDao().addGoalTransaction(new SavingTransactionEntity(id,Integer.valueOf(editTextTrans.getText().toString().trim()),dateToSave));
+
             Toast.makeText(this, "Saving Transaction Successful", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(ActivityAddSavingTransaction.this,ActivitySavingTransactionDetail.class));
+                    finish();
+                }
+            },1000);
         }
 
     }

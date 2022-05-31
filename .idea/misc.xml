@@ -100,6 +100,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_saving_transaction.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_saving_transaction_detail.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/activity_view_trans_details.xml" value="0.2" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/alert_dailog_calendar.xml" value="0.17135416666666667" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/alert_dialog_calendar.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/button_finish_background.xml" value="0.27291666666666664" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/custom_toolbar.xml" value="0.22" />
@@ -124,7 +125,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recycler_consumer_transaction.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recycler_loan.xml" value="0.18" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recyclerview_item.xml" value="0.25" />
-        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_saving_recycler.xml" value="0.25" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_saving_recycler.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/menu_saving_goal.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/navigation_view_menu.xml" value="0.25" />
