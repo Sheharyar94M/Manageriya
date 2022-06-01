@@ -181,6 +181,7 @@
             android:background="@drawable/white_circle_background">
 
             <FrameLayout
+                android:id="@+id/frame_1"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:background="@drawable/blue_history_background"

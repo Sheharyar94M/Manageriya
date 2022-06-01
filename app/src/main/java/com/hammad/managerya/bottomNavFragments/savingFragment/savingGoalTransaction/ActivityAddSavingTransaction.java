@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.savingFragment;
+package com.hammad.managerya.bottomNavFragments.savingFragment.savingGoalTransaction;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.savingFragment.savingTransactionDetails.ActivitySavingTransactionDetail;
 import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingTransactionEntity;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +40,10 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
 
     //for saving the saving goal id
     private int id;
+
+    //for saving goal title and icon
+    private String title;
+    private int icon;
 
     private RoomDBHelper database;
 
@@ -108,6 +113,8 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
 
         Intent intent=getIntent();
         id = intent.getIntExtra("id",-1);
+        title = intent.getStringExtra("title");
+        icon = intent.getIntExtra("icon",0);
     }
 
     private void getCurrentDate() {
@@ -121,7 +128,6 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         //date to save in database
         SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
         dateToSave = dateFormat1.format(calendar.getTime());
-
 
     }
 
@@ -153,8 +159,7 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         new DatePickerDialog(ActivityAddSavingTransaction.this, onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void addSavingTransaction()
-    {
+    private void addSavingTransaction() {
         if (editTextTrans.getText().toString().trim().isEmpty()) {
             Snackbar snackbar = Snackbar.make(textViewDate, "Enter Transaction amount", Snackbar.LENGTH_SHORT);
             snackbar.show();
@@ -162,14 +167,14 @@ public class ActivityAddSavingTransaction extends AppCompatActivity {
         else
         {
             //saving data into database
-            database.savingDao().addGoalTransaction(new SavingTransactionEntity(id,Integer.valueOf(editTextTrans.getText().toString().trim()),dateToSave));
+            database.savingDao().addGoalTransaction(new SavingTransactionEntity(id,title,Integer.valueOf(editTextTrans.getText().toString()),icon,dateToSave));
 
             Toast.makeText(this, "Saving Transaction Successful", Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(ActivityAddSavingTransaction.this,ActivitySavingTransactionDetail.class));
+                    startActivity(new Intent(ActivityAddSavingTransaction.this, ActivitySavingTransactionDetail.class));
                     finish();
                 }
             },1000);

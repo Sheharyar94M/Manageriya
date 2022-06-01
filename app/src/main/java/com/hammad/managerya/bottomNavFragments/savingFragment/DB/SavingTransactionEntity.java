@@ -15,17 +15,23 @@ public class SavingTransactionEntity implements Serializable {
     @ColumnInfo(name = "saving_goal_id")
     private int savingGoalId;
 
+    @ColumnInfo(name = "saving_title")
+    private String savingTitle;
+
     @ColumnInfo(name = "saving_trans_amount")
     private int savingTransAmount;
+
+    @ColumnInfo(name = "saving_icon")
+    private int savingIcon;
 
     @ColumnInfo(name = "saving_trans_date")
     private String savingTransDate;
 
-    public SavingTransactionEntity() {}
-
-    public SavingTransactionEntity(int savingGoalId, int savingTransAmount, String savingTransDate) {
+    public SavingTransactionEntity(int savingGoalId, String savingTitle, int savingTransAmount, int savingIcon, String savingTransDate) {
         this.savingGoalId = savingGoalId;
+        this.savingTitle = savingTitle;
         this.savingTransAmount = savingTransAmount;
+        this.savingIcon = savingIcon;
         this.savingTransDate = savingTransDate;
     }
 
@@ -45,12 +51,28 @@ public class SavingTransactionEntity implements Serializable {
         this.savingGoalId = savingGoalId;
     }
 
+    public String getSavingTitle() {
+        return savingTitle;
+    }
+
+    public void setSavingTitle(String savingTitle) {
+        this.savingTitle = savingTitle;
+    }
+
     public int getSavingTransAmount() {
         return savingTransAmount;
     }
 
     public void setSavingTransAmount(int savingTransAmount) {
         this.savingTransAmount = savingTransAmount;
+    }
+
+    public int getSavingIcon() {
+        return savingIcon;
+    }
+
+    public void setSavingIcon(int savingIcon) {
+        this.savingIcon = savingIcon;
     }
 
     public String getSavingTransDate() {

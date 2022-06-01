@@ -42,15 +42,12 @@ public class LoanFragment extends Fragment {
         setRecyclerView();
 
         //button add consumer click listener
-        buttonAddContact.setOnClickListener(v ->
-                checkContactPermission()
-        );
+        buttonAddContact.setOnClickListener(v -> checkContactPermission());
 
         return view;
     }
 
-    private void initialViews(View view)
-    {
+    private void initialViews(View view) {
         buttonAddContact =view.findViewById(R.id.button_add);
         recyclerView=view.findViewById(R.id.recycler_loan);
 
@@ -74,8 +71,7 @@ public class LoanFragment extends Fragment {
         recyclerView.setAdapter(loanAdapter);
     }
 
-    private void checkContactPermission()
-    {
+    private void checkContactPermission() {
         if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
         {
             //for fragment ActivityCompact is not used. Instead only requestPermissions is used
@@ -101,8 +97,7 @@ public class LoanFragment extends Fragment {
         }
     }
 
-    private void addConsumer()
-    {
+    private void addConsumer() {
         startActivity(new Intent(requireContext(), AddConsumerActivity.class));
         getActivity().finish();
     }

@@ -13,6 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanEntity;
 import com.hammad.managerya.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 
 import java.util.List;
@@ -23,9 +25,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     List<ContactModel> contactModelList;
     String searchedContactName;
 
+    RoomDBHelper helper;
+
     public ContactAdapter(Context context, List<ContactModel> contactModelList) {
         this.context = context;
         this.contactModelList = contactModelList;
+
+        helper = RoomDBHelper.getInstance(context);
     }
 
     @NonNull
@@ -59,6 +65,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
         //contact click listener
         holder.constraintLayout.setOnClickListener( view -> {
+
+            //saving the contact into database
 
             Intent contactIntent=new Intent(context, ConsumerDetailActivity.class);
             contactIntent.putExtra("conName",item.getContactName());

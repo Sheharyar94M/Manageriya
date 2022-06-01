@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ConsumerDetailActivity extends AppCompatActivity {
 
-    private String contactName,contactPhoneNo,contactLetters;
+    private static String contactName,contactPhoneNo,contactLetters;
 
     private ImageView imageViewBack;
     private TextView textViewContactLetter,textViewContactName;

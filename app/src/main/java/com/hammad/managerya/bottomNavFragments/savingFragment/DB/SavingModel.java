@@ -5,25 +5,15 @@ public class SavingModel {
     public int savingId;
     public int savingGoalAmount;
     public String savingTitle;
-    public String savingTag;
-    public String savingIcon;
+    public int savingIcon;
     public String savingTargetDate;
 
     public SavingModel() {}
 
-    public SavingModel(int savingId, int savingGoalAmount, String savingTitle, String savingIcon, String savingTargetDate) {
+    public SavingModel(int savingId, int savingGoalAmount, String savingTitle, int savingIcon, String savingTargetDate) {
         this.savingId = savingId;
         this.savingGoalAmount = savingGoalAmount;
         this.savingTitle = savingTitle;
-        this.savingIcon = savingIcon;
-        this.savingTargetDate = savingTargetDate;
-    }
-
-    public SavingModel(int savingId, int savingGoalAmount, String savingTitle, String savingTag, String savingIcon, String savingTargetDate) {
-        this.savingId = savingId;
-        this.savingGoalAmount = savingGoalAmount;
-        this.savingTitle = savingTitle;
-        this.savingTag = savingTag;
         this.savingIcon = savingIcon;
         this.savingTargetDate = savingTargetDate;
     }
@@ -52,19 +42,11 @@ public class SavingModel {
         this.savingTitle = savingTitle;
     }
 
-    public String getSavingTag() {
-        return savingTag;
-    }
-
-    public void setSavingTag(String savingTag) {
-        this.savingTag = savingTag;
-    }
-
-    public String getSavingIcon() {
+    public int getSavingIcon() {
         return savingIcon;
     }
 
-    public void setSavingIcon(String savingIcon) {
+    public void setSavingIcon(int savingIcon) {
         this.savingIcon = savingIcon;
     }
 

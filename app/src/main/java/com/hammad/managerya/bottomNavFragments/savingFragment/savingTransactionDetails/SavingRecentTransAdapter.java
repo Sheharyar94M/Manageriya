@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.savingFragment;
+package com.hammad.managerya.bottomNavFragments.savingFragment.savingTransactionDetails;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
@@ -14,13 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingModel;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentTransAdapter.ViewHolder> {
 
     Context context;
+    List<SavingModel> savingTransactionList;
 
-    public SavingRecentTransAdapter(Context context) {
+    public SavingRecentTransAdapter(Context context,List<SavingModel> list) {
         this.context = context;
+        this.savingTransactionList = list;
     }
 
     @NonNull
@@ -34,6 +42,14 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
     @Override
     public void onBindViewHolder(@NonNull SavingRecentTransAdapter.ViewHolder holder, int position) {
 
+        SavingModel item = savingTransactionList.get(position);
+
+        //setting the values to textviews
+        holder.imageViewCategory.setImageResource(item.getSavingIcon());
+        holder.textViewSavingGoalTitle.setText(item.getSavingTitle());
+        holder.textViewAmount.setText(String.valueOf(item.getSavingGoalAmount()));
+        holder.textViewDate.setText(getConvertedDate(item.getSavingTargetDate()));
+
         holder.imageViewMore.setOnClickListener(view -> {
             Toast.makeText(context, "More Items Clicked", Toast.LENGTH_SHORT).show();
         });
@@ -42,7 +58,7 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
 
     @Override
     public int getItemCount() {
-        return 5;
+        return savingTransactionList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -65,6 +81,28 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
             textViewCurrency.setText(CURRENCY_);
 
         }
+    }
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd' to 'MMM dd, yyyy' format
+        2022-05-27 to May 27, 2022
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 
 }

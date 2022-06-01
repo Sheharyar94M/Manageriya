@@ -1,4 +1,4 @@
-package com.hammad.managerya.bottomNavFragments.savingFragment;
+package com.hammad.managerya.bottomNavFragments.savingFragment.savingGoal;
 
 public class SavingCategoryModel {
 

@@ -39,7 +39,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 0;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

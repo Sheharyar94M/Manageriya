@@ -1,10 +1,9 @@
-package com.hammad.managerya.bottomNavFragments.savingFragment;
+package com.hammad.managerya.bottomNavFragments.savingFragment.savingTransactionDetails;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,10 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingModel;
+import com.hammad.managerya.bottomNavFragments.savingFragment.savingGoalTransaction.ActivityAddSavingTransaction;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ActivitySavingTransactionDetail extends AppCompatActivity {
 
@@ -35,16 +38,19 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
 
     private SavingRecentTransAdapter recentTransAdapter;
 
-    //variables for saving the intent data
-    private int id,icon;
-    private String title,date;
-    private float savingGoalAmount;
+    //variables for saving the intent data (static so that the values can't be deleted when activity recreates)
+    private static int id,icon;
+    private static String title,date;
+    private static float savingGoalAmount;
 
     //database instance
     private RoomDBHelper database;
 
     //integer for sum of saving goal transactions
     private float amountSaved = 0;
+
+    //list of recent transaction
+    List<SavingModel> savingTransactionList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +72,20 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         //get the intent data
         getIntentData();
 
+        //getting the list of recent transaction
+        savingTransactionList = database.savingDao().getSavingTransDetailsListById(id);
+
         //set the recent saving transaction recyclerview
         setRecyclerView();
 
         //create saving transaction
         textViewSavingTransaction.setOnClickListener(view -> {
-            Intent intent= new Intent(this,ActivityAddSavingTransaction.class);
+            Intent intent= new Intent(this, ActivityAddSavingTransaction.class);
             intent.putExtra("id",id);
+            intent.putExtra("title",title);
+            intent.putExtra("icon",icon);
             startActivity(intent);
+            finish();
         });
     }
 
@@ -127,7 +139,7 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewSavingTransaction.setLayoutManager(layoutManager);
 
-        recentTransAdapter = new SavingRecentTransAdapter(this);
+        recentTransAdapter = new SavingRecentTransAdapter(this,savingTransactionList);
         recyclerViewSavingTransaction.setAdapter(recentTransAdapter);
 
     }
@@ -136,12 +148,19 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
 
         Intent intent=getIntent();
 
-        id=intent.getIntExtra("id",-1);
-        savingGoalAmount =intent.getIntExtra("amount",0);
-        icon=intent.getIntExtra("icon",0);
+        /*
+            This condition is used to check the intent data. In case this activity is called from SavingFragment (fragment), intent will have data.
+            If this activity is called from ActivityAddSavingTransaction (activity), then intent will be null
+        */
+        if(intent.getStringExtra("date") != null)
+        {
+            id=intent.getIntExtra("id",-1);
+            savingGoalAmount =intent.getIntExtra("amount",0);
+            icon=intent.getIntExtra("icon",0);
 
-        title=intent.getStringExtra("title");
-        date = intent.getStringExtra("date");
+            title=intent.getStringExtra("title");
+            date = intent.getStringExtra("date");
+        }
 
         //retrieving the sum of saving goal transactions
         amountSaved = database.savingDao().getSavingTransSumById(id);

@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/century_gothic"
         android:text="Saving Goal Title"
-        android:gravity="center"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/_12ssp"
