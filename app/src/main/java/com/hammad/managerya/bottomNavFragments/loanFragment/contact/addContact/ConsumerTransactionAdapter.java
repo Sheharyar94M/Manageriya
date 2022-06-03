@@ -13,16 +13,19 @@ import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
-import com.hammad.managerya.bottomNavFragments.loanFragment.contact.LoanDetailModel;
+import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanDetailEntity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTransactionAdapter.ViewHolder> {
 
     Context context;
-    List<LoanDetailModel> loanDetailList;
+    List<LoanDetailEntity> loanDetailList;
 
-    public ConsumerTransactionAdapter(Context context, List<LoanDetailModel> loanDetailModelList) {
+    public ConsumerTransactionAdapter(Context context, List<LoanDetailEntity> loanDetailModelList) {
         this.context = context;
         this.loanDetailList = loanDetailModelList;
     }
@@ -39,20 +42,20 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
     @Override
     public void onBindViewHolder(@NonNull ConsumerTransactionAdapter.ViewHolder holder, int position) {
 
-        LoanDetailModel item=loanDetailList.get(position);
+        LoanDetailEntity item=loanDetailList.get(position);
 
-        holder.textViewDate.setText(item.getLoanTransDate());
+        holder.textViewDate.setText(getConvertedDate(item.getTransDate()));
 
         //checking optional details
-        if(item.getOptionalLoanDetail() == null || item.getOptionalLoanDetail().length() == 0) {
+        if(item.getOptionalDesc() == null || item.getOptionalDesc().length() == 0) {
             holder.textViewOptionalDetail.setVisibility(View.GONE);
         }
-        else if(item.getOptionalLoanDetail() != null || item.getOptionalLoanDetail().length() > 0) {
+        else if(item.getOptionalDesc() != null || item.getOptionalDesc().length() > 0) {
             holder.textViewOptionalDetail.setVisibility(View.VISIBLE);
-            holder.textViewOptionalDetail.setText(item.getOptionalLoanDetail());
+            holder.textViewOptionalDetail.setText(item.getOptionalDesc());
         }
 
-        if(item.getTransactionType().equals("Lend"))
+        if(item.getAmountLend() > 0)
         {
             holder.flowLend.setVisibility(View.VISIBLE);
 
@@ -61,12 +64,12 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             holder.textViewRemBalance.setBackgroundColor(context.getResources().getColor(R.color.colorLightGreen));
 
             //setting the loan transaction amount
-            holder.textViewAmountLend.setText(item.getLoanAmount());
+            holder.textViewAmountLend.setText(String.valueOf(item.getAmountLend()));
 
             //setting the borrow visibility to gone
             holder.flowBorrow.setVisibility(View.GONE);
         }
-        else if(item.getTransactionType().equals("Borrow"))
+        else if(item.getAmountBorrow() > 0)
         {
             holder.flowBorrow.setVisibility(View.VISIBLE);
 
@@ -75,7 +78,7 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             holder.textViewRemBalance.setBackgroundColor(context.getResources().getColor(R.color.colorLightRed));
 
             //setting the loan transaction amount
-            holder.textViewAmountBorrow.setText(item.getLoanAmount());
+            holder.textViewAmountBorrow.setText(String.valueOf(item.getAmountBorrow()));
 
             //setting the lend visibility to gone
             holder.flowLend.setVisibility(View.GONE);
@@ -119,5 +122,27 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             textViewCurrencyLend.setText(CURRENCY_);
             textViewCurrencyBorrow.setText(CURRENCY_);
         }
+    }
+
+    /*
+        This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
+        2022-05-27 11:05:32 to May 27, 2022 11:05 am
+    */
+    private String getConvertedDate(String databaseDate) {
+        String convertedDate = "";
+
+        //database date format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //converting date format to another
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
+        try {
+            Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

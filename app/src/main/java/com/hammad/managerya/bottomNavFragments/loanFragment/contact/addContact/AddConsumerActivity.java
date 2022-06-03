@@ -1,6 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,24 +18,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanEntity;
+import com.hammad.managerya.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddConsumerActivity extends AppCompatActivity {
+public class AddConsumerActivity extends AppCompatActivity implements ContactAdapter.OnContactListInterface {
 
     List<ContactModel> contactModelList = new ArrayList<>();
+
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private TextInputEditText editTextSearch;
     private ContactAdapter adapter;
     private ContactModel contactModel;
 
+    //DB instance
+    private RoomDBHelper database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_consumer);
 
+        //database instance initialization
+        database = RoomDBHelper.getInstance(this);
+
+        //initializing toolbar
         setToolbar();
 
         //initializing views
@@ -46,7 +58,6 @@ public class AddConsumerActivity extends AppCompatActivity {
 
         //searching contact names
         searchContactName();
-
     }
 
     private void setToolbar() {
@@ -129,7 +140,7 @@ public class AddConsumerActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ContactAdapter(this, contactModelList/*, this*/);
+        adapter = new ContactAdapter(this, contactModelList, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -190,5 +201,21 @@ public class AddConsumerActivity extends AppCompatActivity {
         if (flag == 1) {
             contactModelList.add(contactModel);
         }
+    }
+
+    //Contact Adapter interface listener
+    @Override
+    public void onContactClick(String phoneNo, String contactName, String contactLetters, long contactId) {
+
+        //saving the contact into database
+        database.loanDao().addContact(new LoanEntity(phoneNo,contactName,contactLetters,contactId));
+
+        //forwarding the added details to next activity
+        Intent contactIntent=new Intent(this, ConsumerDetailActivity.class);
+        contactIntent.putExtra("conName",contactName);
+        contactIntent.putExtra("conPhone",phoneNo);
+        contactIntent.putExtra("conLetters",contactLetters);
+        startActivity(contactIntent);
+        finish();
     }
 }

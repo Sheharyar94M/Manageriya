@@ -3,7 +3,9 @@ package com.hammad.managerya.bottomNavFragments.loanFragment.contact;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanDetailEntity;
 import com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact.ConsumerTransactionAdapter;
 import com.hammad.managerya.R;
 
@@ -33,12 +37,24 @@ public class ConsumerDetailActivity extends AppCompatActivity {
     private AppCompatButton buttonLend,buttonBorrowed;
 
     private ConsumerTransactionAdapter consumerTransAdapter;
-    List<LoanDetailModel> loanDetailList =new ArrayList<>();
+    List<LoanDetailEntity> loanDetailList =new ArrayList<>();
+
+    //database instance
+    private RoomDBHelper database;
+
+    //static variable for handling the condition of onResume()
+    private static int checkValue = 0;
+
+    //variables for storing the values of lended and borrowed amounts sum (for individual user sums)
+    private int lendedAmountSum = 0, borrowedAmountSum=0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_consumer_detail);
+
+        //initializing database instance
+        database = RoomDBHelper.getInstance(this);
 
         //initializing views
         initializeViews();
@@ -46,11 +62,17 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         //getting intent data from ContactAdapter
         getIntentData();
 
+        //getting the loan detail list searched by phone number
+        loanDetailList = database.loanDao().getLoanTransList(contactPhoneNo);
+
         //recyclerview
-        setRecyclerView();
+        setRecyclerView(loanDetailList);
 
         //buttons click listeners
         buttonsClickListener();
+
+        //getting the current difference of amount lended and borrowed for this particular consumer
+        currentBalanceStatus();
     }
 
     private void initializeViews() {
@@ -87,11 +109,6 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         textViewContactLetter.setText(contactLetters);
         textViewContactName.setText(contactName);
 
-        //getting the intent data from AddLoanTransactionActivity
-        if(intent.getStringExtra("btnType") != null)
-        {
-            getLoanTransactionData(intent);
-        }
     }
 
     private void buttonsClickListener() {
@@ -141,51 +158,83 @@ public class ConsumerDetailActivity extends AppCompatActivity {
 
     }
 
-    private void setRecyclerView() {
+    private void setRecyclerView(List<LoanDetailEntity> list) {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransactions.setLayoutManager(layoutManager);
 
         //scroll recyclerview to last entered item position
-        int newPosition= loanDetailList.size() - 1;
+        int newPosition= list.size() - 1;
         recyclerViewTransactions.scrollToPosition(newPosition);
 
-        consumerTransAdapter=new ConsumerTransactionAdapter(this, loanDetailList);
+        consumerTransAdapter=new ConsumerTransactionAdapter(this, list);
         recyclerViewTransactions.setAdapter(consumerTransAdapter);
     }
 
-    // scroll the recyclerview to newly entered position
-    private void adapterPosition() {
-        int newPosition= loanDetailList.size() - 1;
-        consumerTransAdapter.notifyItemInserted(newPosition);
-        recyclerViewTransactions.scrollToPosition(newPosition);
-    }
-
     private void amountLend() {
+        //incrementing the value on button click
+        checkValue++;
+
         Intent intent=new Intent(this, AddLoanTransactionActivity.class);
         intent.putExtra("type","Lend");
+        intent.putExtra("phoneNo",contactPhoneNo);
         startActivity(intent);
-        finish();
     }
 
     private void amountBorrowed() {
+        //incrementing the value on button click
+        checkValue++;
+
         Intent intent=new Intent(this, AddLoanTransactionActivity.class);
         intent.putExtra("type","Borrow");
+        intent.putExtra("phoneNo",contactPhoneNo);
         startActivity(intent);
-        finish();
     }
 
-    private void getLoanTransactionData(Intent intent) {
-        LoanDetailModel loanModel=new LoanDetailModel();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        loanModel.setTransactionType(intent.getStringExtra("btnType"));
-        loanModel.setLoanAmount(intent.getStringExtra("amount"));
-        loanModel.setLoanTransDate(intent.getStringExtra("transDate"));
-        loanModel.setOptionalLoanDetail(intent.getStringExtra("loanDetails"));
+        if(checkValue >= 1)
+        {
+            //getting the loan detail list searched by phone number
+            loanDetailList = database.loanDao().getLoanTransList(contactPhoneNo);
 
-        loanDetailList.add(loanModel);
+            //calling the recyclerview
+            setRecyclerView(loanDetailList);
 
-        //calling the recyclerview
-        setRecyclerView();
+            //getting the current difference of amount lended and borrowed for this particular consumer
+            currentBalanceStatus();
+
+            //setting the value to zero again so that it can only be called when transaction is added
+            checkValue = 0;
+        }
     }
 
+    //function for calculating the difference between lended and borrowed amount
+    private void currentBalanceStatus()
+    {
+        lendedAmountSum = database.loanDao().getLendedAmountSum(contactPhoneNo);
+        borrowedAmountSum = database.loanDao().getBorrowedAmountSum(contactPhoneNo);
+
+        if(lendedAmountSum > borrowedAmountSum)
+        {
+            textViewAmount.setText(String.valueOf(lendedAmountSum - borrowedAmountSum));
+            textViewLatestTransType.setText("Amount Lended");
+
+            //setting the color green
+            textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
+            textViewLatestTransType.setTextColor(getResources().getColor(R.color.colorGreen));
+            textViewCurrency.setTextColor(getResources().getColor(R.color.colorGreen));
+        }
+        else if(lendedAmountSum < borrowedAmountSum)
+        {
+            textViewAmount.setText(String.valueOf(borrowedAmountSum - lendedAmountSum));
+            textViewLatestTransType.setText("Amount Borrowed");
+
+            //setting the color green
+            textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
+            textViewLatestTransType.setTextColor(getResources().getColor(R.color.colorRed));
+            textViewCurrency.setTextColor(getResources().getColor(R.color.colorRed));
+        }
+    }
 }

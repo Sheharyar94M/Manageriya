@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
+import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanDetailEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,6 +39,12 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
     //string to save the button pressed type from getIntent
     private String buttonPressedType;
 
+    //database instance
+    private RoomDBHelper database;
+
+    //string for saving phone no
+    private String phoneNo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +52,9 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
 
         //initialize views
         initializeViews();
+
+        //initializing database instance
+        database = RoomDBHelper.getInstance(this);
 
         //setting the toolbar
         setToolbar();
@@ -111,6 +123,9 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
             saveButton.setBackgroundResource(R.drawable.drawable_round_red_button);
         }
 
+        //getting the phone no from intent data
+        phoneNo = intent.getStringExtra("phoneNo");
+
     }
 
     private void saveLoanTrans(){
@@ -125,31 +140,42 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
             loanDetails="";
         }
 
-        Intent intent=new Intent(this, ConsumerDetailActivity.class);
-        intent.putExtra("btnType", buttonPressedType);
-        intent.putExtra("loanDetails",loanDetails);
-
         //checking whether user entered loan amount or not
         if(editTextAmount.getText().toString().length() > 0)
         {
             if(selectedDateTime == null || selectedDateTime.length() == 0)
             {
-                intent.putExtra("amount",editTextAmount.getText().toString());
-                intent.putExtra("transDate",currentDateTime);
-                startActivity(intent);
-                finish();
+                //saving data in database
+                if(buttonPressedType.equals("Lend"))
+                {
+                    saveLendedAmount(Integer.parseInt(editTextAmount.getText().toString()),currentDateTime);
+                }
+                else if (buttonPressedType.equals("Borrow"))
+                {
+                    saveBorrowedAmount(Integer.parseInt(editTextAmount.getText().toString()),currentDateTime);
+                }
+
+                Toast.makeText(this, "Transaction Added Successfully", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> finish(),1000);
 
             }
             else if(selectedDateTime != null || selectedDateTime.length() > 0)
             {
-                intent.putExtra("amount",editTextAmount.getText().toString());
-                intent.putExtra("transDate",selectedDateTime);
-                startActivity(intent);
-                finish();
+                //saving data in database
+                if(buttonPressedType.equals("Lend"))
+                {
+                    saveLendedAmount(Integer.parseInt(editTextAmount.getText().toString()),selectedDateTime);
+                }
+                else if (buttonPressedType.equals("Borrow"))
+                {
+                    saveBorrowedAmount(Integer.parseInt(editTextAmount.getText().toString()),selectedDateTime);
+                }
+
+                Toast.makeText(this, "Transaction Added Successfully", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> finish(),1000);
             }
         }
-        else if(editTextAmount.getText().toString().length() <= 0)
-        {
+        else if(editTextAmount.getText().toString().length() <= 0) {
             Toast.makeText(this, "Enter Amount", Toast.LENGTH_SHORT).show();
         }
 
@@ -200,5 +226,13 @@ public class AddLoanTransactionActivity extends AppCompatActivity {
         };
 
         new DatePickerDialog(AddLoanTransactionActivity.this,onDateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void saveLendedAmount(int amountLended,String date) {
+        database.loanDao().addLoanTransaction(new LoanDetailEntity(phoneNo,amountLended,0,date,loanDetails));
+    }
+
+    private void saveBorrowedAmount(int amountBorrowed,String date) {
+        database.loanDao().addLoanTransaction(new LoanDetailEntity(phoneNo,0,amountBorrowed,date,loanDetails));
     }
 }

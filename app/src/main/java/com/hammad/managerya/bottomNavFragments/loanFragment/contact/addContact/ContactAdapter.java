@@ -25,13 +25,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     List<ContactModel> contactModelList;
     String searchedContactName;
 
-    RoomDBHelper helper;
+    OnContactListInterface mOnContactListInterface;
 
-    public ContactAdapter(Context context, List<ContactModel> contactModelList) {
+    public ContactAdapter(Context context, List<ContactModel> contactModelList,OnContactListInterface onContactListInterface) {
         this.context = context;
         this.contactModelList = contactModelList;
-
-        helper = RoomDBHelper.getInstance(context);
+        this.mOnContactListInterface = onContactListInterface;
     }
 
     @NonNull
@@ -39,7 +38,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     public ContactAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         View view=layoutInflater.inflate(R.layout.layout_contact_recycler,parent,false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mOnContactListInterface);
     }
 
     @Override
@@ -61,18 +60,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
         holder.textViewLetters.setText(item.getContactLetters());
 
-        holder.textViewPhoneNo.setText(item.getPhoneNo());
+        holder.textViewPhoneNo.setText(String.valueOf(item.getPhoneNo()));
 
         //contact click listener
         holder.constraintLayout.setOnClickListener( view -> {
-
-            //saving the contact into database
-
-            Intent contactIntent=new Intent(context, ConsumerDetailActivity.class);
-            contactIntent.putExtra("conName",item.getContactName());
-            contactIntent.putExtra("conPhone",item.getPhoneNo());
-            contactIntent.putExtra("conLetters",item.getContactLetters());
-            context.startActivity(contactIntent);
+            //interface click listener
+            mOnContactListInterface.onContactClick(item.getPhoneNo(),item.getContactName(),item.getContactLetters(),item.getContactId());
         });
 
     }
@@ -85,8 +78,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout constraintLayout;
         TextView textViewLetters,textViewName,textViewPhoneNo,textViewContactStatus;
+        OnContactListInterface onContactListInterface;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,OnContactListInterface onContactListInterface) {
             super(itemView);
 
             constraintLayout=itemView.findViewById(R.id.constraint_contact);
@@ -94,6 +88,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             textViewName=itemView.findViewById(R.id.txt_contact_name);
             textViewPhoneNo=itemView.findViewById(R.id.txt_contact_no);
             textViewContactStatus=itemView.findViewById(R.id.txt_contact_status);
+
+            //interface initialization
+            this.onContactListInterface = onContactListInterface;
         }
     }
 
@@ -105,6 +102,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     public String setSearchText(String text) {
         return this.searchedContactName = text;
+    }
+
+    //Adapter interface listener
+    public interface OnContactListInterface{
+        void onContactClick(String phoneNo,String contactName,String contactLetters,long contactId);
     }
 
 }
