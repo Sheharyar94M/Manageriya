@@ -4,24 +4,27 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/menu_1"
-            android:title="Menu 1" />
+            android:id="@+id/menu_share_with_friends"
+            android:title="Share with Friends"
+            android:icon="@drawable/ic_share"/>
 
         <item
-            android:id="@+id/menu_2"
-            android:title="Menu 2" />
+            android:id="@+id/menu_privacy_policy"
+            android:title="Privacy Policy"
+            android:icon="@drawable/ic_privacy_policy"/>
 
         <item
-            android:id="@+id/menu_3"
-            android:title="Menu 3" />
+            android:id="@+id/menu_clear_record"
+            android:title="Clear Record"
+            android:icon="@drawable/ic_clear_history"/>
 
-        <item
+       <!-- <item
             android:id="@+id/menu_4"
             android:title="Menu 4" />
 
         <item
             android:id="@+id/menu_5"
-            android:title="Menu 5" />
+            android:title="Menu 5" />-->
 
     </group>
 

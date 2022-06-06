@@ -1,17 +1,19 @@
 package com.hammad.managerya.mainActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -22,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.hammad.managerya.BuildConfig;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.addRecord.AddRecordActivity;
@@ -86,7 +89,6 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         */
         if(!areCategoriesAdded)
         {
-            Log.i("CHECK_CAT", "if condition called: ");
             addCategories();
         }
 
@@ -139,25 +141,25 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
         switch (item.getItemId())
         {
-            case R.id.menu_1:
-                Toast.makeText(this, "Menu 1", Toast.LENGTH_SHORT).show();
+            case R.id.menu_share_with_friends:
+                shareAppLink();
                 break;
 
-            case R.id.menu_2:
-                Toast.makeText(this, "Menu 2", Toast.LENGTH_SHORT).show();
+            case R.id.menu_privacy_policy:
+                privacyPolicy();
                 break;
 
-            case R.id.menu_3:
-                Toast.makeText(this, "Menu 3", Toast.LENGTH_SHORT).show();
+            case R.id.menu_clear_record:
+                clearAllRecord();
                 break;
 
-            case R.id.menu_4:
+           /* case R.id.menu_4:
                 Toast.makeText(this, "Menu 4", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.menu_5:
                 Toast.makeText(this, "Menu 5", Toast.LENGTH_SHORT).show();
-                break;
+                break;*/
         }
 
         return true;
@@ -252,4 +254,40 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         preferenceEditor.apply();
     }
 
+    private void shareAppLink(){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        String subSectionLink = "Download\n Managerya: Daily-Expense-Manager \nfrom:\n\n\t\"https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
+        intent.putExtra(Intent.EXTRA_TEXT, subSectionLink);
+        startActivity(Intent.createChooser(intent, "Share via"));
+    }
+
+    private void privacyPolicy() {
+        Uri uri = Uri.parse("https://risibleapps.blogspot.com/2022/02/privacy-policy-at-risibleapps-we.html");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    private void clearAllRecord(){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("Delete All Record")
+                .setMessage("Want to delete all record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting all record
+                    database.clearAllTables();
+
+                    //setting the preference value to false to indicate that categories tables are empty
+                    preferenceEditor.putBoolean(getString(R.string.categories_saved),false);
+                    preferenceEditor.apply();
+
+                    //recreating the activity
+                    recreate();
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        alertDialog.create().show();
+    }
 }

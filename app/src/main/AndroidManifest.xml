@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
+            android:name=".graphs.InsightActivity"
+            android:exported="false" />
+        <activity
             android:name=".bottomNavFragments.savingFragment.savingTransactionDetails.ActivitySavingTransactionDetail"
             android:exported="false" />
         <activity

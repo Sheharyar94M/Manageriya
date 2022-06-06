@@ -3,6 +3,7 @@ package com.hammad.managerya.bottomNavFragments.loanFragment.DB;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -24,7 +25,7 @@ public interface LoanDao {
     List<LoanEntity> getAddedContactList();
 
     //loan transaction list searched by phone no
-    @Query("select * from loan_detail where phone_no= :phoneNo")
+    @Query("select * from loan_detail where phone_no= :phoneNo ")
     List<LoanDetailEntity> getLoanTransList(String phoneNo);
 
     //sum of total amount lend
@@ -42,6 +43,11 @@ public interface LoanDao {
     //sum of total amount borrowed search by phone number (for individual user record)
     @Query("select sum(amount_borrow) from loan_detail where phone_no= :phoneNo")
     int getBorrowedAmountSum(String phoneNo);
+
+    //query for getting the latest transaction date and amount
+    @Query("select * from loan_detail where phone_no= :phoneNo order by trans_date desc")
+    List<LoanDetailEntity> getLoanTransByDate(String phoneNo);
+
 
 
 }

@@ -13,6 +13,7 @@ import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanDetailEntity;
 
 import java.text.ParseException;
@@ -44,6 +45,7 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
 
         LoanDetailEntity item=loanDetailList.get(position);
 
+        //setting the date
         holder.textViewDate.setText(getConvertedDate(item.getTransDate()));
 
         //checking optional details
@@ -55,8 +57,7 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             holder.textViewOptionalDetail.setText(item.getOptionalDesc());
         }
 
-        if(item.getAmountLend() > 0)
-        {
+        if(item.getAmountLend() > 0) {
             holder.flowLend.setVisibility(View.VISIBLE);
 
             holder.textViewBalance.setBackgroundColor(context.getResources().getColor(R.color.colorLightGreen));
@@ -69,8 +70,7 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             //setting the borrow visibility to gone
             holder.flowBorrow.setVisibility(View.GONE);
         }
-        else if(item.getAmountBorrow() > 0)
-        {
+        else if(item.getAmountBorrow() > 0) {
             holder.flowBorrow.setVisibility(View.VISIBLE);
 
             holder.textViewBalance.setBackgroundColor(context.getResources().getColor(R.color.colorLightRed));

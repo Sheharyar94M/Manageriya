@@ -231,7 +231,7 @@ public class ConsumerDetailActivity extends AppCompatActivity {
             textViewAmount.setText(String.valueOf(borrowedAmountSum - lendedAmountSum));
             textViewLatestTransType.setText("Amount Borrowed");
 
-            //setting the color green
+            //setting the color red
             textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
             textViewLatestTransType.setTextColor(getResources().getColor(R.color.colorRed));
             textViewCurrency.setTextColor(getResources().getColor(R.color.colorRed));

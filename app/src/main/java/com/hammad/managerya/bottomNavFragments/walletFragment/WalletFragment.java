@@ -23,6 +23,7 @@ import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActi
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.history.HistoryActivity;
+import com.hammad.managerya.graphs.InsightActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,7 +75,6 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //sum of total expense
         amountSpend = database.expenseDetailDao().getTotalExpenseSum();
 
-
         //get the months list
         getMonthsList();
 
@@ -92,6 +92,9 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
         //budget click listener
         imageViewBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(), BudgetActivity.class)));
+
+        //insight (graphs) activity
+        imageViewInsights.setOnClickListener(v -> startActivity(new Intent(requireContext(), InsightActivity.class)));
 
         return view;
     }

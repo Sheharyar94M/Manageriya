@@ -143,30 +143,30 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements SavingCa
 
     private void savingCategoriesList() {
 
-        /*savingCategoryList.add(new SavingCategoryModel(,"Appliances"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.appliances,"Appliances"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.education,"Education"));
         savingCategoryList.add(new SavingCategoryModel(R.drawable.electronics,"Electronics"));
-        /*savingCategoryList.add(new SavingCategoryModel(,"Emergency"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.emergency,"Emergency"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.family,"Family"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.gifts_received,"Gifts"));
 
-        /*savingCategoryList.add(new SavingCategoryModel(,"Hajj"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.hajj,"Hajj"));
         savingCategoryList.add(new SavingCategoryModel(R.drawable.home_e,"Home"));
 
-        /*savingCategoryList.add(new SavingCategoryModel(,"Other"));
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.other,"Other"));
 
-        savingCategoryList.add(new SavingCategoryModel(,"Party"));
-        savingCategoryList.add(new SavingCategoryModel(,"Personal"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.party,"Party"));
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.personal_12,"Personal"));
         savingCategoryList.add(new SavingCategoryModel(R.drawable.investment,"Profit"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.shopping,"Shopping"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.travel,"Travel"));
 
-        /*savingCategoryList.add(new SavingCategoryModel(,"Vehicle"));*/
+        savingCategoryList.add(new SavingCategoryModel(R.drawable.vehicle,"Vehicle"));
 
         savingCategoryList.add(new SavingCategoryModel(R.drawable.wedding,"Wedding "));
 

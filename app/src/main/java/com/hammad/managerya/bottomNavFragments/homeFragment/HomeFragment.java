@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
+import com.hammad.managerya.graphs.InsightActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,24 +52,33 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             Color.rgb(5, 159, 249), Color.rgb(4, 151, 243),
             Color.rgb(187, 217, 249)
     };
+
     //string for inner circle of pie graph
-    public static String CURRENCY_ = "PKR ";
+    public static String CURRENCY_ = "$ ";
+
     String spend = "\nSpend";
+
     //array list for pie chart entries
     ArrayList<PieEntry> pieEntries = new ArrayList<>();
+
     //recent transaction list
     List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
+
     //database
     RoomDBHelper database;
+
     //list to be passed to pie chart
     List<ExpenseCatDetailModel> pieChartDataList = new ArrayList<>();
+
     private TextView textViewCurrentDate;
     private TextView textViewTotalIncome, textViewSpend, textViewPercentage;
     private TextView textViewCurrencyIncome, textViewCurrencyExpense;
     private RecyclerView recyclerViewRecentTransaction, recyclerViewMonth;
-    private List<String> monthsList = new ArrayList<>();
     private PieChart pieChart;
     private RecyclerView recyclerViewRecentBudget;
+    private ImageView imageViewInsights;
+
+    private List<String> monthsList = new ArrayList<>();
 
     //variables for calculating the current earning,spending and percentage
     private float earning = 0, amountSpend = 0;
@@ -123,11 +134,15 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //setting the recent recyclerview
         setBudgetRecentRecyclerview();
 
+        //insight (graphs) activity
+        imageViewInsights.setOnClickListener(v -> startActivity(new Intent(requireContext(), InsightActivity.class)));
+
         return view;
     }
 
     private void initializeViews(View view) {
         textViewCurrentDate = view.findViewById(R.id.text_view_current_date);
+        imageViewInsights = view.findViewById(R.id.image_view_insights);
 
         //Recent Transaction recyclerview
         recyclerViewRecentTransaction = view.findViewById(R.id.recycler_home_frag);
