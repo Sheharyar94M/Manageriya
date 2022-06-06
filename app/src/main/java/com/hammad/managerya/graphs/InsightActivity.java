@@ -1,7 +1,10 @@
 package com.hammad.managerya.graphs;
 
+import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.snackbar.Snackbar;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
@@ -247,6 +251,34 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         xAxis.setDrawGridLines(false);
 
         barChart.setData(barData);
+
+        final Snackbar[] snackBar = new Snackbar[1];
+
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                int value = 0;
+
+                if((int) h.getX() == 1)
+                {
+                    value = 0;
+                }
+                else if((int) h.getX() == 2)
+                {
+                    value = 1;
+                }
+
+                snackBar[0] = Snackbar.make(barChart,"Category: "+xAxisValues.get(value)+"\nAmount= "+CURRENCY_+" "+(int) barEntries.get(value).getY() , Snackbar.LENGTH_LONG);
+                snackBar[0].setBackgroundTint(getResources().getColor(R.color.colorPrimaryVariant))
+                        .setTextColor(Color.WHITE)
+                        .show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+                snackBar[0].dismiss();
+            }
+        });
 
     }
 
