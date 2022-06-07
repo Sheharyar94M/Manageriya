@@ -4,7 +4,6 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -78,8 +76,10 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         setMonthRecyclerView();
 
         //adding values in BarEntry ArrayList
-        barEntries.add(new BarEntry(1,totalExpense));
-        barEntries.add(new BarEntry(2,totalIncome));
+        barEntries.add(new BarEntry(1f,totalExpense));
+        barEntries.add(new BarEntry(2f,0));
+        barEntries.add(new BarEntry(3f,0));
+        barEntries.add(new BarEntry(4f,totalIncome));
 
         //adding the entries names
         xAxisName.add("Expense");
@@ -220,30 +220,24 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
     }
 
     private void setBarchart(BarChart barChart, ArrayList<BarEntry> arrayList, final ArrayList<String> xAxisValues) {
-       /* barChart.setDrawBarShadow(false);
-        barChart.setFitBars(false);*/
         barChart.setDrawValueAboveBar(false);
         barChart.setMaxVisibleValueCount(25);
         barChart.setPinchZoom(false);
 
-
-        BarDataSet barDataSet = new BarDataSet(arrayList, "Values");
-        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarDataSet barDataSet = new BarDataSet(arrayList, "");
+        barDataSet.setColors(ColorTemplate.PASTEL_COLORS);
 
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.9f);
+        barData.setBarWidth(2f);
         barData.setValueTextSize(0f);
 
         barChart.setBackgroundColor(Color.TRANSPARENT);
         barChart.setDrawGridBackground(false);
         barChart.getDescription().setEnabled(false);
 
-        Legend l = barChart.getLegend();
-        //l.setTextSize(10f);
-        //l.setFormSize(10f);
-        //To set components of x axis
+
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setTextSize(11f);
+        //xAxis.setTextSize(11f);
         //xAxis.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
         xAxis.setLabelCount(0);
         //xAxis.setValueFormatter(barChart.getDefaultValueFormatter());
@@ -258,17 +252,20 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 int value = 0;
+                int value1 = 0;
 
                 if((int) h.getX() == 1)
                 {
                     value = 0;
+                    value1 = 0;
                 }
-                else if((int) h.getX() == 2)
+                else if((int) h.getX() == 4)
                 {
                     value = 1;
+                    value1 = 3;
                 }
 
-                snackBar[0] = Snackbar.make(barChart,"Category: "+xAxisValues.get(value)+"\nAmount= "+CURRENCY_+" "+(int) barEntries.get(value).getY() , Snackbar.LENGTH_LONG);
+                snackBar[0] = Snackbar.make(barChart,"Category: "+xAxisValues.get(value)+"\nAmount= "+CURRENCY_+(int) barEntries.get(value1).getY() , Snackbar.LENGTH_LONG);
                 snackBar[0].setBackgroundTint(getResources().getColor(R.color.colorPrimaryVariant))
                         .setTextColor(Color.WHITE)
                         .show();

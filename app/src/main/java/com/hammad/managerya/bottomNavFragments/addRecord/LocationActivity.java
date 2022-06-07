@@ -1,8 +1,11 @@
 package com.hammad.managerya.bottomNavFragments.addRecord;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -10,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,6 +59,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient mLocationClient;
 
+    private ImageView imgViewCurrentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +80,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
             Intent locationIntent = new Intent(LocationActivity.this, ActivityAddTransactionDetail.class);
             locationIntent.putExtra("location", locationAddress);
-            startActivity(locationIntent);
+            setResult(Activity.RESULT_OK, locationIntent);
             finish();
         });
 
@@ -81,6 +88,20 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             //getting the current location
             getCurrentLocation();
         }
+
+        //move to current location on click
+        imgViewCurrentLocation.setOnClickListener(view -> {
+
+            if(isGpsEnabled())
+            {
+                //this removes the previous marker
+                if(marker != null)
+                {
+                    marker.remove();
+                }
+                getCurrentLocation();
+            }
+        });
 
     }
 
@@ -90,7 +111,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         setSupportActionBar(toolbar);
 
         //setting the back button on toolbar
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -98,6 +118,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private void initializeView() {
         textViewLocationAddress = findViewById(R.id.text_address);
         buttonSelectLocation = findViewById(R.id.btn_location);
+        imgViewCurrentLocation = findViewById(R.id.img_current_location);
 
         //map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_fragment);
@@ -125,6 +146,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
+
+        //indicating the user's current location  (location icon on status bar)
+        mGoogleMap.setMyLocationEnabled(true);
 
         //map click listener
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -177,6 +201,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
+
         mLocationClient.getLastLocation().addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {

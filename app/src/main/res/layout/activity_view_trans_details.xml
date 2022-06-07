@@ -165,6 +165,8 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_1"
             app:layout_constraintWidth_percent="0.8"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:hint="Added Description"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
@@ -209,6 +211,8 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_2"
             app:layout_constraintWidth_percent="0.8"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:hint="Added Tag"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
@@ -247,13 +251,15 @@
         <TextView
             android:id="@+id/txt_location"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/img_3"
             app:layout_constraintTop_toTopOf="@id/img_3"
             android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_3"
             app:layout_constraintWidth_percent="0.8"
             android:hint="Entered Location"
+            android:gravity="center_vertical"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 
@@ -297,7 +303,9 @@
             android:layout_marginStart="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/img_4"
             app:layout_constraintWidth_percent="0.8"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:hint="Attached Receipt"
+            android:gravity="center_vertical"
             android:textSize="@dimen/_12ssp"
             android:padding="@dimen/_2sdp"/>
 

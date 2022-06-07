@@ -144,8 +144,7 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
             setRecyclerView(addedContactList);
         }
 
-        if(checkValueTotalSum >= 1)
-        {
+        if(checkValueTotalSum >= 1) {
             //user defined function for calculating total lend and borrowed amounts
             setTotalLendBorrowedSum();
 

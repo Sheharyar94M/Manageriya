@@ -62,18 +62,29 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
         holder.textViewName.setText(item.getContactName());
         holder.textViewNameCharacter.setText(item.getContactLetter());
 
-        //setting the latest transaction date and amount
-        holder.textViewDate.setText(getConvertedDate(loanDetailEntityList.get(0).getTransDate()));
+        // if loanDetailEntityList size is greater than zero
+        if(loanDetailEntityList.size() > 0){
 
-        if(loanDetailEntityList.get(0).getAmountLend() == 0)
-        {
-            holder.textViewAmount.setText(String.valueOf(loanDetailEntityList.get(0).getAmountBorrow()));
-            holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorRed));
-            holder.textViewCurrency.setTextColor(context.getResources().getColor(R.color.colorRed));
+            //setting the latest transaction date and amount
+            holder.textViewDate.setText(getConvertedDate(loanDetailEntityList.get(0).getTransDate()));
+
+            if(loanDetailEntityList.get(0).getAmountLend() == 0)
+            {
+                holder.textViewAmount.setText(String.valueOf(loanDetailEntityList.get(0).getAmountBorrow()));
+                holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorRed));
+                holder.textViewCurrency.setTextColor(context.getResources().getColor(R.color.colorRed));
+            }
+            else  if(loanDetailEntityList.get(0).getAmountBorrow() == 0)
+            {
+                holder.textViewAmount.setText(String.valueOf(loanDetailEntityList.get(0).getAmountLend()));
+                holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorGreen));
+                holder.textViewCurrency.setTextColor(context.getResources().getColor(R.color.colorGreen));
+            }
+
         }
-        else  if(loanDetailEntityList.get(0).getAmountBorrow() == 0)
-        {
-            holder.textViewAmount.setText(String.valueOf(loanDetailEntityList.get(0).getAmountLend()));
+        else{
+            holder.textViewDate.setText("No recent Date");
+            holder.textViewAmount.setText("0");
             holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorGreen));
             holder.textViewCurrency.setTextColor(context.getResources().getColor(R.color.colorGreen));
         }

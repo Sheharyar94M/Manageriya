@@ -237,11 +237,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         ArrayList<Integer> colors = new ArrayList<>();
 
-        for (int color : ColorTemplate.COLORFUL_COLORS/*createColors(COLORS_PALETTE_1)*/) {
+        for (int color : ColorTemplate.PASTEL_COLORS/*createColors(COLORS_PALETTE_1)*/) {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate.VORDIPLOM_COLORS/*createColors(COLORS_PALETTE_2)*/) {
+        for (int color : ColorTemplate.MATERIAL_COLORS/*createColors(COLORS_PALETTE_2)*/) {
             colors.add(color);
         }
 
@@ -294,8 +294,18 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
+
+                //String for saving category name
+                String catName = pieEntries.get((int) h.getX()).getLabel();
+
+                //checking if category name contains '\n'
+                if(catName.contains("\n"))
+                {
+                    catName = catName.replace("\n","");
+                }
+
                 //highlights the selected pie chart slice
-                Toast.makeText(requireContext(), pieEntries.get((int) h.getX()).getLabel(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), catName, Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -44,6 +43,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
 
     public static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
+    private static final int LOCATION_REQUEST_CODE = 102;
 
     private TextView textViewCategoryName, textViewAmount, textViewDate, textViewLocation, textViewReceipt;
     private TextView textViewPreview, textViewDelete;
@@ -54,10 +54,13 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     private String currentDateTime;
 
     //for saving category id from intent
-    private int categoryId;
+    private static int categoryId;
 
     //for saving amount from intent
-    private int transactionAmount=0;
+    private static int transactionAmount=0;
+
+    //for saving category name and date from intent
+    private static String categoryName,currentDate;
 
     //strings for saving the income details
     private String currentPicturePath="";
@@ -148,28 +151,32 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
     private void getIntentData(Intent intent, String fragmentCalled) {
         if (fragmentCalled != null) {
             if (fragmentCalled.equals("expense")) {
-                //getting the amount and date from Add Expense Fragment
 
+                //getting the amount and date from Add Expense Fragment
                 transactionAmount = Integer.parseInt(intent.getStringExtra("expenseAmount"));
+                categoryName = intent.getStringExtra("expenseCat");
+                currentDate = intent.getStringExtra("expenseDate");
 
                 textViewAmount.setText(String.valueOf(transactionAmount));
                 textViewAmount.append(" -");
-                textViewCategoryName.setText(intent.getStringExtra("expenseCat"));
-                textViewDate.setText(intent.getStringExtra("expenseDate"));
+                textViewCategoryName.setText(categoryName);
+                textViewDate.setText(currentDate);
                 textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
 
                 //getting the expense category id
                 categoryId = intent.getIntExtra("expenseCatId", 0);
 
             } else if (fragmentCalled.equals("income")) {
-                //getting the amount and date from Add Income Fragment
 
+                //getting the amount and date from Add Income Fragment
                 transactionAmount = Integer.parseInt(intent.getStringExtra("incomeAmount"));
+                categoryName = intent.getStringExtra("incomeCat");
+                currentDate = intent.getStringExtra("incomeDate");
 
                 textViewAmount.setText(String.valueOf(transactionAmount));
                 textViewAmount.append(" +");
-                textViewCategoryName.setText(intent.getStringExtra("incomeCat"));
-                textViewDate.setText(intent.getStringExtra("incomeDate"));
+                textViewCategoryName.setText(categoryName);
+                textViewDate.setText(currentDate);
                 textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
 
                 //getting the income category id
@@ -255,8 +262,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
             case 3:
 
                 if (requestCode == 3 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(new Intent(this, LocationActivity.class));
-                    finish();
+                    startActivityForResult(new Intent(this, LocationActivity.class), LOCATION_REQUEST_CODE);
                 } else {
                     Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
                 }
@@ -349,6 +355,15 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 }
             }
         }
+        else if(requestCode == LOCATION_REQUEST_CODE){
+            if(resultCode == Activity.RESULT_OK){
+
+                locationAddress = data.getStringExtra("location");
+
+                //setting the location address to textview
+                textViewLocation.setText(locationAddress);
+            }
+        }
     }
 
     private String getFileExtension(Uri contentUri) {
@@ -402,8 +417,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 3);
         } else {
-            startActivity(new Intent(this, LocationActivity.class));
-            finish();
+            startActivityForResult(new Intent(this, LocationActivity.class), LOCATION_REQUEST_CODE);
         }
     }
 
@@ -446,7 +460,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                     startActivity(new Intent(ActivityAddTransactionDetail.this, HomeScreenActivity.class));
                     finish();
                 }
-            }, 1500);
+            }, 1200);
         }
         else if (textViewAmount.getText().toString().contains("-"))
         {
@@ -461,7 +475,7 @@ public class ActivityAddTransactionDetail extends AppCompatActivity {
                     startActivity(new Intent(ActivityAddTransactionDetail.this, HomeScreenActivity.class));
                     finish();
                 }
-            }, 1500);
+            }, 1200);
         }
     }
 }

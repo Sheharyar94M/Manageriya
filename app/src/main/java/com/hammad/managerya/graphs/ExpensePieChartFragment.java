@@ -119,10 +119,10 @@ public class ExpensePieChartFragment extends Fragment {
 
                 if(catName.contains("\n"))
                 {
-                    catName=catName.replace("\n"," ");
+                    catName=catName.replace("\n","");
                 }
 
-                snackBar[0] = Snackbar.make(pieChartExpense, "Category Name: "+catName+"\nCategory Amount= "+CURRENCY_+" "+(int) position.getExpCatAmount(), Snackbar.LENGTH_LONG);
+                snackBar[0] = Snackbar.make(pieChartExpense, "Category Name: "+catName+"\nCategory Amount= "+CURRENCY_+(int) position.getExpCatAmount(), Snackbar.LENGTH_LONG);
                 snackBar[0].setBackgroundTint(getContext().getResources().getColor(R.color.colorPrimaryVariant))
                         .setTextColor(Color.WHITE)
                         .show();
