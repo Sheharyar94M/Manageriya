@@ -1,22 +1,29 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,10 +33,14 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
     List<HomeRecentTransModel> recentTransList;
     private RecentTransInterface mRecentTransInterface;
 
+    RoomDBHelper database;
+
     public HomeFragTransAdapter(Context context, RecentTransInterface recentTransInterface, List<HomeRecentTransModel> list) {
         this.context = context;
         this.mRecentTransInterface = recentTransInterface;
         this.recentTransList = list;
+
+        database = RoomDBHelper.getInstance(context);
     }
 
     @NonNull
@@ -65,7 +76,8 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
             holder.textViewAmount.append(" +");
             holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorGreen));
 
-        } else if (item.getTransType().equals("Expense")) {
+        }
+        else if (item.getTransType().equals("Expense")) {
             holder.textViewAmount.append(" -");
             holder.textViewAmount.setTextColor(context.getResources().getColor(R.color.colorRed));
         }
@@ -81,7 +93,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         void onRecentTransClick(int position);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener {
 
         ConstraintLayout constraintLayout;
         ImageView imageView;
@@ -102,8 +114,48 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
             this.recentTransInterface = recentTransInterface;
 
+            //for long click
+            itemView.setOnCreateContextMenuListener(this);
 
             constraintLayout.setOnClickListener(view -> recentTransInterface.onRecentTransClick(getAdapterPosition()));
+        }
+
+        //overridden method for long click listener
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+
+            MenuItem deleteRecordItem = contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordItem.setOnMenuItemClickListener(this);
+        }
+
+        //menu item click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        if(recentTransList.get(position).getTransType().equals("Income"))
+                        {
+                            //delete alert dialog
+                            deleteAlertDialog("Income",recentTransList.get(position),position);
+
+                        }
+                        else if(recentTransList.get(position).getTransType().equals("Expense"))
+                        {
+                            //delete alert dialog
+                            deleteAlertDialog("Expense",recentTransList.get(position),position);
+                        }
+
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -128,5 +180,37 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         }
 
         return convertedDate;
+    }
+
+    //alert dialog
+    private void deleteAlertDialog(String type, HomeRecentTransModel item, int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    if(type.equals("Income"))
+                    {
+                        database.incomeDetailDao().deleteIncomeDetail(item.getCatId(),item.getRecordId());
+                        Toast.makeText(context, "Record Delete Successfully", Toast.LENGTH_SHORT).show();
+                        recentTransList.remove(position);
+                        notifyDataSetChanged();
+                    }
+                    else if(type.equals("Expense"))
+                    {
+                        database.expenseDetailDao().deleteExpenseDetail(item.getCatId(),item.getRecordId());
+                        Toast.makeText(context, "Record Delete Successfully", Toast.LENGTH_SHORT).show();
+                        recentTransList.remove(position);
+                        notifyDataSetChanged();
+                    }
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
+
+        alertDialog.create().show();
     }
 }

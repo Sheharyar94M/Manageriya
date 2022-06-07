@@ -30,6 +30,10 @@ public interface ExpenseDetailDao {
     int getExpenseCategorySum(int catId);
 
     //query for retrieving Expense details transaction searched by category id
-    @Query("select expense_detail.expense_det_cat_id as catId,expense_category.expense_cat_name as catName,expense_category.expense_icon_name as catIcon,expense_detail.expense_amount as transAmount, expense_detail.expense_date as transDate,expense_detail.expense_desc as transDesc,expense_detail.expense_tag as transTag,expense_detail.expense_location as transLocation,expense_detail.expense_img_path as transImagePath, \"Expense\" as transType from expense_category inner join expense_detail on expense_category.expense_cat_id=expense_detail.expense_det_cat_id where expense_det_cat_id= :catId ORDER by transDate DESC")
+    @Query("select expense_detail.id as recordId,expense_detail.expense_det_cat_id as catId,expense_category.expense_cat_name as catName,expense_category.expense_icon_name as catIcon,expense_detail.expense_amount as transAmount, expense_detail.expense_date as transDate,expense_detail.expense_desc as transDesc,expense_detail.expense_tag as transTag,expense_detail.expense_location as transLocation,expense_detail.expense_img_path as transImagePath, \"Expense\" as transType from expense_category inner join expense_detail on expense_category.expense_cat_id=expense_detail.expense_det_cat_id where expense_det_cat_id= :catId ORDER by transDate DESC")
     List<HomeRecentTransModel> getExpenseDetailById(int catId);
+
+    //delete expense detail record searched by category id and id(auto-incremented) primary key
+    @Query("DELETE from expense_detail WHERE expense_detail.expense_det_cat_id = :catId AND expense_detail.id = :recordId")
+    void deleteExpenseDetail(int catId,int recordId);
 }

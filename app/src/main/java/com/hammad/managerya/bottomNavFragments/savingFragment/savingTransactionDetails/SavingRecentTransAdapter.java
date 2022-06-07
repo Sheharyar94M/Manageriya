@@ -50,10 +50,6 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
         holder.textViewAmount.setText(String.valueOf(item.getSavingGoalAmount()));
         holder.textViewDate.setText(getConvertedDate(item.getSavingTargetDate()));
 
-        holder.imageViewMore.setOnClickListener(view -> {
-            Toast.makeText(context, "More Items Clicked", Toast.LENGTH_SHORT).show();
-        });
-
     }
 
     @Override
@@ -64,7 +60,7 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textViewSavingGoalTitle, textViewCurrency,textViewAmount,textViewDate;
-        ImageView imageViewCategory,imageViewMore;
+        ImageView imageViewCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,7 +71,6 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
             textViewDate=itemView.findViewById(R.id.text_date_);
 
             imageViewCategory=itemView.findViewById(R.id.img__1);
-            imageViewMore=itemView.findViewById(R.id.img_more);
 
             //setting the currency to textview
             textViewCurrency.setText(CURRENCY_);

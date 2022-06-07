@@ -1,6 +1,8 @@
 package com.hammad.managerya.bottomNavFragments.homeFragment.homeDB;
 
 public class HomeRecentTransModel {
+
+    public int recordId;
     public int catId;
     public String catName;
     public int catIcon;
@@ -13,6 +15,14 @@ public class HomeRecentTransModel {
     public String transType;
 
     public HomeRecentTransModel() {}
+
+    public int getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(int recordId) {
+        this.recordId = recordId;
+    }
 
     public int getCatId() {
         return catId;
