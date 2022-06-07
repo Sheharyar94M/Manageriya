@@ -1,12 +1,12 @@
 package com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanEntity;
-import com.hammad.managerya.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
@@ -25,12 +25,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     List<ContactModel> contactModelList;
     String searchedContactName;
 
+    //click listener interface
     OnContactListInterface mOnContactListInterface;
+
+    //hashmap for identifying added contact
+    HashMap<Long,String> hashMap=new HashMap<>();
+
+    RoomDBHelper database;
+
+    //list of added contacts
+    List<LoanEntity> addedContactsList;
 
     public ContactAdapter(Context context, List<ContactModel> contactModelList,OnContactListInterface onContactListInterface) {
         this.context = context;
         this.contactModelList = contactModelList;
         this.mOnContactListInterface = onContactListInterface;
+
+        database = RoomDBHelper.getInstance(context);
+
+        addedContactsList = database.loanDao().getAddedContactList();
     }
 
     @NonNull
@@ -43,30 +56,68 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ContactAdapter.MyViewHolder holder, int position) {
+
+        //contact model list item
         ContactModel item = contactModelList.get(position);
+
+        //retrieved added contact list is added to hashmap
+        for (LoanEntity loanItem : addedContactsList)
+        {
+            hashMap.put(loanItem.getContactId(),loanItem.getContactName());
+        }
+
+        //searching if a contact is already added or not
+        if(hashMap.containsKey(item.getContactId())){
+
+            holder.textViewContactStatus.setText("Added");
+
+            //removes the drawable from any view
+            holder.textViewContactStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+            //contact click listener
+            holder.constraintLayout.setOnClickListener( view -> {
+                Toast.makeText(context, "Contact Already Added", Toast.LENGTH_SHORT).show();
+            });
+        }
+        else if(!(hashMap.containsKey(item.getContactId()))){
+
+            holder.textViewContactStatus.setText("Add");
+
+            //setting the left drawable to textview
+            holder.textViewContactStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_small,0,0,0);
+
+            //setting the tint to drawable
+            holder.textViewContactStatus.getCompoundDrawables()[0].setTint(context.getResources().getColor(R.color.colorPrimary));
+
+            //contact click listener
+            holder.constraintLayout.setOnClickListener( view -> {
+                //interface click listener
+                mOnContactListInterface.onContactClick(item.getPhoneNo(),item.getContactName(),item.getContactLetters(),item.getContactId());
+            });
+        }
 
         //for filtering name
         String content= item.getContactName().toLowerCase();
 
-        if (searchedContactName != null && !searchedContactName.isEmpty())
-        {
+        if (searchedContactName != null && !searchedContactName.isEmpty()) {
+
             String htmlText = content.replace(searchedContactName, "<font color='#ff0000'>" + searchedContactName + "</font>");
             holder.textViewName.setText(Html.fromHtml(htmlText));
         }
-        else
-        {
+        else {
             holder.textViewName.setText(item.getContactName());
         }
 
+        //setting the data from contact model list to views
         holder.textViewLetters.setText(item.getContactLetters());
 
         holder.textViewPhoneNo.setText(String.valueOf(item.getPhoneNo()));
 
-        //contact click listener
+       /* //contact click listener
         holder.constraintLayout.setOnClickListener( view -> {
             //interface click listener
             mOnContactListInterface.onContactClick(item.getPhoneNo(),item.getContactName(),item.getContactLetters(),item.getContactId());
-        });
+        });*/
 
     }
 

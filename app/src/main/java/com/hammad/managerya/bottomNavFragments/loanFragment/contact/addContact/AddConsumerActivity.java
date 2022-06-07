@@ -23,6 +23,7 @@ import com.hammad.managerya.bottomNavFragments.loanFragment.DB.LoanEntity;
 import com.hammad.managerya.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddConsumerActivity extends AppCompatActivity implements ContactAdapter.OnContactListInterface {
