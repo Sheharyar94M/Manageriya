@@ -342,6 +342,15 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         startActivity(intent);
     }
 
+    //overridden long click listener of HomeFragTransAdapter
+    @Override
+    public void onRecentTransLongClick() {
+
+        //refreshing the fragment to get latest changes
+        getActivity().finish();
+        startActivity(getActivity().getIntent());
+    }
+
     //months adapter click listener
     @Override
     public void onMonthSelected(String monthName) {

@@ -1,10 +1,10 @@
 package com.hammad.managerya.bottomNavFragments.walletFragment.history;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+import static com.hammad.managerya.bottomNavFragments.walletFragment.WalletFragment.CHECK_VALUE;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +24,7 @@ import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
+import com.hammad.managerya.mainActivity.HomeScreenActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,9 +84,6 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         //set months recyclerview
         setMonthRecyclerView();
 
-        //set recent transaction recyclerview
-        //setRecentTransRecyclerview();
-
         //setting the spinner
         setSpinner();
 
@@ -98,8 +96,8 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     }
 
 
-    private void initializeViews()
-    {
+    private void initializeViews() {
+
         //toolbar
         toolbar=findViewById(R.id.toolbar_history);
 
@@ -148,8 +146,8 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
 
     }
 
-    private void setMonthRecyclerView()
-    {
+    private void setMonthRecyclerView() {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerViewMonth.setLayoutManager(layoutManager);
 
@@ -165,8 +163,8 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     @Override
     public void onMonthSelected(String monthName) {}
 
-    private void setRecentTransRecyclerview(List<HomeRecentTransModel> list)
-    {
+    private void setRecentTransRecyclerview(List<HomeRecentTransModel> list) {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransaction.setLayoutManager(layoutManager);
 
@@ -197,14 +195,38 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         startActivity(intent);
     }
 
+    //overridden long click listener of HomeFragTransAdapter
+    @Override
+    public void onRecentTransLongClick() {
+        //getting the latest changes when a record is deleted
+
+        //getting the total sum of income
+        earning = database.incomeDetailDao().getTotalIncomeSum();
+
+        //getting the total sum of expense
+        expense = database.expenseDetailDao().getTotalExpenseSum();
+
+        //remaining balance
+        remainingBalance = earning - expense;
+
+        //setting the remaining balance value to textview balance
+        textViewBalance.setText(String.valueOf((int) remainingBalance));
+
+        //setting the spinner
+        setSpinner();
+
+        //incrementing the variable value of Wallet Fragment for fetching latest data in Wallet Fragment in case any record is deleted
+        CHECK_VALUE++;
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
 
-    private void setSpinner()
-    {
+    private void setSpinner() {
+
         ArrayAdapter spinnerAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item,dateSortList);
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

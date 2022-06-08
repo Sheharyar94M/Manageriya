@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.ActivityBudgetHistory;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
 import java.util.Arrays;
@@ -107,8 +108,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
         //itemview click listener
         holder.constraintLayout.setOnClickListener(view -> {
-            Intent intent=new Intent(context, ActivityBudgetHistory.class);
-            intent.putExtra("BudgetCatId",item.getBudgetCatId());
+            Intent intent=new Intent(context, BudgetActivity.class);
+            //intent.putExtra("BudgetCatId",item.getBudgetCatId());
             context.startActivity(intent);
         });
 

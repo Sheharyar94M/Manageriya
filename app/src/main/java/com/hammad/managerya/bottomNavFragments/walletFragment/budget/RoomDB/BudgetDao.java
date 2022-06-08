@@ -29,4 +29,8 @@ public interface BudgetDao {
     //update budget values
     @Query("update budget set budget_limit= :budgetAmount where category_id= :catId")
     void updateBudgetLimit(int budgetAmount,int catId);
+
+    //delete budget by id
+    @Query("DELETE from budget where category_id= :catId")
+    void deleteBudget(int catId);
 }

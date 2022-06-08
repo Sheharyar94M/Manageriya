@@ -62,7 +62,6 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
         //retrieving added contact list
         addedContactList = database.loanDao().getAddedContactList();
 
-
         //setting the recyclerview
         setRecyclerView(addedContactList);
 
@@ -124,6 +123,9 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
     }
 
     private void addConsumer() {
+
+        //incrementing the value of
+
         startActivity(new Intent(requireContext(), AddConsumerActivity.class));
     }
 
@@ -142,6 +144,9 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
 
             //setting the recyclerview
             setRecyclerView(addedContactList);
+
+            //user defined function for calculating total lend and borrowed amounts
+            setTotalLendBorrowedSum();
         }
 
         if(checkValueTotalSum >= 1) {
@@ -168,8 +173,29 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
         startActivity(intent);
     }
 
-    private void setTotalLendBorrowedSum()
-    {
+    //LoanAdapter long click listener
+    @Override
+    public void onLoanLongClick() {
+
+        //getting the latest values
+
+        //retrieving added contact list
+        addedContactList = database.loanDao().getAddedContactList();
+
+        //setting the recyclerview
+        setRecyclerView(addedContactList);
+
+        //setting the values to zero
+        totalLend = 0;
+        totalBorrowed = 0;
+
+        //user defined function for calculating total lend and borrowed amounts
+        setTotalLendBorrowedSum();
+
+    }
+
+    private void setTotalLendBorrowedSum() {
+
         //getting sum of total lended amount
         totalLend = database.loanDao().getTotalAmountLend();
 

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/drawable_cement_grey"
-        app:layout_constraintHeight_percent="0.50"
+        app:layout_constraintHeight_percent="0.51"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -144,7 +144,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_history"
             android:layout_width="@dimen/_60sdp"
@@ -207,15 +206,46 @@
         <androidx.constraintlayout.helper.widget.Flow
             android:id="@+id/flow_wallet"
             android:layout_width="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginStart="@dimen/_20sdp"
             app:flow_maxElementsWrap="2"
             app:flow_wrapMode="chain"
             app:flow_horizontalGap="@dimen/_35sdp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraint_2_frag_wallet"
             app:constraint_referenced_ids="constraint_history,constraint_budget"/>
+
+        <TextView
+            android:id="@+id/text_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History"
+            android:textSize="@dimen/_12ssp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="@id/constraint_history"
+            app:layout_constraintEnd_toEndOf="@id/constraint_history"
+            app:layout_constraintTop_toBottomOf="@id/flow_wallet"
+            app:layout_constraintBottom_toBottomOf="@+id/constraint_3_frag_wallet"/>
+
+        <TextView
+            android:id="@+id/text__budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Budget"
+            android:textSize="@dimen/_12ssp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryVariant"
+
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="@id/constraint_budget"
+            app:layout_constraintEnd_toEndOf="@id/constraint_budget"
+            app:layout_constraintTop_toBottomOf="@id/flow_wallet"
+            app:layout_constraintBottom_toBottomOf="@+id/constraint_3_frag_wallet"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

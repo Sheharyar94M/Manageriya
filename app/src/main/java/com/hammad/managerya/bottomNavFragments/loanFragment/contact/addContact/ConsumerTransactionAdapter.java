@@ -3,12 +3,17 @@ package com.hammad.managerya.bottomNavFragments.loanFragment.contact.addContact;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,10 +30,16 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
 
     Context context;
     List<LoanDetailEntity> loanDetailList;
+    OnConsumerTransactionListener mConsumerTransactionListener;
 
-    public ConsumerTransactionAdapter(Context context, List<LoanDetailEntity> loanDetailModelList) {
+    RoomDBHelper database;
+
+    public ConsumerTransactionAdapter(Context context, List<LoanDetailEntity> loanDetailModelList,OnConsumerTransactionListener listener) {
         this.context = context;
         this.loanDetailList = loanDetailModelList;
+        this.mConsumerTransactionListener = listener;
+
+        database = RoomDBHelper.getInstance(context);
     }
 
     @NonNull
@@ -37,7 +48,7 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
 
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         View view=layoutInflater.inflate(R.layout.layout_recycler_consumer_transaction,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mConsumerTransactionListener);
     }
 
     @Override
@@ -90,14 +101,16 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
         return loanDetailList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener{
 
         TextView textViewDate,textViewBalance,textViewCurrencyRemBalance,textViewRemBalance,textViewOptionalDetail;
         TextView textViewCurrencyLend,textViewAmountLend;
         TextView textViewCurrencyBorrow,textViewAmountBorrow;
         Flow flowLend,flowBorrow;
 
-        public ViewHolder(@NonNull View itemView) {
+        OnConsumerTransactionListener onConsumerTransactionListener;
+
+        public ViewHolder(@NonNull View itemView,OnConsumerTransactionListener listener) {
             super(itemView);
 
             //constraint 1 views
@@ -121,6 +134,39 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
             textViewCurrencyRemBalance.setText(CURRENCY_);
             textViewCurrencyLend.setText(CURRENCY_);
             textViewCurrencyBorrow.setText(CURRENCY_);
+
+            //initializing interface
+            this.onConsumerTransactionListener = listener;
+
+            //long click listener
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+        //for long click
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuItem deleteRecordItem=contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordItem.setOnMenuItemClickListener(this);
+        }
+
+        //long click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        //delete dialog
+                        deleteDialog(position);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -144,5 +190,39 @@ public class ConsumerTransactionAdapter extends RecyclerView.Adapter<ConsumerTra
         }
 
         return convertedDate;
+    }
+
+    //interface
+    public interface OnConsumerTransactionListener{
+        void onConsumerTransLongClick();
+    }
+
+    private void deleteDialog(int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting a particular transaction
+                    database.loanDao().deleteLoanTransaction(loanDetailList.get(position).getLoanId(),loanDetailList.get(position).getPhoneNo());
+                    Toast.makeText(context, "Transaction Deleted Successfully", Toast.LENGTH_SHORT).show();
+
+                    //removing the item from list
+                    loanDetailList.remove(position);
+                    notifyDataSetChanged();
+
+                    //calling the long click interface
+                    mConsumerTransactionListener.onConsumerTransLongClick();
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+
+                    dialogInterface.dismiss();
+
+                });
+
+        alertDialog.create().show();
     }
 }

@@ -2,6 +2,7 @@ package com.hammad.managerya.bottomNavFragments.savingFragment.DB;
 
 public class SavingModel {
 
+    public int id;
     public int savingId;
     public int savingGoalAmount;
     public String savingTitle;
@@ -10,12 +11,13 @@ public class SavingModel {
 
     public SavingModel() {}
 
-    public SavingModel(int savingId, int savingGoalAmount, String savingTitle, int savingIcon, String savingTargetDate) {
-        this.savingId = savingId;
-        this.savingGoalAmount = savingGoalAmount;
-        this.savingTitle = savingTitle;
-        this.savingIcon = savingIcon;
-        this.savingTargetDate = savingTargetDate;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getSavingId() {

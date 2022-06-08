@@ -26,7 +26,7 @@ import com.hammad.managerya.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsumerDetailActivity extends AppCompatActivity {
+public class ConsumerDetailActivity extends AppCompatActivity implements ConsumerTransactionAdapter.OnConsumerTransactionListener {
 
     private static String contactName,contactPhoneNo,contactLetters;
 
@@ -166,7 +166,7 @@ public class ConsumerDetailActivity extends AppCompatActivity {
         int newPosition= list.size() - 1;
         recyclerViewTransactions.scrollToPosition(newPosition);
 
-        consumerTransAdapter=new ConsumerTransactionAdapter(this, list);
+        consumerTransAdapter=new ConsumerTransactionAdapter(this, list,this);
         recyclerViewTransactions.setAdapter(consumerTransAdapter);
     }
 
@@ -211,8 +211,8 @@ public class ConsumerDetailActivity extends AppCompatActivity {
     }
 
     //function for calculating the difference between lended and borrowed amount
-    private void currentBalanceStatus()
-    {
+    private void currentBalanceStatus() {
+
         lendedAmountSum = database.loanDao().getLendedAmountSum(contactPhoneNo);
         borrowedAmountSum = database.loanDao().getBorrowedAmountSum(contactPhoneNo);
 
@@ -236,5 +236,26 @@ public class ConsumerDetailActivity extends AppCompatActivity {
             textViewLatestTransType.setTextColor(getResources().getColor(R.color.colorRed));
             textViewCurrency.setTextColor(getResources().getColor(R.color.colorRed));
         }
+    }
+
+    //ConsumerTransactionAdapter listener long click
+    @Override
+    public void onConsumerTransLongClick() {
+
+        //getting the latest values
+
+        //getting the loan detail list searched by phone number
+        loanDetailList = database.loanDao().getLoanTransList(contactPhoneNo);
+
+        //recyclerview
+        setRecyclerView(loanDetailList);
+
+        //setting the variable values to zero
+        lendedAmountSum = 0;
+        borrowedAmountSum=0 ;
+
+        //getting the current difference of amount lended and borrowed for this particular consumer
+        currentBalanceStatus();
+
     }
 }

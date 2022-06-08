@@ -3,15 +3,19 @@ package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
+import android.content.DialogInterface;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -96,9 +100,10 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
 
     public interface OnBudgetClickListener {
         void onBudgetItemClicked(int position);
+        void onBudgetItemLongClick();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
         ImageView imageView;
         TextView textViewCategoryName, textViewCurrency1, textViewCurrency2;
@@ -126,9 +131,67 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
             //initializing interface instance
             this.onBudgetClickListener = onBudgetClickListener;
 
+            //for long click
+            itemView.setOnCreateContextMenuListener(this);
+
             //click listener
             itemView.setOnClickListener(view -> onBudgetClickListener.onBudgetItemClicked(getAdapterPosition()));
 
         }
+
+        //for long click
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+
+            MenuItem deleteRecordItem=contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordItem.setOnMenuItemClickListener(this);
+        }
+
+        //menu item click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        //delete dialog
+                        deleteDialog(position);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    //delete dialog
+    private void deleteDialog(int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting the budget
+                    database.budgetDao().deleteBudget(addedBudgetList.get(position).getBudgetCatId());
+                    Toast.makeText(context, "Budget Deleted", Toast.LENGTH_SHORT).show();
+
+                    addedBudgetList.remove(position);
+                    notifyDataSetChanged();
+
+                    //calling the long click interface function
+                    mOnBudgetClickListener.onBudgetItemLongClick();
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
+
+        alertDialog.create().show();
     }
 }

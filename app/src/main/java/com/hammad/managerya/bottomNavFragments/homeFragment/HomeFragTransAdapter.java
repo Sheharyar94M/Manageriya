@@ -91,6 +91,8 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
     public interface RecentTransInterface {
         void onRecentTransClick(int position);
+        void onRecentTransLongClick();
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener {
@@ -114,7 +116,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
             this.recentTransInterface = recentTransInterface;
 
-            //for long click
+            //long click listener
             itemView.setOnCreateContextMenuListener(this);
 
             constraintLayout.setOnClickListener(view -> recentTransInterface.onRecentTransClick(getAdapterPosition()));
@@ -143,12 +145,14 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
                         {
                             //delete alert dialog
                             deleteAlertDialog("Income",recentTransList.get(position),position);
+                            //mRecentTransInterface.onRecentTransLongClick("Income",recentTransList.get(position),position);
 
                         }
                         else if(recentTransList.get(position).getTransType().equals("Expense"))
                         {
                             //delete alert dialog
                             deleteAlertDialog("Expense",recentTransList.get(position),position);
+                            //mRecentTransInterface.onRecentTransLongClick("Expense",recentTransList.get(position),position);
                         }
 
                     return true;
@@ -158,7 +162,6 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
             return false;
         }
     }
-
 
     /*
         This function is used to convert date from 'yyyy-MM-dd HH:mm:ss' to 'MMM dd, yyyy hh:mm aaa' format
@@ -197,6 +200,9 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
                         Toast.makeText(context, "Record Delete Successfully", Toast.LENGTH_SHORT).show();
                         recentTransList.remove(position);
                         notifyDataSetChanged();
+
+                        //calling the long click interface
+                        mRecentTransInterface.onRecentTransLongClick();
                     }
                     else if(type.equals("Expense"))
                     {
@@ -204,6 +210,9 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
                         Toast.makeText(context, "Record Delete Successfully", Toast.LENGTH_SHORT).show();
                         recentTransList.remove(position);
                         notifyDataSetChanged();
+
+                        //calling the long click interface
+                        mRecentTransInterface.onRecentTransLongClick();
                     }
 
                 })

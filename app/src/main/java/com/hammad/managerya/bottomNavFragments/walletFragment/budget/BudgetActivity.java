@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -89,8 +90,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     }
 
-    private void setToolbar()
-    {
+    private void setToolbar() {
+
         toolbar=findViewById(R.id.toolbar_budget);
 
         setSupportActionBar(toolbar);
@@ -120,8 +121,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         finish();
     }
 
-    private void initializeViews()
-    {
+    private void initializeViews() {
+
         textViewCurrency1=findViewById(R.id.txt_currency_budget);
         textViewCurrency2=findViewById(R.id.txt_currency_2_budget);
 
@@ -171,8 +172,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     }
 
-    private void setMonthRecyclerView()
-    {
+    private void setMonthRecyclerView() {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerViewMonth.setLayoutManager(layoutManager);
 
@@ -188,8 +189,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     @Override
     public void onMonthSelected(String monthName) {}
 
-    private void setBudgetRecyclerview()
-    {
+    private void setBudgetRecyclerview() {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewBudget.setLayoutManager(layoutManager);
 
@@ -204,6 +205,35 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         Intent intent=new Intent(this, ActivityBudgetHistory.class);
         intent.putExtra("BudgetCatId",addedBudgetList.get(position).getBudgetCatId());
         startActivity(intent);
+        finish();
+    }
+
+    //Budget Interface long click listener
+    @Override
+    public void onBudgetItemLongClick() {
+
+        //getting the latest changes when a record is deleted
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList();
+
+        //budget recyclerview
+        setBudgetRecyclerview();
+
+        //setting the variables values to zero
+        totalBudgetAllocated = 0;
+        totalBudgetSpend = 0;
+
+        //traversing the addedBudgetList for total sum of budget categories and budget spend
+        for (int i=0; i < addedBudgetList.size(); i++)
+        {
+            totalBudgetAllocated += addedBudgetList.get(i).getBudgetLimit();
+            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId());
+        }
+
+        //setting the total budget info
+        setTotalBudgetInfo(totalBudgetAllocated,totalBudgetSpend);
+
     }
 
     //function for getting the details of particular category (expense transactions)

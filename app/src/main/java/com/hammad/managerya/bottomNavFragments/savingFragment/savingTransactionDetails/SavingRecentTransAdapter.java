@@ -3,7 +3,11 @@ package com.hammad.managerya.bottomNavFragments.savingFragment.savingTransaction
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,9 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hammad.managerya.R;
+import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingModel;
 
 import java.text.ParseException;
@@ -25,10 +31,17 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
 
     Context context;
     List<SavingModel> savingTransactionList;
+    OnSavingRecentTransListener mOnSavingRecentTransListener;
 
-    public SavingRecentTransAdapter(Context context,List<SavingModel> list) {
+    //room database instance
+    RoomDBHelper database;
+
+    public SavingRecentTransAdapter(Context context,List<SavingModel> list,OnSavingRecentTransListener listener) {
         this.context = context;
         this.savingTransactionList = list;
+        this.mOnSavingRecentTransListener = listener;
+
+        database = RoomDBHelper.getInstance(context);
     }
 
     @NonNull
@@ -36,7 +49,7 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
     public SavingRecentTransAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.layout_recent_saving_transaction,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view,mOnSavingRecentTransListener);
     }
 
     @Override
@@ -57,12 +70,13 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
         return savingTransactionList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener{
 
         TextView textViewSavingGoalTitle, textViewCurrency,textViewAmount,textViewDate;
         ImageView imageViewCategory;
+        OnSavingRecentTransListener onSavingRecentTransListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView,OnSavingRecentTransListener listener) {
             super(itemView);
 
             textViewSavingGoalTitle =itemView.findViewById(R.id.text_category);
@@ -72,9 +86,42 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
 
             imageViewCategory=itemView.findViewById(R.id.img__1);
 
+            //initializing interface
+            this.onSavingRecentTransListener = listener;
+
             //setting the currency to textview
             textViewCurrency.setText(CURRENCY_);
 
+            //long click interface
+            itemView.setOnCreateContextMenuListener(this);
+
+        }
+
+        //long click
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuItem deleteRecordItem=contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordItem.setOnMenuItemClickListener(this);
+        }
+
+        //long click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        //delete dialog
+                        deleteDialog(position);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -98,6 +145,41 @@ public class SavingRecentTransAdapter extends RecyclerView.Adapter<SavingRecentT
         }
 
         return convertedDate;
+    }
+
+    //interface
+    public interface OnSavingRecentTransListener{
+        void onSavingRecentTransLongClick();
+    }
+
+    private void deleteDialog(int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting the saving goal transaction
+                    database.savingDao().deleteSavingGoalTransaction(savingTransactionList.get(position).getId(),savingTransactionList.get(position).getSavingId());
+                    Toast.makeText(context, "Saving Goal Transaction Deleted", Toast.LENGTH_SHORT).show();
+
+                    //removing item from list
+                    savingTransactionList.remove(position);
+                    notifyDataSetChanged();
+
+                    //calling the interface long click listener
+                    mOnSavingRecentTransListener.onSavingRecentTransLongClick();
+
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+
+                    dialogInterface.dismiss();
+
+                });
+
+        alertDialog.create().show();
     }
 
 }

@@ -12,7 +12,7 @@
         android:layout_height="@dimen/_100sdp"
         android:layout_marginStart="4dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_launcher_background"
+        android:src="@drawable/header_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

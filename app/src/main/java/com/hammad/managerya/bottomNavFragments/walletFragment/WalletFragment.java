@@ -4,13 +4,14 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +45,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     private RecyclerView recyclerViewRecentTransaction;
     private TextView textViewCurrentMonth;
 
-    private ImageView imageViewHistory,imageViewBudget;
+    /*private ImageView imageViewHistory,imageViewBudget;*/
+    private ConstraintLayout layoutHistory,layoutBudget;
 
     //recent transaction list
     List<HomeRecentTransModel> recentTranslList = new ArrayList<>();
@@ -55,6 +57,12 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     //variables for calculating the current earning,spending and percentage
     private float earning=0,amountSpend=0;
     private int percentage=0;
+
+    /*
+        Variable for storing the value if any record is deleted in HistoryActivity.
+        If record is deleted in HistoryActivity, the logic in handled in onResume() of this fragment
+    */
+    public static int CHECK_VALUE = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +96,10 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         setRecentTransactionRecyclerview();
 
         //history click listener
-        imageViewHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
+        layoutHistory.setOnClickListener(v-> startActivity(new Intent(requireContext(), HistoryActivity.class)));
 
         //budget click listener
-        imageViewBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(), BudgetActivity.class)));
+        layoutBudget.setOnClickListener(v -> startActivity(new Intent(requireContext(), BudgetActivity.class)));
 
         //insight (graphs) activity
         imageViewInsights.setOnClickListener(v -> startActivity(new Intent(requireContext(), InsightActivity.class)));
@@ -121,9 +129,11 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //recent transaction recyclerview
         recyclerViewRecentTransaction=view.findViewById(R.id.recycler_recent_trans_wallet);
 
-        //imageview History & Budget
-        imageViewHistory=view.findViewById(R.id.img_history_wallet);
-        imageViewBudget=view.findViewById(R.id.img_budget_wallet);
+        //layout History & Budget
+        /*imageViewHistory=view.findViewById(R.id.img_history_wallet);
+        imageViewBudget=view.findViewById(R.id.img_budget_wallet);*/
+        layoutHistory=view.findViewById(R.id.constraint_history);
+        layoutBudget=view.findViewById(R.id.constraint_budget);
 
         //setting the current month to textview
         Calendar calendar = Calendar.getInstance();
@@ -211,6 +221,14 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         startActivity(intent);
     }
 
+    //overridden long click listener of HomeFragTransAdapter
+    @Override
+    public void onRecentTransLongClick() {
+
+        //getting the latest changes when a record is deleted
+        getUpdatedData();
+    }
+
     private void getExpenditureDetails() {
 
         percentage = (int) ((amountSpend / earning) * 100);
@@ -242,5 +260,39 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         }
 
         return convertedDate;
+    }
+
+    //user-defined function for fetching the latest data in case any record is deleted
+    private void getUpdatedData(){
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions();
+
+        //sum of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum();
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+
+        //getting the details of expenditure
+        getExpenditureDetails();
+
+        //recent transaction recyclerview
+        setRecentTransactionRecyclerview();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(CHECK_VALUE >= 1) {
+
+            //if value is >=1, this means any record is deleted. So, we will fetch the new changes (Changes made from HistoryActivity)
+            getUpdatedData();
+
+            //setting the value to zero again
+            CHECK_VALUE = 0;
+        }
+
     }
 }

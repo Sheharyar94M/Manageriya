@@ -3,13 +3,17 @@ package com.hammad.managerya.bottomNavFragments.loanFragment;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Context;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -96,7 +100,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
         return addedContactList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener {
 
         TextView textViewNameCharacter,textViewName,textViewCurrency,textViewAmount,textViewDate;
         ConstraintLayout constraintLayout;
@@ -120,11 +124,44 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
 
             //interface click listener
             constraintLayout.setOnClickListener(view -> mOnLoanInterface.onLoanClick(getAdapterPosition()));
+
+            //long click listener
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+        //for long click
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            MenuItem deleteRecordItem=contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordItem.setOnMenuItemClickListener(this);
+        }
+
+        //long click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        //delete dialog
+                        deleteDialog(position);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
+    //interface
     public interface OnLoanInterface{
         void onLoanClick(int position);
+        void onLoanLongClick();
     }
 
     //function for converting date format
@@ -144,5 +181,38 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.MyViewHolder> 
         }
 
         return convertedDate;
+    }
+
+    private void deleteDialog(int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting the added contact
+                    database.loanDao().deleteAddedContact(addedContactList.get(position).getPhoneNo());
+
+                    //deleting all the transactions of added contact
+                    database.loanDao().deleteAllLoanTransaction(addedContactList.get(position).getPhoneNo());
+
+                    Toast.makeText(context, "Contact Removed Successfully", Toast.LENGTH_SHORT).show();
+
+                    //removing item from list
+                    addedContactList.remove(position);
+                    notifyDataSetChanged();
+
+                    //calling the interface long click listener
+                    mOnLoanInterface.onLoanLongClick();
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+
+                    dialogInterface.dismiss();
+
+                });
+
+        alertDialog.create().show();
     }
 }

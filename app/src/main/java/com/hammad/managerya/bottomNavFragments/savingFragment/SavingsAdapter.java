@@ -3,13 +3,18 @@ package com.hammad.managerya.bottomNavFragments.savingFragment;
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -78,7 +83,7 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
         return savingGoalList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener,MenuItem.OnMenuItemClickListener{
 
         ImageView imageView;
         TextView textViewSavingTitle, textViewCurrency;
@@ -108,14 +113,46 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
             //initializing interface instance
             this.onSavingClickListener=onSavingClickListener;
 
+            //long click listener
+            itemView.setOnCreateContextMenuListener(this);
+
             //interface click listener
             itemView.setOnClickListener(view -> mOnSavingClickListener.onSavingItemClicked(getAdapterPosition()));
 
+        }
+
+        //for long click
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+
+            MenuItem deleteRecordId= contextMenu.add(Menu.NONE,1,1,"Delete Record");
+            deleteRecordId.setOnMenuItemClickListener(this);
+        }
+
+        //long click listener
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            int position=getAdapterPosition();
+
+            if(position != RecyclerView.NO_POSITION)
+            {
+                switch (menuItem.getItemId())
+                {
+                    case 1:
+                        //delete dialog
+                        deleteDialog(position);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
     public interface OnSavingClickListener{
         void onSavingItemClicked(int position);
+        void onSavingItemLongClick();
     }
 
     /*
@@ -140,4 +177,33 @@ public class SavingsAdapter extends RecyclerView.Adapter<SavingsAdapter.MyViewHo
         return convertedDate;
     }
 
+    private void deleteDialog(int position){
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(context);
+
+        alertDialog.setTitle("Delete Record")
+                .setMessage("want to delete this record?")
+                .setPositiveButton("DELETE", (dialogInterface, i) -> {
+
+                    //deleting saving goal
+                    database.savingDao().deleteSavingGoal(savingGoalList.get(position).getId());
+
+                    //deleting saving goal transactions
+                    database.savingDao().deleteAllSavingTransactions(savingGoalList.get(position).getId());
+
+                    Toast.makeText(context, "Saving Goal Deleted", Toast.LENGTH_SHORT).show();
+
+                    savingGoalList.remove(position);
+                    notifyDataSetChanged();
+
+                    //calling the listener long click listener
+                    mOnSavingClickListener.onSavingItemLongClick();;
+
+                })
+                .setNegativeButton("CANCEL", (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                });
+
+        alertDialog.create().show();
+    }
 }

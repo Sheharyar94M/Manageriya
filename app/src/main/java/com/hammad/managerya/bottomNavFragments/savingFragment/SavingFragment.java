@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.hammad.managerya.R;
@@ -115,6 +116,26 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
         intent.putExtra("icon",item.getSavingIcon());
         intent.putExtra("date",item.getSavingTargetDate());
         startActivity(intent);
+    }
+
+    //Savings Adapter interface long click listener
+    @Override
+    public void onSavingItemLongClick() {
+
+        //getting the updated values
+
+        //getting the saving goal list
+        savingGoalList = database.savingDao().getSavingGoalList();
+
+        //setting the recyclerview
+        setupRecyclerview(savingGoalList);
+
+        //setting the values to zero
+        totalSavingGoalAmount = 0;
+        totalSavedAmount =0;
+
+        //setting the values to textviews
+        setValuesToViews();
     }
 
     @Override

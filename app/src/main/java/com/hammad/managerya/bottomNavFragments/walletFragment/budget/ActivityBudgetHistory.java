@@ -2,18 +2,19 @@ package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
@@ -56,7 +57,6 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
     private int budgetSpend=0;
 
     private List<HomeRecentTransModel> expenseDetailList=new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,11 +145,15 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+        //intent is called here to set the back stack of activity
+        startActivity(new Intent(this,BudgetActivity.class));
         finish();
+
     }
 
-    private void setMonthRecycler()
-    {
+    private void setMonthRecycler() {
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerViewMonth.setLayoutManager(layoutManager);
 
@@ -227,14 +231,33 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         startActivity(intent);
     }
 
+    //overridden long click listener of HomeFragTransAdapter
+    @Override
+    public void onRecentTransLongClick() {
+
+        //getting the latest changes when a record is deleted
+
+        budgetDetailList = database.budgetDao().getBudgetById(budgetCatId);
+
+        //getting the recent transaction list of specific budget categories
+        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId);
+
+        //setting the budget details to text views
+        setBudgetDetails(budgetDetailList);
+
+        //recent budget transaction recyclerview
+        setRecentRecyclerView();
+
+    }
+
     private void getIntentData(){
         Intent intent=getIntent();
 
         budgetCatId = intent.getIntExtra("BudgetCatId",-1);
     }
 
-    private void setBudgetDetails(List<BudgetDetailsModel> list)
-    {
+    private void setBudgetDetails(List<BudgetDetailsModel> list) {
+
         BudgetDetailsModel item= list.get(0);
 
         //getting the sum of spend budget for particular category

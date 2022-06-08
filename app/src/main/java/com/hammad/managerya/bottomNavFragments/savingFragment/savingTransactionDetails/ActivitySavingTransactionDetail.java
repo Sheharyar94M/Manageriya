@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ActivitySavingTransactionDetail extends AppCompatActivity {
+public class ActivitySavingTransactionDetail extends AppCompatActivity implements SavingRecentTransAdapter.OnSavingRecentTransListener {
 
     private TextView textViewSavingGoalTitle,textViewDate,textViewCurrency,textViewAmountSaved,textViewSavingGoal,textViewPercentage;
     private ImageView imageViewCategory;
@@ -139,7 +139,7 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewSavingTransaction.setLayoutManager(layoutManager);
 
-        recentTransAdapter = new SavingRecentTransAdapter(this,savingTransactionList);
+        recentTransAdapter = new SavingRecentTransAdapter(this,savingTransactionList,this);
         recyclerViewSavingTransaction.setAdapter(recentTransAdapter);
 
     }
@@ -202,5 +202,21 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity {
         }
 
         return convertedDate;
+    }
+
+    //SavingRecentTransAdapter long click listener
+    @Override
+    public void onSavingRecentTransLongClick() {
+
+        //getting the latest changes
+
+        //get the intent data
+        getIntentData();
+
+        //getting the list of recent transaction
+        savingTransactionList = database.savingDao().getSavingTransDetailsListById(id);
+
+        //set the recent saving transaction recyclerview
+        setRecyclerView();
     }
 }

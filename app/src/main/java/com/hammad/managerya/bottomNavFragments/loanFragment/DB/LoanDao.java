@@ -3,7 +3,6 @@ package com.hammad.managerya.bottomNavFragments.loanFragment.DB;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -48,6 +47,17 @@ public interface LoanDao {
     @Query("select * from loan_detail where phone_no= :phoneNo order by trans_date desc")
     List<LoanDetailEntity> getLoanTransByDate(String phoneNo);
 
+    //deleting an added contact
+    @Query("DELETE from loan where phoneNo= :phoneNumber")
+    void deleteAddedContact(String phoneNumber);
+
+    //delete all loan transaction of an added contact
+    @Query("DELETE from loan_detail where phone_no= :phoneNumber")
+    void deleteAllLoanTransaction(String phoneNumber);
+
+    //delete a particular loan transaction
+    @Query("DELETE from loan_detail where loanId= :id AND phone_no= :phoneNo")
+    void deleteLoanTransaction(int id,String phoneNo);
 
 
 }
