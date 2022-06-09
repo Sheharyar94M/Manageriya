@@ -54,6 +54,9 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     //recent transaction list
     private List<HomeRecentTransModel> recentTransList=new ArrayList<>();
 
+    //string for saving current month and year
+    private String currentMonth="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +65,17 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         //initialize views
         initializeViews();
 
+        //getting the current date
+        getCurrentDate();
+
         //initializing database instances
         database = RoomDBHelper.getInstance(this);
 
         //getting the total sum of income
-        earning = database.incomeDetailDao().getTotalIncomeSum();
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
 
         //getting the total sum of expense
-        expense = database.expenseDetailDao().getTotalExpenseSum();
+        expense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
         //remaining balance
         remainingBalance = earning - expense;
@@ -160,7 +166,28 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
 
     //Month recyclerview click listener
     @Override
-    public void onMonthSelected(String monthName) {}
+    public void onMonthSelected(String monthName) {
+
+        currentMonth = monthName;
+
+        //getting the latest changes
+
+        //getting the total sum of income
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+
+        //getting the total sum of expense
+        expense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
+
+        //remaining balance
+        remainingBalance = earning - expense;
+
+        //setting the remaining balance value to textview balance
+        textViewBalance.setText(String.valueOf((int) remainingBalance));
+
+        //setting the spinner
+        setSpinner();
+
+    }
 
     private void setRecentTransRecyclerview(List<HomeRecentTransModel> list) {
 
@@ -200,10 +227,10 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         //getting the latest changes when a record is deleted
 
         //getting the total sum of income
-        earning = database.incomeDetailDao().getTotalIncomeSum();
+        earning = database.incomeDetailDao().getTotalIncomeSum(currentMonth);
 
         //getting the total sum of expense
-        expense = database.expenseDetailDao().getTotalExpenseSum();
+        expense = database.expenseDetailDao().getTotalExpenseSum(currentMonth);
 
         //remaining balance
         remainingBalance = earning - expense;
@@ -243,13 +270,13 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         switch (position)
         {
             case 0:
-                recentTransList = database.homeFragmentDao().getAllTransactions();
+                recentTransList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
                 //setting the list to recycler view
                 setRecentTransRecyclerview(recentTransList);
                 break;
 
             case 1:
-                recentTransList = database.homeFragmentDao().getAllTransactionsByASC();
+                recentTransList = database.homeFragmentDao().getAllTransactionsByASC(monthDateConversion(currentMonth));
                 //setting the list to recycler view
                 setRecentTransRecyclerview(recentTransList);
                 break;
@@ -293,5 +320,32 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         }
 
         return convertedDate;
+    }
+
+    //date conversion for month (Jun 2022 to 2022-06)
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
+
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+
+        currentMonth = dateFormat1.format(calendar.getTime());
     }
 }

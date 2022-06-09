@@ -6,15 +6,9 @@ public class BudgetDetailsModel {
     public String budgetCatName;
     public int budgetIcon;
     public int budgetLimit;
+    public String budgetDate;
 
     public BudgetDetailsModel() {}
-
-    public BudgetDetailsModel(int budgetCatId, String budgetCatName, int budgetIcon, int budgetLimit) {
-        this.budgetCatId = budgetCatId;
-        this.budgetCatName = budgetCatName;
-        this.budgetIcon = budgetIcon;
-        this.budgetLimit = budgetLimit;
-    }
 
     public int getBudgetCatId() {
         return budgetCatId;
@@ -46,5 +40,13 @@ public class BudgetDetailsModel {
 
     public void setBudgetLimit(int budgetLimit) {
         this.budgetLimit = budgetLimit;
+    }
+
+    public String getBudgetDate() {
+        return budgetDate;
+    }
+
+    public void setBudgetDate(String budgetDate) {
+        this.budgetDate = budgetDate;
     }
 }

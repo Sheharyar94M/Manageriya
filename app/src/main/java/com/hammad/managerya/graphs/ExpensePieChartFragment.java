@@ -44,6 +44,9 @@ public class ExpensePieChartFragment extends Fragment {
     //array list for pie chart entries
     ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
+    //string for saving the currently selected month value
+    private String currentMonth="";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_expense_pie_chart, container, false);
@@ -51,13 +54,17 @@ public class ExpensePieChartFragment extends Fragment {
         //initialize pie chart
         pieChartExpense=view.findViewById(R.id.pie_chart_expense);
 
+        //getting the bundle value from InsightActivity
+        Bundle bundle=getArguments();
+        currentMonth = bundle.getString("month");
+
         //database instance initialization
         database = RoomDBHelper.getInstance(requireContext());
 
-        expenseAmount = database.expenseDetailDao().getTotalExpenseSum();
+        expenseAmount = database.expenseDetailDao().getTotalExpenseSum(currentMonth);
 
         //getting the list of income details
-        pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum();
+        pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum(currentMonth);
 
         //setting the pie chart
         setupPieChart();

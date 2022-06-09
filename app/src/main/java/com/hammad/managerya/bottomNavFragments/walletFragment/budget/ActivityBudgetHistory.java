@@ -59,6 +59,9 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
     private List<HomeRecentTransModel> expenseDetailList=new ArrayList<>();
 
+    //string for saving current month and year
+    private String currentMonth="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,9 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         //initialize views
         initializeViews();
 
+        //getting the current date
+        getCurrentDate();
+
         //initializing database instance
         database=RoomDBHelper.getInstance(this);
 
@@ -78,7 +84,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         budgetDetailList = database.budgetDao().getBudgetById(budgetCatId);
 
         //getting the recent transaction list of specific budget categories
-        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId);
+        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId,monthDateConversion(currentMonth));
 
         //getting the months list
         getMonthsList();
@@ -117,6 +123,13 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         recyclerViewRecent=findViewById(R.id.recycler_recent_budget);
 
         progressBar=findViewById(R.id.progress_budget_history);
+    }
+
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+        currentMonth = dateFormat1.format(calendar.getTime());
     }
 
     private void setToolbar(){
@@ -198,7 +211,23 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
     //months click listener
     @Override
     public void onMonthSelected(String monthName) {
-        Toast.makeText(this, monthName, Toast.LENGTH_SHORT).show();
+
+        //setting the selected month value to current month
+        currentMonth = monthName;
+
+        //getting the latest changes when a record is deleted
+
+        budgetDetailList = database.budgetDao().getBudgetById(budgetCatId);
+
+        //getting the recent transaction list of specific budget categories
+        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId,monthDateConversion(currentMonth));
+
+        //setting the budget details to text views
+        setBudgetDetails(budgetDetailList);
+
+        //recent budget transaction recyclerview
+        setRecentRecyclerView();
+
     }
 
     private void setRecentRecyclerView() {
@@ -241,7 +270,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         budgetDetailList = database.budgetDao().getBudgetById(budgetCatId);
 
         //getting the recent transaction list of specific budget categories
-        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId);
+        expenseDetailList = database.expenseDetailDao().getExpenseDetailById(budgetCatId,monthDateConversion(currentMonth));
 
         //setting the budget details to text views
         setBudgetDetails(budgetDetailList);
@@ -292,7 +321,7 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
     //function for getting the details of particular category (expense transactions)
     private int getBudgetSpend(int budgetCatId) {
-        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,monthDateConversion(currentMonth));
     }
 
     /*
@@ -309,6 +338,25 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
         try {
             Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
+
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
             convertedDate = dateFormat2.format(date);
         } catch (ParseException e) {
             e.printStackTrace();

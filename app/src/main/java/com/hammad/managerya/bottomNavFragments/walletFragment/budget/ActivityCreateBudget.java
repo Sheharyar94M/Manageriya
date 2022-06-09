@@ -25,7 +25,9 @@ import com.hammad.managerya.bottomNavFragments.addRecord.expense.AddExpenseAdapt
 import com.hammad.managerya.bottomNavFragments.addRecord.expense.expenseDB.ExpenseCategoryEntity;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ActivityCreateBudget extends AppCompatActivity implements AddExpenseAdapter.ExpenseInterfaceListener {
@@ -46,6 +48,9 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
     //this income category list contain first 8 elements
     private List<ExpenseCategoryEntity> expenseCategoryList=new ArrayList<>();
 
+    //for saving date
+    private String currentDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,9 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
 
         //initialize views
         initializeView();
+
+        //getting the current date
+        getCurrentDate();
 
         //initialize database helper class
         database=RoomDBHelper.getInstance(this);
@@ -78,6 +86,13 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
 
         //setting toolbar as support action bar
         setSupportActionBar(toolbar);
+    }
+
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        currentDate = dateFormat.format(calendar.getTime());
     }
 
     //onCreateOptionsMenu & onOptionsItemSelected for handling the cancel button on toolbar
@@ -133,7 +148,7 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
         else
         {
             //saving the budget
-            database.budgetDao().addBudget(new BudgetEntity(categoryId,categoryName,categoryIcon,Integer.valueOf(editTextAmount.getText().toString())));
+            database.budgetDao().addBudget(new BudgetEntity(categoryId,categoryName,categoryIcon,Integer.valueOf(editTextAmount.getText().toString()),currentDate));
             Toast.makeText(this, "Budget Created Successfully", Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {

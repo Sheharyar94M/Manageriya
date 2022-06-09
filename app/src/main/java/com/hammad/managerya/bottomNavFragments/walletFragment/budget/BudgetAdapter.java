@@ -63,7 +63,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
         BudgetDetailsModel item = addedBudgetList.get(position);
 
         //for getting details of particular category expenses (which is budget spent for that category)
-        budgetSpend = getBudgetSpend(item.getBudgetCatId());
+        budgetSpend = getBudgetSpend(item.getBudgetCatId(), item.getBudgetDate());
 
         //if the category name contain new line literal (\n) then replace that liberal with no space so that the category can be displayed in single line
         if(item.getBudgetCatName().contains("\n")) {
@@ -93,9 +93,9 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
     }
 
     //function for getting the details of particular category (expense transactions)
-    private int getBudgetSpend(int budgetCatId) {
+    private int getBudgetSpend(int budgetCatId,String date) {
 
-        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,date);
     }
 
     public interface OnBudgetClickListener {

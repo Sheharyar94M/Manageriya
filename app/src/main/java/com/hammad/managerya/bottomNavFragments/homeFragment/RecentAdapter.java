@@ -71,7 +71,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         BudgetDetailsModel item = addedBudgetList.get(position);
 
         //for getting details of particular category expenses (which is budget spent for that category)
-        budgetSpend = getBudgetSpend(item.getBudgetCatId());
+        budgetSpend = getBudgetSpend(item.getBudgetCatId(), item.getBudgetDate());
 
         //total budget of category
         budgetTotal = item.getBudgetLimit();
@@ -143,8 +143,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
     }
 
     //function for getting the details of particular category (expense transactions)
-    private int getBudgetSpend(int budgetCatId) {
+    private int getBudgetSpend(int budgetCatId,String date) {
 
-        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,date);
     }
 }

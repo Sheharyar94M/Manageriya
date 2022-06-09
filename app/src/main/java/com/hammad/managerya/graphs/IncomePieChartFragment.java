@@ -26,7 +26,11 @@ import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class IncomePieChartFragment extends Fragment {
@@ -43,6 +47,9 @@ public class IncomePieChartFragment extends Fragment {
     //array list for pie chart entries
     ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
+    //string for saving the currently selected month value
+    private String currentMonth="";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_income_pie_chart, container, false);
@@ -50,13 +57,17 @@ public class IncomePieChartFragment extends Fragment {
         //initialize pie chart
         pieChartIncome=view.findViewById(R.id.pie_chart_income);
 
+        //getting the bundle value from InsightActivity
+        Bundle bundle=getArguments();
+        currentMonth = bundle.getString("month");
+
         //database instance initialization
         database = RoomDBHelper.getInstance(requireContext());
 
-        incomeAmount = database.incomeDetailDao().getTotalIncomeSum();
+        incomeAmount = database.incomeDetailDao().getTotalIncomeSum(currentMonth);
 
         //getting the list of income details
-        pieChartDataList = database.incomeDetailDao().getIncomeCategoriesSum();
+        pieChartDataList = database.incomeDetailDao().getIncomeCategoriesSum(currentMonth);
 
         //setting the pie chart
         setupPieChart();

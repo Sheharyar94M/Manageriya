@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,6 +87,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     //budget list
     private List<BudgetDetailsModel> addedBudgetList=new ArrayList<>();
 
+    //string for saving current month and year
+    private String currentMonth="";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -106,28 +108,28 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //initializing views
         initializeViews(view);
 
+        //get current date
+        getCurrentDate();
+
         //initializing database instance
         database = RoomDBHelper.getInstance(requireActivity());
 
         //getting the list of all recent transaction (income & expense)
-        recentTranslList = database.homeFragmentDao().getAllTransactions();
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
 
         //getting the list of addedBudgetList
-        addedBudgetList = database.budgetDao().getBudgetList();
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
 
         //sum of total income
-        earning = database.incomeDetailDao().getTotalIncomeSum();
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         //sum of total expense
-        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
         //getting the current expenditure
         getExpenditureDetails();
 
         //getting sum of expense categories (for pie chart data)
         getExpenseSumByCategory();
-
-        //get current date
-        getCurrentDate();
 
         //get the months list
         getMonthsList();
@@ -185,6 +187,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         String currentDate = dateFormat.format(calendar.getTime());
+
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+        currentMonth = dateFormat1.format(calendar.getTime());
 
         textViewCurrentDate.setText(currentDate);
     }
@@ -365,18 +370,46 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     //months adapter click listener
     @Override
     public void onMonthSelected(String monthName) {
-        Toast.makeText(requireContext(), monthName, Toast.LENGTH_SHORT).show();
 
-        Log.i("HELLO_123", "onMonthSelected called");
+        currentMonth = monthName;
 
-        /*for(HomeRecentTransModel item : recentTranslList)
-        {
-            if(item.getTransDate().contains("May") && item.getTransDate().contains("2022"))
-            {
-                Log.i("HELLO_123", "month: "+monthName);
-                Log.i("HELLO_123", "trnans date: "+item.getTransDate()+"\n\n");
-            }
-        }*/
+        //getting the latest data changes
+
+        //clearing the list before new data insertion
+        pieEntries.clear();
+        recentTranslList.clear();
+        pieChartDataList.clear();
+        addedBudgetList.clear();
+
+        Log.i("HELLO_123", "onMonthSelected: "+monthDateConversion(monthName));
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
+
+        //sum of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
+
+        //getting the current expenditure
+        getExpenditureDetails();
+
+        //getting sum of expense categories (for pie chart data)
+        getExpenseSumByCategory();
+
+        //setting the recyclerview
+        setRecentTransactionRecyclerView();
+
+        //setting the pie chart
+        setupPieChart();
+        loadPieChartData();
+
+        //setting the recent recyclerview
+        setBudgetRecentRecyclerview();
+
     }
 
     private void getExpenditureDetails() {
@@ -403,7 +436,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     }
 
     private void getExpenseSumByCategory() {
-        pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum();
+        pieChartDataList = database.expenseDetailDao().getExpenseCategoriesSum(monthDateConversion(currentMonth));
     }
 
     /*
@@ -420,6 +453,25 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("MMM dd, yyyy hh:mm aaa");
         try {
             Date date = dateFormat1.parse(databaseDate);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
+    }
+
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
             convertedDate = dateFormat2.format(date);
         } catch (ParseException e) {
             e.printStackTrace();

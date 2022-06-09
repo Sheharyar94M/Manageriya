@@ -64,6 +64,10 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     */
     public static int CHECK_VALUE = 0;
 
+    //string for saving current month and year
+    private String currentMonth="";
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -72,16 +76,19 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //initialize views
         initialViews(view);
 
+        //getting the current date
+        getCurrentDate();
+
         //initializing database instance
         database = RoomDBHelper.getInstance(requireContext());
 
         //getting the list of all recent transaction (income & expense)
-        recentTranslList = database.homeFragmentDao().getAllTransactions();
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
 
         //sum of total income
-        earning = database.incomeDetailDao().getTotalIncomeSum();
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         //sum of total expense
-        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
         //get the months list
         getMonthsList();
@@ -142,6 +149,14 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         textViewCurrentMonth.setText(currentDate);
     }
 
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+        currentMonth = dateFormat1.format(calendar.getTime());
+
+    }
+
     private void getMonthsList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy");
 
@@ -190,6 +205,12 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
         //setting the current month to textview
         textViewCurrentMonth.setText(monthName);
+
+        //setting the current month to variable
+        currentMonth = monthName;
+
+        //getting the latest values
+        getUpdatedData();
     }
 
     private void setRecentTransactionRecyclerview(){
@@ -275,12 +296,12 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     private void getUpdatedData(){
 
         //getting the list of all recent transaction (income & expense)
-        recentTranslList = database.homeFragmentDao().getAllTransactions();
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
 
         //sum of total income
-        earning = database.incomeDetailDao().getTotalIncomeSum();
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         //sum of total expense
-        amountSpend = database.expenseDetailDao().getTotalExpenseSum();
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
         //getting the details of expenditure
         getExpenditureDetails();
@@ -303,5 +324,24 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
             CHECK_VALUE = 0;
         }
 
+    }
+
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

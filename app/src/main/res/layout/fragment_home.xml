@@ -205,7 +205,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_home_frag"
         android:layout_width="match_parent"

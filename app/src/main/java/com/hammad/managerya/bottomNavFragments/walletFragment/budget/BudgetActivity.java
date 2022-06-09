@@ -4,6 +4,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +21,11 @@ import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class BudgetActivity extends AppCompatActivity implements MonthAdapter.OnMonthClickListener, BudgetAdapter.OnBudgetClickListener {
@@ -46,6 +49,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     private int totalBudgetAllocated = 0;
     private int totalBudgetSpend = 0;
 
+    //string for saving current month and year
+    private String currentMonth="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +63,18 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //initialize views
         initializeViews();
 
+        //getting the current date
+        getCurrentDate();
+
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
 
+        Log.i("HELLO_123", "month: "+currentMonth);
+
         //getting the list of addedBudgetList
-        addedBudgetList = database.budgetDao().getBudgetList();
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
+
+        Log.i("HELLO_123", "added list size: "+addedBudgetList.size());
 
         //get the month list
         getMonthsList();
@@ -143,6 +156,13 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         recyclerViewBudget=findViewById(R.id.recycler_budget);
     }
 
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+        currentMonth = dateFormat1.format(calendar.getTime());
+    }
+
     private void getMonthsList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM yyyy");
 
@@ -187,7 +207,15 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
     //Month recyclerview click listener
     @Override
-    public void onMonthSelected(String monthName) {}
+    public void onMonthSelected(String monthName) {
+
+        //setting the selected month value to current month
+        currentMonth = monthName;
+
+        //getting the updated data
+        getUpdatedData();
+
+    }
 
     private void setBudgetRecyclerview() {
 
@@ -213,9 +241,13 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     public void onBudgetItemLongClick() {
 
         //getting the latest changes when a record is deleted
+        getUpdatedData();
+    }
+
+    private void getUpdatedData(){
 
         //getting the list of addedBudgetList
-        addedBudgetList = database.budgetDao().getBudgetList();
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
 
         //budget recyclerview
         setBudgetRecyclerview();
@@ -233,13 +265,12 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
         //setting the total budget info
         setTotalBudgetInfo(totalBudgetAllocated,totalBudgetSpend);
-
     }
 
     //function for getting the details of particular category (expense transactions)
     private int getBudgetSpend(int budgetCatId) {
 
-        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId);
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,monthDateConversion(currentMonth));
     }
 
     private void setTotalBudgetInfo(int totalAllocatedBudget,int totalSpendBudget) {
@@ -254,5 +285,24 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //setting progressbar values
         progressBar.setMax(totalAllocatedBudget);
         progressBar.setProgress(totalSpendBudget);
+    }
+
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

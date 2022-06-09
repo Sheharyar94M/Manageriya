@@ -30,9 +30,11 @@ import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class InsightActivity extends AppCompatActivity implements MonthAdapter.OnMonthClickListener {
@@ -55,6 +57,15 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
     //variables for saving income and expense sum
     private int totalIncome = 0,totalExpense = 0;
 
+    //string for saving current month and year
+    private String currentMonth="";
+
+    //bundle for moving the month name to Income & Expense pie chart fragment
+    Bundle bundle;
+
+    IncomePieChartFragment incomePieChartFragment;
+    ExpensePieChartFragment expensePieChartFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +74,14 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         //initialize views
         initializeViews();
 
+        //getting the current date
+        getCurrentDate();
+
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
 
-        totalIncome = database.incomeDetailDao().getTotalIncomeSum();
-        totalExpense = database.expenseDetailDao().getTotalExpenseSum();
+        totalIncome = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+        totalExpense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
         //getting the months list
         getMonthsList();
@@ -88,8 +102,20 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         //setting the bar chart
         setBarchart(barChart,barEntries,xAxisName);
 
+        //initializing the bundle instance
+        bundle = new Bundle();
+        bundle.putString("month",monthDateConversion(currentMonth));
+
+        //default fragment (IncomePieChartFragment)
+        incomePieChartFragment=new IncomePieChartFragment();
+        incomePieChartFragment.setArguments(bundle);
+
+        //expense pie chart
+        expensePieChartFragment =new ExpensePieChartFragment();
+        expensePieChartFragment.setArguments(bundle);
+
         //setting the income pie chart fragment as default
-        replaceFragment(new IncomePieChartFragment());
+        replaceFragment(incomePieChartFragment);
 
         //button income click listener
         buttonIncome.setOnClickListener(v -> {
@@ -103,7 +129,7 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
             buttonIncome.setTextColor(getResources().getColor(R.color.white));
 
             //setting the income pie chart fragment
-            replaceFragment(new IncomePieChartFragment());
+            replaceFragment(incomePieChartFragment);
         });
 
         //button expense click listener
@@ -118,7 +144,7 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
             buttonExpense.setTextColor(getResources().getColor(R.color.white));
 
             //setting the expense pie chart fragment
-            replaceFragment(new ExpensePieChartFragment());
+            replaceFragment(expensePieChartFragment);
         });
     }
 
@@ -176,49 +202,45 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
     //months recyclerview click listener
     @Override
     public void onMonthSelected(String monthName) {
-        Toast.makeText(this, monthName, Toast.LENGTH_SHORT).show();
+
+        //setting the selected month value to current month
+        currentMonth = monthName;
+
+        //fetching the updated details
+
+        //setting the newly selected month value to bundle
+        bundle.putString("month",monthDateConversion(currentMonth));
+
+        //clearing the list before adding new values
+        barEntries.clear();
+        xAxisName.clear();
+
+        totalIncome = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+        totalExpense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
+
+        //adding values in BarEntry ArrayList
+        barEntries.add(new BarEntry(1f,totalExpense));
+        barEntries.add(new BarEntry(2f,0));
+        barEntries.add(new BarEntry(3f,0));
+        barEntries.add(new BarEntry(4f,totalIncome));
+
+        //adding the entries names
+        xAxisName.add("Expense");
+        xAxisName.add("Income");
+
+        //setting the bar chart
+        setBarchart(barChart,barEntries,xAxisName);
+
+        //setting the currently selected month value to Income and Expense pie chart fragments
+        incomePieChartFragment.setArguments(bundle);
+        expensePieChartFragment.setArguments(bundle);
+
+        //replacing the fragment
+        replaceFragment(incomePieChartFragment);
+
     }
 
     //setting the horizontal bar chart
-    private void setBarChart(){
-
-        float barChartWidth = 9f;
-        float spaceForBar = 10f;
-        ArrayList<BarEntry> barEntries=new ArrayList<>();
-
-        for(int i=0; i < 2; i++)
-        {
-            float val = (float) Math.random();
-            barEntries.add(new BarEntry(i*spaceForBar,val));
-        }
-
-
-        /*barEntries.add(new BarEntry(0,2300));
-        barEntries.add(new BarEntry(1,5000));*/
-
-        BarDataSet barDataSet=new BarDataSet(barEntries,"");
-
-        BarData data = new BarData(barDataSet);
-        data.setValueTextSize(10f);
-        data.setBarWidth(barChartWidth);
-
-        barDataSet.setHighlightEnabled(false);
-
-        barChart.setData(data);
-        barChart.getXAxis().setDrawGridLines(false);
-        barChart.getAxisLeft().setDrawGridLines(false);
-
-
-        /*Legend l = mHorizontalBarChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setFormSize(8f);
-        l.setXEntrySpace(4f);*/
-
-    }
-
     private void setBarchart(BarChart barChart, ArrayList<BarEntry> arrayList, final ArrayList<String> xAxisValues) {
         barChart.setDrawValueAboveBar(false);
         barChart.setMaxVisibleValueCount(25);
@@ -284,5 +306,32 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_charts,fragment);
         fragmentTransaction.commit();
+    }
+
+    private void getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat dateFormat1 =new SimpleDateFormat("MMM yyyy");
+        currentMonth = dateFormat1.format(calendar.getTime());
+    }
+
+    //for converting month format (from May 2022 to 2022-05)
+    private String monthDateConversion(String dateToConvert) {
+        String convertedDate="";
+
+        //current format
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM yyyy");
+
+        //converting date to another format
+
+        SimpleDateFormat dateFormat2=new SimpleDateFormat("yyyy-MM");
+        try {
+            Date date=dateFormat1.parse(dateToConvert);
+            convertedDate = dateFormat2.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return convertedDate;
     }
 }

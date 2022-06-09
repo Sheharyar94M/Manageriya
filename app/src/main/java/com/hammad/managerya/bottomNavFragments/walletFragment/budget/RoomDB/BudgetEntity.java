@@ -22,13 +22,17 @@ public class BudgetEntity implements Serializable {
     @ColumnInfo(name = "budget_limit")
     private int budgetLimit;
 
+    @ColumnInfo(name = "budget_date")
+    private String budgetDate;
+
     public BudgetEntity() {}
 
-    public BudgetEntity(int categoryId, String categoryName, int categoryIcon, int budgetLimit) {
+    public BudgetEntity(int categoryId, String categoryName, int categoryIcon, int budgetLimit,String budgetDate) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.categoryIcon = categoryIcon;
         this.budgetLimit = budgetLimit;
+        this.budgetDate = budgetDate;
     }
 
     public int getCategoryId() {
@@ -61,5 +65,13 @@ public class BudgetEntity implements Serializable {
 
     public void setBudgetLimit(int budgetLimit) {
         this.budgetLimit = budgetLimit;
+    }
+
+    public String getBudgetDate() {
+        return budgetDate;
+    }
+
+    public void setBudgetDate(String budgetDate) {
+        this.budgetDate = budgetDate;
     }
 }
