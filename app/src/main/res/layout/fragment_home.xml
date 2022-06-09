@@ -16,181 +16,192 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/text_view_budget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Budget Details"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textAllCaps="true"
-            android:textSize="@dimen/_20ssp"
-            android:fontFamily="@font/century_gothic"
-            android:layout_marginTop="@dimen/_55sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/image_view_calendar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_calendar"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            app:layout_constraintTop_toBottomOf="@id/text_view_budget"
-            app:layout_constraintStart_toStartOf="@id/text_view_budget"/>
-
-        <TextView
-            android:id="@+id/text_view_current_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:fontFamily="@font/century_gothic"
-            android:textSize="@dimen/_17ssp"
-            app:layout_constraintTop_toBottomOf="@id/text_view_budget"
-            app:layout_constraintStart_toEndOf="@id/image_view_calendar"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_10sdp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_months"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_view_current_date"/>
-
-        <ImageView
-            android:id="@+id/image_view_insights"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:src="@drawable/ic_insights"
-            app:layout_constraintStart_toEndOf="@id/recycler_view_months"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_view_current_date"
-            app:layout_constraintBottom_toBottomOf="@id/recycler_view_months"/>
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pie_chart"
-            android:layout_width="@dimen/_135sdp"
-            android:layout_height="@dimen/_135sdp"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_20sdp"
-            app:layout_constraintTop_toBottomOf="@id/recycler_view_months"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/text_view_total_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:fontFamily="@font/century_gothic"
-            android:text="100"
-            android:textSize="@dimen/_18ssp"
-            app:layout_constraintTop_toTopOf="@id/pie_chart"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pie_chart"/>
-
-        <TextView
-            android:id="@+id/text_view_currency_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:fontFamily="@font/century_gothic"
-            android:text=""
-            android:textSize="@dimen/_18ssp"
-            android:layout_marginEnd="@dimen/_3sdp"
-            app:layout_constraintTop_toTopOf="@id/text_view_total_income"
-            app:layout_constraintBottom_toBottomOf="@id/text_view_total_income"
-            app:layout_constraintEnd_toStartOf="@id/text_view_total_income"/>
-
-        <TextView
-            android:id="@+id/text_view_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/century_gothic"
-            android:text="Earning"
-            android:textStyle="bold"
-            android:textSize="@dimen/_9ssp"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/text_view_currency_1"
-            android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
-
-        <TextView
-            android:id="@+id/text_view_total_expense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="70"
-            android:textStyle="bold"
-            android:textSize="@dimen/_15ssp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/century_gothic"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_1"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            app:layout_constraintStart_toEndOf="@id/text_view_currency_2" />
-
-        <TextView
-            android:id="@+id/text_view_currency_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textStyle="bold"
-            android:textSize="@dimen/_15ssp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/century_gothic"
-            app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
-            app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
-            app:layout_constraintEnd_toStartOf="@id/text_view_total_expense"
-            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
-
-        <TextView
-            android:id="@+id/text_view_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/century_gothic"
-            android:text="Spend"
-            android:textStyle="bold"
-            android:textSize="@dimen/_9ssp"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/text_view_total_expense"
-            android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
-
-        <TextView
-            android:id="@+id/text_view_percentage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="70%"
-            android:textSize="@dimen/_13ssp"
-            android:textColor="#F8F5F5"
-            android:fontFamily="@font/century_gothic"
-            android:layout_marginStart="@dimen/_10sdp"
-            app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
-            app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
-            app:layout_constraintStart_toEndOf="@id/text_view_total_expense" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_recent"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@id/pie_chart"
-            app:layout_constraintBottom_toBottomOf="@id/constraint_2"/>
+            android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/text_view_budget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Budget Details"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_20ssp"
+                    android:fontFamily="@font/century_gothic"
+                    android:layout_marginTop="@dimen/_55sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/image_view_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_budget"
+                    app:layout_constraintStart_toStartOf="@id/text_view_budget"/>
+
+                <TextView
+                    android:id="@+id/text_view_current_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/century_gothic"
+                    android:textSize="@dimen/_17ssp"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_budget"
+                    app:layout_constraintStart_toEndOf="@id/image_view_calendar"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_10sdp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_months"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:layout_constraintWidth_percent="0.8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_current_date"/>
+
+                <ImageView
+                    android:id="@+id/image_view_insights"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:src="@drawable/ic_insights"
+                    app:layout_constraintStart_toEndOf="@id/recycler_view_months"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_current_date"
+                    app:layout_constraintBottom_toBottomOf="@id/recycler_view_months"/>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart"
+                    android:layout_width="@dimen/_135sdp"
+                    android:layout_height="@dimen/_135sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_view_months"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/text_view_total_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="100"
+                    android:textSize="@dimen/_18ssp"
+                    app:layout_constraintTop_toTopOf="@id/pie_chart"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/pie_chart"/>
+
+                <TextView
+                    android:id="@+id/text_view_currency_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/century_gothic"
+                    android:text=""
+                    android:textSize="@dimen/_18ssp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    app:layout_constraintTop_toTopOf="@id/text_view_total_income"
+                    app:layout_constraintBottom_toBottomOf="@id/text_view_total_income"
+                    app:layout_constraintEnd_toStartOf="@id/text_view_total_income"/>
+
+                <TextView
+                    android:id="@+id/text_view_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="Earning"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_currency_1"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
+
+                <TextView
+                    android:id="@+id/text_view_total_expense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="70"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_15ssp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/century_gothic"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_1"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    app:layout_constraintStart_toEndOf="@id/text_view_currency_2" />
+
+                <TextView
+                    android:id="@+id/text_view_currency_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_15ssp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/century_gothic"
+                    app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
+                    app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
+                    app:layout_constraintEnd_toStartOf="@id/text_view_total_expense"
+                    app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
+
+                <TextView
+                    android:id="@+id/text_view_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/century_gothic"
+                    android:text="Spend"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_total_expense"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:layout_constraintStart_toStartOf="@id/text_view_currency_1"/>
+
+                <TextView
+                    android:id="@+id/text_view_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="70%"
+                    android:textSize="@dimen/_13ssp"
+                    android:textColor="#F8F5F5"
+                    android:fontFamily="@font/century_gothic"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:layout_constraintTop_toTopOf="@id/text_view_total_expense"
+                    app:layout_constraintBottom_toBottomOf="@id/text_view_total_expense"
+                    app:layout_constraintStart_toEndOf="@id/text_view_total_expense" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_recent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    app:layout_constraintTop_toBottomOf="@id/pie_chart"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

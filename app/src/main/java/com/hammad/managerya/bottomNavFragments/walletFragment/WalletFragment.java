@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,7 +46,6 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     private RecyclerView recyclerViewRecentTransaction;
     private TextView textViewCurrentMonth;
 
-    /*private ImageView imageViewHistory,imageViewBudget;*/
     private ConstraintLayout layoutHistory,layoutBudget;
 
     //recent transaction list
@@ -130,8 +130,6 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         recyclerViewRecentTransaction=view.findViewById(R.id.recycler_recent_trans_wallet);
 
         //layout History & Budget
-        /*imageViewHistory=view.findViewById(R.id.img_history_wallet);
-        imageViewBudget=view.findViewById(R.id.img_budget_wallet);*/
         layoutHistory=view.findViewById(R.id.constraint_history);
         layoutBudget=view.findViewById(R.id.constraint_budget);
 
@@ -236,8 +234,19 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //setting the values to text views
         textViewEarning.setText(String.valueOf((int) earning));
         textViewSpend.setText(String.valueOf((int) amountSpend));
-        textViewPercentage.setText(String.valueOf(percentage));
-        textViewPercentage.append(" %");
+
+        //checking if earning is greater than expense or not
+        if (amountSpend > earning)
+        {
+            textViewPercentage.setVisibility(View.GONE);
+        }
+        else if (amountSpend < earning)
+        {
+            textViewPercentage.setVisibility(View.VISIBLE);
+
+            textViewPercentage.setText(String.valueOf(percentage));
+            textViewPercentage.append(" %");
+        }
     }
 
     /*

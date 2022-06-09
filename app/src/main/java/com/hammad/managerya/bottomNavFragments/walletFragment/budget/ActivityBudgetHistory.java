@@ -1,6 +1,7 @@
 package com.hammad.managerya.bottomNavFragments.walletFragment.budget;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+import static com.hammad.managerya.bottomNavFragments.walletFragment.WalletFragment.CHECK_VALUE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -247,6 +248,9 @@ public class ActivityBudgetHistory extends AppCompatActivity implements MonthAda
 
         //recent budget transaction recyclerview
         setRecentRecyclerView();
+
+        //variable for storing the value if any record is deleted to get updated record in Wallet Fragment
+        CHECK_VALUE ++ ;
 
     }
 

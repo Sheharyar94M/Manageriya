@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -89,6 +90,16 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        /*
+            Clearing the list before adding new data.
+            This is because when Home Fragment is called through back stack the onCreate of this fragment is not called.
+            OnCreateView is called, due to which repetitive data is added in list
+        */
+        pieEntries.clear();
+        recentTranslList.clear();
+        pieChartDataList.clear();
+        addedBudgetList.clear();
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -375,8 +386,20 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //setting the values to text views
         textViewTotalIncome.setText(String.valueOf((int) earning));
         textViewSpend.setText(String.valueOf((int) amountSpend));
-        textViewPercentage.setText(String.valueOf(percentage));
-        textViewPercentage.append(" %");
+
+        //checking whether income is greater than expense or not
+        if(amountSpend > earning)
+        {
+            textViewPercentage.setVisibility(View.GONE);
+        }
+        else if(amountSpend < earning)
+        {
+            textViewPercentage.setVisibility(View.VISIBLE);
+
+            textViewPercentage.setText(String.valueOf(percentage));
+            textViewPercentage.append(" %");
+        }
+
     }
 
     private void getExpenseSumByCategory() {
@@ -404,4 +427,5 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         return convertedDate;
     }
+
 }

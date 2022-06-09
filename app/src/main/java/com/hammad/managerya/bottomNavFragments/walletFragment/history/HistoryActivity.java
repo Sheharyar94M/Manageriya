@@ -24,7 +24,6 @@ import com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragTransAdapter
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.homeFragment.ViewTransDetailsActivity;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeRecentTransModel;
-import com.hammad.managerya.mainActivity.HomeScreenActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
