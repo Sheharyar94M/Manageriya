@@ -272,7 +272,7 @@
         android:id="@+id/recycler_recent_budget"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintWidth_percent="0.96"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cons_3"

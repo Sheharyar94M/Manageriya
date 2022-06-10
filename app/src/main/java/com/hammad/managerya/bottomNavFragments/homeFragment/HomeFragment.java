@@ -335,7 +335,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecentBudget.setLayoutManager(layoutManager);
 
-        RecentAdapter recentAdapter = new RecentAdapter(requireContext(),addedBudgetList);
+        RecentAdapter recentAdapter = new RecentAdapter(requireContext(),monthDateConversion(currentMonth),addedBudgetList);
         recyclerViewRecentBudget.setAdapter(recentAdapter);
     }
 
@@ -380,8 +380,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         recentTranslList.clear();
         pieChartDataList.clear();
         addedBudgetList.clear();
-
-        Log.i("HELLO_123", "onMonthSelected: "+monthDateConversion(monthName));
 
         //getting the list of all recent transaction (income & expense)
         recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));

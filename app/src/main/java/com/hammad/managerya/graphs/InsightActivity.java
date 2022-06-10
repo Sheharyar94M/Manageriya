@@ -2,9 +2,10 @@ package com.hammad.managerya.graphs;
 
 import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -58,7 +58,7 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
     private int totalIncome = 0,totalExpense = 0;
 
     //string for saving current month and year
-    private String currentMonth="";
+    private static String currentMonth="";
 
     //bundle for moving the month name to Income & Expense pie chart fragment
     Bundle bundle;
@@ -79,6 +79,8 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
 
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
+
+        Log.i("HELLO_123", "onCreate: month= "+currentMonth);
 
         totalIncome = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         totalExpense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
@@ -215,6 +217,12 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         barEntries.clear();
         xAxisName.clear();
 
+        barChart.clear();
+
+        //clearing the previously stored values
+        totalIncome = 0;
+        totalExpense =0;
+
         totalIncome = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         totalExpense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
@@ -231,12 +239,25 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         //setting the bar chart
         setBarchart(barChart,barEntries,xAxisName);
 
+        incomePieChartFragment=new IncomePieChartFragment();
+        expensePieChartFragment=new ExpensePieChartFragment();
+
         //setting the currently selected month value to Income and Expense pie chart fragments
         incomePieChartFragment.setArguments(bundle);
         expensePieChartFragment.setArguments(bundle);
 
         //replacing the fragment
         replaceFragment(incomePieChartFragment);
+
+        //setting the highlighted button to income button
+
+        //setting the colors & background to button Income
+        buttonIncome.setBackgroundResource(R.drawable.button_finish_background_circular);
+        buttonIncome.setTextColor(getResources().getColor(R.color.white));
+
+        //setting the background to white of button Expense
+        buttonExpense.setBackgroundResource(R.drawable.edit_text_white_background);
+        buttonExpense.setTextColor(getResources().getColor(R.color.colorPrimaryVariant));
 
     }
 

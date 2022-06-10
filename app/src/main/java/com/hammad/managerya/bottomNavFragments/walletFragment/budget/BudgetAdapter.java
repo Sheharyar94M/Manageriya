@@ -36,11 +36,14 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
 
     private RoomDBHelper database;
 
-    public BudgetAdapter(Context context, List<BudgetDetailsModel> list, OnBudgetClickListener onBudgetClickListener) {
+    private String selectedMonth="";
+
+    public BudgetAdapter(Context context,String monthName, List<BudgetDetailsModel> list, OnBudgetClickListener onBudgetClickListener) {
         this.context = context;
         this.addedBudgetList = list;
         this.mOnBudgetClickListener = onBudgetClickListener;
         this.budgetSpend = 0;
+        this.selectedMonth = monthName;
 
         database = RoomDBHelper.getInstance(context);
     }
@@ -63,7 +66,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.MyViewHold
         BudgetDetailsModel item = addedBudgetList.get(position);
 
         //for getting details of particular category expenses (which is budget spent for that category)
-        budgetSpend = getBudgetSpend(item.getBudgetCatId(), item.getBudgetDate());
+        budgetSpend = getBudgetSpend(item.getBudgetCatId(), selectedMonth);
 
         //if the category name contain new line literal (\n) then replace that liberal with no space so that the category can be displayed in single line
         if(item.getBudgetCatName().contains("\n")) {

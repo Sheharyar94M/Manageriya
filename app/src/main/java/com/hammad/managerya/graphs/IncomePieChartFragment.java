@@ -5,6 +5,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,14 +46,19 @@ public class IncomePieChartFragment extends Fragment {
     private List<ExpenseCatDetailModel> pieChartDataList = new ArrayList<>();
 
     //array list for pie chart entries
-    ArrayList<PieEntry> pieEntries = new ArrayList<>();
+    private ArrayList<PieEntry> pieEntries = new ArrayList<>();
 
     //string for saving the currently selected month value
     private String currentMonth="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_income_pie_chart, container, false);
+
+        //clearing the array list everytime the onCreateView is called so that no previous data is present in list
+        pieChartDataList.clear();
+        pieEntries.clear();
 
         //initialize pie chart
         pieChartIncome=view.findViewById(R.id.pie_chart_income);

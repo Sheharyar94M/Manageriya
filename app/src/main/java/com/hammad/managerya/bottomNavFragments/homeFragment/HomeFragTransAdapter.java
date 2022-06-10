@@ -61,8 +61,15 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
         //category icon
         holder.imageView.setImageResource(item.getCatIcon());
 
+        String catName= item.getCatName();
+
+        if(catName.contains("\n"))
+        {
+            catName = catName.replace("\n","");
+        }
+
         //category name
-        holder.textViewCategory.setText(item.getCatName());
+        holder.textViewCategory.setText(catName);
 
         //transaction date
         //holder.textViewDate.setText(item.getTransDate());

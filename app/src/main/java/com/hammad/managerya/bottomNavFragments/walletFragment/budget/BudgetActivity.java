@@ -69,12 +69,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
 
-        Log.i("HELLO_123", "month: "+currentMonth);
-
         //getting the list of addedBudgetList
         addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
-
-        Log.i("HELLO_123", "added list size: "+addedBudgetList.size());
 
         //get the month list
         getMonthsList();
@@ -89,7 +85,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         for (int i=0; i < addedBudgetList.size(); i++)
         {
             totalBudgetAllocated += addedBudgetList.get(i).getBudgetLimit();
-            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId());
+            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId(),monthDateConversion(currentMonth));
         }
 
         //create budget click listener
@@ -222,7 +218,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewBudget.setLayoutManager(layoutManager);
 
-        BudgetAdapter budgetAdapter=new BudgetAdapter(this,addedBudgetList,this);
+        BudgetAdapter budgetAdapter=new BudgetAdapter(this,monthDateConversion(currentMonth),addedBudgetList,this);
         recyclerViewBudget.setAdapter(budgetAdapter);
     }
 
@@ -260,7 +256,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         for (int i=0; i < addedBudgetList.size(); i++)
         {
             totalBudgetAllocated += addedBudgetList.get(i).getBudgetLimit();
-            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId());
+            totalBudgetSpend += getBudgetSpend(addedBudgetList.get(i).getBudgetCatId(),monthDateConversion(currentMonth));
         }
 
         //setting the total budget info
@@ -268,9 +264,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     }
 
     //function for getting the details of particular category (expense transactions)
-    private int getBudgetSpend(int budgetCatId) {
+    private int getBudgetSpend(int budgetCatId,String date) {
 
-        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,monthDateConversion(currentMonth));
+        return database.expenseDetailDao().getExpenseCategorySum(budgetCatId,date);
     }
 
     private void setTotalBudgetInfo(int totalAllocatedBudget,int totalSpendBudget) {
@@ -278,9 +274,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         //setting the values to textviews
         textViewTotalBudgetAllocated.setText(String.valueOf(totalAllocatedBudget));
 
-        textViewTotalBudgetSpend.setText(String.valueOf(totalBudgetSpend));
+        textViewTotalBudgetSpend.setText(String.valueOf(totalSpendBudget));
 
-        textViewTotalRemainingBudget.setText(String.valueOf(totalBudgetAllocated - totalBudgetSpend));
+        textViewTotalRemainingBudget.setText(String.valueOf(totalAllocatedBudget - totalSpendBudget));
 
         //setting progressbar values
         progressBar.setMax(totalAllocatedBudget);

@@ -47,12 +47,15 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
 
     private int percentage;
 
-    public RecentAdapter(Context context,List<BudgetDetailsModel> list) {
+    private String currentSelectedMonth="";
+
+    public RecentAdapter(Context context,String month,List<BudgetDetailsModel> list) {
         this.context = context;
         this.addedBudgetList = list;
         this.budgetSpend = 0;
         this.budgetTotal = 0;
         this.percentage = 0;
+        this.currentSelectedMonth = month;
 
         database = RoomDBHelper.getInstance(context);
     }
@@ -71,7 +74,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.MyViewHold
         BudgetDetailsModel item = addedBudgetList.get(position);
 
         //for getting details of particular category expenses (which is budget spent for that category)
-        budgetSpend = getBudgetSpend(item.getBudgetCatId(), item.getBudgetDate());
+        budgetSpend = getBudgetSpend(item.getBudgetCatId(), currentSelectedMonth);
 
         //total budget of category
         budgetTotal = item.getBudgetLimit();

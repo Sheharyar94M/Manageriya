@@ -178,15 +178,16 @@
 
     <TextView
         android:id="@+id/txt_create_saving_goal"
-        android:layout_width="@dimen/_50sdp"
+        android:layout_width="@dimen/_60sdp"
         android:layout_height="wrap_content"
         android:text="CREATE"
         android:textAllCaps="true"
         android:textSize="@dimen/_12ssp"
         android:textStyle="bold"
+        android:gravity="center_vertical|center_horizontal"
         android:textColor="@color/white"
         android:background="@drawable/button_create_saving"
-        android:padding="@dimen/_3sdp"
+        android:padding="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintTop_toTopOf="@id/txt_3"
         app:layout_constraintEnd_toEndOf="parent"/>

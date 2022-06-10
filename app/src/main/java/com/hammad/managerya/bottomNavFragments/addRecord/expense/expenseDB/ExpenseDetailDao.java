@@ -26,7 +26,7 @@ public interface ExpenseDetailDao {
     List<ExpenseCatDetailModel> getExpenseCategoriesSum(String date);
 
     //search expense detail by category id
-    @Query("Select sum(expense_amount) from expense_detail where expense_det_cat_id= :catId AND expense_date= :date")
+    @Query("Select sum(expense_amount) from expense_detail where expense_det_cat_id= :catId AND strftime('%Y-%m', expense_date)= :date")
     int getExpenseCategorySum(int catId,String date);
 
     //query for retrieving Expense details transaction searched by category id
