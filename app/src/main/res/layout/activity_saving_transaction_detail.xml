@@ -48,7 +48,7 @@
             android:id="@+id/img_saving_detail"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
-            android:src="@drawable/charity_50"
+            android:src="@drawable/charity_100"
             android:scaleType="fitCenter"
             android:background="@drawable/home_fragment_circular_recycle"
             android:layout_marginStart="@dimen/_15sdp"
@@ -194,7 +194,7 @@
 
     <TextView
         android:id="@+id/txt_create_saving_trans"
-        android:layout_width="@dimen/_50sdp"
+        android:layout_width="@dimen/_60sdp"
         android:layout_height="wrap_content"
         android:text="CREATE"
         android:textAllCaps="true"
@@ -202,7 +202,8 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@drawable/button_create_saving"
-        android:padding="@dimen/_3sdp"
+        android:padding="@dimen/_5sdp"
+        android:gravity="center_vertical|center_horizontal"
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintTop_toTopOf="@id/txt_3_"
         app:layout_constraintEnd_toEndOf="parent"/>

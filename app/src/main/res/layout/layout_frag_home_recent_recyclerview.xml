@@ -17,9 +17,9 @@
 
         <ImageView
             android:id="@+id/img_recent_frag_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/charity_50"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/charity_100"
             android:scaleType="fitCenter"
             android:background="@drawable/white_circular_background"
             app:layout_constraintStart_toStartOf="parent"

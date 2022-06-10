@@ -11,8 +11,8 @@
         android:id="@+id/img_budget"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_40sdp"
-        android:src="@drawable/entertainment"
-        android:scaleType="centerInside"
+        android:src="@drawable/charity_100"
+        android:scaleType="fitCenter"
         android:background="@drawable/home_fragment_circular_recycle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

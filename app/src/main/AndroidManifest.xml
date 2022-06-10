@@ -17,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Managerya">
         <activity
+            android:name=".splash.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
             android:name=".graphs.InsightActivity"
             android:exported="false" />
         <activity
@@ -61,13 +71,7 @@
             android:exported="false" />
         <activity
             android:name=".mainActivity.HomeScreenActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".bottomNavFragments.homeFragment.ViewTransDetailsActivity"
             android:exported="false" />
@@ -93,6 +97,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCObqzzxFiVY18tSnUl_h5apCYUu5GHAmY" />
+
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1814031312363155~8956209338"/>
+
     </application>
 
 </manifest>

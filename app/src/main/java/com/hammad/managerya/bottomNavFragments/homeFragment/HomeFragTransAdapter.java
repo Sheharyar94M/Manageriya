@@ -63,6 +63,7 @@ public class HomeFragTransAdapter extends RecyclerView.Adapter<HomeFragTransAdap
 
         String catName= item.getCatName();
 
+        //if category name contains '\n', then removes the space
         if(catName.contains("\n"))
         {
             catName = catName.replace("\n","");

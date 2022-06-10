@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/img_recycler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
         android:background="@drawable/white_circle_recyclerview"
-        android:src="@drawable/charity_50"
-        android:scaleType="centerInside"
+        android:src="@drawable/charity_100"
+        android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
