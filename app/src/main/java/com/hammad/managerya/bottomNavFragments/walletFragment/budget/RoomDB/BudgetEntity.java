@@ -1,15 +1,14 @@
 package com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "budget")
+@Entity(tableName = "budget",primaryKeys = {"category_id","budget_date"})
 public class BudgetEntity implements Serializable {
 
-    @PrimaryKey
     @ColumnInfo(name = "category_id")
     private int categoryId;
 
@@ -22,10 +21,9 @@ public class BudgetEntity implements Serializable {
     @ColumnInfo(name = "budget_limit")
     private int budgetLimit;
 
+    @NonNull
     @ColumnInfo(name = "budget_date")
     private String budgetDate;
-
-    public BudgetEntity() {}
 
     public BudgetEntity(int categoryId, String categoryName, int categoryIcon, int budgetLimit,String budgetDate) {
         this.categoryId = categoryId;

@@ -91,7 +91,7 @@ public class ActivityCreateBudget extends AppCompatActivity implements AddExpens
     private void getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         currentDate = dateFormat.format(calendar.getTime());
     }
 

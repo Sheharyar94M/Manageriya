@@ -14,8 +14,10 @@ public interface BudgetDao {
     @Insert(onConflict = REPLACE)
     void addBudget(BudgetEntity budgetEntity);
 
+    //where strftime('%Y-%m', budgetDate) = :date
+
     //get list of created budgets
-    @Query("select category_id as budgetCatId, category_name as budgetCatName, category_icon as budgetIcon, budget_limit as budgetLimit, budget_date as budgetDate from budget where strftime('%Y-%m', budgetDate) = :date")
+    @Query("select category_id as budgetCatId, category_name as budgetCatName, category_icon as budgetIcon, budget_limit as budgetLimit, budget_date as budgetDate from budget where budgetDate= :date")
     List<BudgetDetailsModel> getBudgetList(String date);
 
     //query for searching specific budget by category id
