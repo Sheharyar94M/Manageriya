@@ -88,7 +88,7 @@
         android:id="@+id/button_saving_trans"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="1"
+        app:layout_constraintWidth_percent="0.5"
         android:text="Add Saving Transaction"
         android:textColor="@color/white"
         android:background="@drawable/button_finish_background"

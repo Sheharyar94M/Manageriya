@@ -101,6 +101,8 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
     private InterstitialAd mInterstitialAd;
 
+    private ImageView placeHolder1, placeHolder2;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,53 +178,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //fetching the latest changes
-
-        //clearing the previous values
-        earning = 0;
-        amountSpend = 0;
-        percentage = 0;
-
-        pieEntries.clear();
-        recentTranslList.clear();
-        pieChartDataList.clear();
-        addedBudgetList.clear();
-
-        pieChart.clear();
-
-        //getting the list of all recent transaction (income & expense)
-        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
-
-        //getting the list of addedBudgetList
-        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
-
-        //sum of total income
-        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
-        //sum of total expense
-        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
-
-        //getting the current expenditure
-        getExpenditureDetails();
-
-        //getting sum of expense categories (for pie chart data)
-        getExpenseSumByCategory();
-
-        //setting the recyclerview
-        setRecentTransactionRecyclerView();
-
-        //setting the pie chart
-        setupPieChart();
-        loadPieChartData();
-
-        //setting the recent recyclerview
-        setBudgetRecentRecyclerview();
-
-    }
-
     private void initializeViews(View view) {
         textViewCurrentDate = view.findViewById(R.id.text_view_current_date);
         imageViewInsights = view.findViewById(R.id.image_view_insights);
@@ -250,6 +205,10 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //recyclerview recent
         recyclerViewRecentBudget = view.findViewById(R.id.recycler_view_recent);
 
+        //place holders
+        placeHolder1 = view.findViewById(R.id.chart_place_holder);
+        placeHolder2 = view.findViewById(R.id.place_holder_2);
+
     }
 
     private void getCurrentDate() {
@@ -265,6 +224,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     }
 
     private void setRecentTransactionRecyclerView() {
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
 
@@ -315,6 +275,17 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     }
 
     private void loadPieChartData() {
+
+        if(pieChartDataList.size() == 0)
+        {
+            pieChart.setVisibility(View.INVISIBLE);
+            placeHolder1.setVisibility(View.VISIBLE);
+        }
+        else if(pieChartDataList.size() > 0)
+        {
+            pieChart.setVisibility(View.VISIBLE);
+            placeHolder1.setVisibility(View.INVISIBLE);
+        }
 
         //setting the data to pie chart
         for (int i = 0; i < pieChartDataList.size(); i++) {
@@ -402,6 +373,18 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     }
 
     private void setBudgetRecentRecyclerview() {
+
+        if(addedBudgetList.size() == 0)
+        {
+            recyclerViewRecentBudget.setVisibility(View.INVISIBLE);
+            placeHolder2.setVisibility(View.VISIBLE);
+        }
+        else if(addedBudgetList.size() > 0)
+        {
+            recyclerViewRecentBudget.setVisibility(View.VISIBLE);
+            placeHolder2.setVisibility(View.INVISIBLE);
+        }
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewRecentBudget.setLayoutManager(layoutManager);
 
@@ -612,6 +595,53 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             Intent intent = new Intent(requireContext(), InsightActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //fetching the latest changes
+
+        //clearing the previous values
+        earning = 0;
+        amountSpend = 0;
+        percentage = 0;
+
+        pieEntries.clear();
+        recentTranslList.clear();
+        pieChartDataList.clear();
+        addedBudgetList.clear();
+
+        pieChart.clear();
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
+
+        //sum of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
+
+        //getting the current expenditure
+        getExpenditureDetails();
+
+        //getting sum of expense categories (for pie chart data)
+        getExpenseSumByCategory();
+
+        //setting the recyclerview
+        setRecentTransactionRecyclerView();
+
+        //setting the pie chart
+        setupPieChart();
+        loadPieChartData();
+
+        //setting the recent recyclerview
+        setBudgetRecentRecyclerview();
+
     }
 
     @Override

@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:fontFamily="@font/century_gothic"
-                android:text="70%"
+                android:text=""
                 android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="#F8F5F5"
                 android:textSize="@dimen/_12ssp"

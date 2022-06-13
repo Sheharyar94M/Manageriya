@@ -92,6 +92,17 @@
                     app:layout_constraintTop_toBottomOf="@id/recycler_view_months"
                     app:layout_constraintStart_toStartOf="parent"/>
 
+                <ImageView
+                    android:id="@+id/chart_place_holder"
+                    android:layout_width="@dimen/_135sdp"
+                    android:layout_height="@dimen/_135sdp"
+                    android:src="@drawable/place_holder_pie_chart"
+                    android:visibility="invisible"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_view_months"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
                 <TextView
                     android:id="@+id/text_view_total_income"
                     android:layout_width="wrap_content"
@@ -179,7 +190,7 @@
                     android:id="@+id/text_view_percentage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="70%"
+                    android:text=""
                     android:textSize="@dimen/_13ssp"
                     android:textColor="#F8F5F5"
                     android:fontFamily="@font/century_gothic"
@@ -199,6 +210,20 @@
                     app:layout_constraintTop_toBottomOf="@id/pie_chart"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
+                <ImageView
+                    android:id="@+id/place_holder_2"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:src="@drawable/add_place_holder"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_25sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:visibility="invisible"
+                    app:layout_constraintTop_toBottomOf="@id/pie_chart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
@@ -215,6 +240,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraint_2"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

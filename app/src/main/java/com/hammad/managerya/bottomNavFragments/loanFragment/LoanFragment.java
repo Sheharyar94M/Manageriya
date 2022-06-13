@@ -124,9 +124,6 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
     }
 
     private void addConsumer() {
-
-        //incrementing the value of
-
         startActivity(new Intent(requireContext(), AddConsumerActivity.class));
     }
 
