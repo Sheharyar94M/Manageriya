@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
     //variable for controlling the addedContactList refreshing
     private static int checkValue = 0;
 
-    private Button buttonAddContact;
+    private /*Button*/ ImageView buttonAddContact;
     private RecyclerView recyclerView;
     private TextView textViewCurrency1, textViewCurrency2, textViewTotalLend, textViewTotalBorrowed;
     private List<LoanEntity> addedContactList = new ArrayList<>();

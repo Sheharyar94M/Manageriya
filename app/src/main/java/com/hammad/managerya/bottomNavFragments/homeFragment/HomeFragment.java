@@ -112,6 +112,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        Log.i("HELLO_123", "onCreateView: ");
         /*
             Clearing the list before adding new data.
             This is because when Home Fragment is called through back stack the onCreate of this fragment is not called.
@@ -173,6 +174,53 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         imageViewInsights.setOnClickListener(v -> showAd());
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //fetching the latest changes
+
+        //clearing the previous values
+        earning = 0;
+        amountSpend = 0;
+        percentage = 0;
+
+        pieEntries.clear();
+        recentTranslList.clear();
+        pieChartDataList.clear();
+        addedBudgetList.clear();
+
+        pieChart.clear();
+
+        //getting the list of all recent transaction (income & expense)
+        recentTranslList = database.homeFragmentDao().getAllTransactions(monthDateConversion(currentMonth));
+
+        //getting the list of addedBudgetList
+        addedBudgetList = database.budgetDao().getBudgetList(monthDateConversion(currentMonth));
+
+        //sum of total income
+        earning = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
+        //sum of total expense
+        amountSpend = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
+
+        //getting the current expenditure
+        getExpenditureDetails();
+
+        //getting sum of expense categories (for pie chart data)
+        getExpenseSumByCategory();
+
+        //setting the recyclerview
+        setRecentTransactionRecyclerView();
+
+        //setting the pie chart
+        setupPieChart();
+        loadPieChartData();
+
+        //setting the recent recyclerview
+        setBudgetRecentRecyclerview();
+
     }
 
     private void initializeViews(View view) {

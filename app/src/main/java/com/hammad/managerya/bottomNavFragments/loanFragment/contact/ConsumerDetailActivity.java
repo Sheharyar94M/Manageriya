@@ -216,10 +216,27 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
         lendedAmountSum = database.loanDao().getLendedAmountSum(contactPhoneNo);
         borrowedAmountSum = database.loanDao().getBorrowedAmountSum(contactPhoneNo);
 
+        //if loan detail list size is zero, then set the following details to currentBalanceStatus
+        if(loanDetailList.size() == 0)
+        {
+            //setting the amount
+            textViewAmount.setText("0");
+
+            //setting the color green
+            textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
+            textViewCurrency.setTextColor(getResources().getColor(R.color.colorGreen));
+
+            //setting the trans type visibility to gone
+            textViewLatestTransType.setVisibility(View.GONE);
+        }
+
         if(lendedAmountSum > borrowedAmountSum)
         {
             textViewAmount.setText(String.valueOf(lendedAmountSum - borrowedAmountSum));
             textViewLatestTransType.setText("Amount Lended");
+
+            //setting the visibility to VISIBLE
+            textViewLatestTransType.setVisibility(View.VISIBLE);
 
             //setting the color green
             textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
@@ -230,6 +247,9 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
         {
             textViewAmount.setText(String.valueOf(borrowedAmountSum - lendedAmountSum));
             textViewLatestTransType.setText("Amount Borrowed");
+
+            //setting the visibility to VISIBLE
+            textViewLatestTransType.setVisibility(View.VISIBLE);
 
             //setting the color red
             textViewAmount.setTextColor(getResources().getColor(R.color.colorRed));
