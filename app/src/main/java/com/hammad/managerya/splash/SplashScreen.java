@@ -72,11 +72,11 @@ public class SplashScreen extends AppCompatActivity {
         if(BuildConfig.DEBUG)
         {
             interstitialAdId=getString(R.string.interstitial_ad_debug_id);
-            Log.i("INTER_AD_ID", "debug version: "+interstitialAdId);
+            Log.i("SPLASH_AD", "SPLASH debug version: "+interstitialAdId);
         }
         else {
-            //interstitialAdId=getString(R.string.interstitial_ad_id);
-            Log.i("INTER_AD_ID", "release version: "+interstitialAdId);
+            interstitialAdId=getString(R.string.interstitial_ad_id);
+            Log.i("SPLASH_AD", "SPLASH release version: "+interstitialAdId);
         }
 
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -85,13 +85,14 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 super.onAdLoaded(interstitialAd);
+                Log.i("SPLASH_AD", "SPLASH onAdLoaded: ");
                 mInterstitialAd = interstitialAd;
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                Log.i("FAILED_AD", "splash interstitial failed ad: "+loadAdError.getCode());
+                Log.i("SPLASH_AD", "SPLASH failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
                 mInterstitialAd = null;
             }
         });
@@ -100,7 +101,7 @@ public class SplashScreen extends AppCompatActivity {
     public void showAd() {
         //checking if ad is loaded or not
         if (mInterstitialAd != null) {
-            mInterstitialAd.show(SplashScreen.this);
+            mInterstitialAd.show(this);
 
             mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                 @Override

@@ -4,23 +4,35 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.hammad.managerya.BuildConfig;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.savingFragment.DB.SavingEntity;
 import com.hammad.managerya.bottomNavFragments.savingFragment.savingGoal.ActivityAddSavingGoal;
 import com.hammad.managerya.bottomNavFragments.savingFragment.savingTransactionDetails.ActivitySavingTransactionDetail;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.ActivityCreateBudget;
+import com.hammad.managerya.bottomNavFragments.walletFragment.budget.BudgetActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +57,16 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
     //variables for saving total saving goal values
     int totalSavingGoalAmount =0, totalSavedAmount =0;
 
+    private InterstitialAd mInterstitialAd;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //initializing mobile ad
+        MobileAds.initialize(requireContext(), initializationStatus -> {});
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -52,6 +74,9 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
         //initialize views
         initializeView(view);
+
+        //loading the ad
+        loadAd();
 
         //database initialization
         database = RoomDBHelper.getInstance(requireContext());
@@ -61,7 +86,8 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
         //create saving transaction click listener
         createSavingGoal.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), ActivityAddSavingGoal.class));
+            /*startActivity(new Intent(requireContext(), ActivityAddSavingGoal.class));*/
+            showAd();
         });
 
         //setting the recyclerview
@@ -180,5 +206,83 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
         //setting the progress bar values
         progressBar.setProgress(totalSavedAmount);
         progressBar.setMax(totalSavingGoalAmount);
+    }
+
+    public void loadAd() {
+
+        //checking whether app is running on release/debug version
+        String interstitialAdId="";
+        if(BuildConfig.DEBUG)
+        {
+            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            Log.i("SAVING_AD", "SAVING debug version: "+interstitialAdId);
+        }
+        else {
+            interstitialAdId=getString(R.string.interstitial_ad_id);
+            Log.i("SAVING_AD", "SAVING release version: "+interstitialAdId);
+        }
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(requireContext(), interstitialAdId, adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                Log.i("SAVING_AD", "SAVING onAdLoaded: ");
+                mInterstitialAd = interstitialAd;
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("SAVING_AD", "SAVING failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
+                mInterstitialAd = null;
+            }
+        });
+    }
+
+    public void showAd() {
+        //checking if ad is loaded or not
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(requireActivity());
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    mInterstitialAd = null;
+
+                    //moving to ActivityAddSavingGoal
+                    startActivity(new Intent(requireContext(), ActivityAddSavingGoal.class));
+                }
+
+                //this function make sure no ad is loaded for second time
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+
+                    mInterstitialAd = null;
+                }
+            });
+        }
+        else
+        {
+            //if there is no internet connection, then no ad will be loaded and app will move onto next screen
+            Intent intent = new Intent(requireContext(), ActivityAddSavingGoal.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mInterstitialAd = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        mInterstitialAd = null;
+        super.onDestroy();
     }
 }

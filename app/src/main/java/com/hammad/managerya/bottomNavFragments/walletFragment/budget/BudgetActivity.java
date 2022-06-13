@@ -15,11 +15,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.hammad.managerya.BuildConfig;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.MonthAdapter;
 import com.hammad.managerya.bottomNavFragments.walletFragment.budget.RoomDB.BudgetDetailsModel;
+import com.hammad.managerya.graphs.InsightActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,10 +62,15 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     //string for saving current month and year
     private String currentMonth="";
 
+    private InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+
+        //initializing mobile ad
+        MobileAds.initialize(this, initializationStatus -> {});
 
         //initialize toolbar
         setToolbar();
@@ -65,6 +80,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
         //getting the current date
         getCurrentDate();
+
+        //loading the ad
+        loadAd();
 
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
@@ -90,8 +108,7 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
 
         //create budget click listener
         textViewCreateBudget.setOnClickListener(view -> {
-            startActivity(new Intent(this, ActivityCreateBudget.class));
-            finish();
+            showAd();
         });
 
         //setting the total budget info
@@ -300,5 +317,85 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         }
 
         return convertedDate;
+    }
+
+    public void loadAd() {
+
+        //checking whether app is running on release/debug version
+        String interstitialAdId="";
+        if(BuildConfig.DEBUG)
+        {
+            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            Log.i("BUDGET_AD", "BUDGET debug version: "+interstitialAdId);
+        }
+        else {
+            interstitialAdId=getString(R.string.interstitial_ad_id);
+            Log.i("BUDGET_AD", "BUDGET release version: "+interstitialAdId);
+        }
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(this, interstitialAdId, adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                Log.i("BUDGET_AD", "BUDGET onAdLoaded: ");
+                mInterstitialAd = interstitialAd;
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("BUDGET_AD", "BUDGET failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
+                mInterstitialAd = null;
+            }
+        });
+    }
+
+    public void showAd() {
+        //checking if ad is loaded or not
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    mInterstitialAd = null;
+
+                    //moving to ActivityCreateBudget
+                    startActivity(new Intent(BudgetActivity.this, ActivityCreateBudget.class));
+                    finish();
+                }
+
+                //this function make sure no ad is loaded for second time
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+
+                    mInterstitialAd = null;
+                }
+            });
+        }
+        else
+        {
+            //if there is no internet connection, then no ad will be loaded and app will move onto next screen
+            Intent intent = new Intent(this, ActivityCreateBudget.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mInterstitialAd = null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mInterstitialAd = null;
+        super.onDestroy();
     }
 }

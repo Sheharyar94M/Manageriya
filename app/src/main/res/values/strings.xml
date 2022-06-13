@@ -6,5 +6,6 @@
     <string name="categories_saved">Categories Saved</string>
 
     <string name="interstitial_ad_debug_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="interstitial_ad_id">xx-xxx-xxx-xxxxxxxx</string>
 
 </resources>

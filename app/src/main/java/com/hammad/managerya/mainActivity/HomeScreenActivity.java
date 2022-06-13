@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,6 +23,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.hammad.managerya.BuildConfig;
@@ -55,14 +64,22 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     //boolean for checking preference value for income & expense categories
     boolean areCategoriesAdded;
 
+    private InterstitialAd mInterstitialAd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
+        //initializing mobile ad
+        MobileAds.initialize(this, initializationStatus -> {});
+
         //initialize views
         initialViews();
+
+        //loading the ad
+        loadAd();
 
         //functions for adding category data in income & expense category lists
         incomeCategories();
@@ -148,7 +165,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                 break;
 
             case R.id.menu_clear_record:
-                clearAllRecord();
+                clearAllRecord(item);
                 break;
 
            /* case R.id.menu_4:
@@ -165,7 +182,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     private void addRecord()
     {
-        startActivity(new Intent(this, AddRecordActivity.class));
+        showAd();
     }
 
     private void incomeCategories() {
@@ -245,7 +262,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
         database.incomeCategoryDao().addIncomeCat(incomeCatList);
         database.expenseCategoryDao().addExpenseCat(expenseCatList);
-        database.close();
+        //database.close();
 
         //setting the preference value to true to indicate that categories tables are added
         preferenceEditor.putBoolean(getString(R.string.categories_saved),true);
@@ -266,7 +283,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         startActivity(intent);
     }
 
-    private void clearAllRecord(){
+    private void clearAllRecord(MenuItem item){
 
         AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
 
@@ -281,11 +298,131 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     preferenceEditor.putBoolean(getString(R.string.categories_saved),false);
                     preferenceEditor.apply();
 
-                    //recreating the activity
-                    recreate();
+                    //setting the checked item to false (removes highlighted item)
+                    item.setChecked(false);
+
+                    Toast.makeText(homeScreenActivity, "Record cleared Successfully!", Toast.LENGTH_SHORT).show();
+
+                    new Handler().postDelayed(() -> {
+                        //showing the ad
+                        showAdClearHistory();
+                    },1000);
+
                 })
                 .setNegativeButton("CANCEL", (dialogInterface, i) -> dialogInterface.dismiss());
 
         alertDialog.create().show();
+    }
+
+    public void loadAd() {
+
+        //checking whether app is running on release/debug version
+        String interstitialAdId="";
+        if(BuildConfig.DEBUG)
+        {
+            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            Log.i("HOME_ACT_AD", "HOME_ACT debug version: "+interstitialAdId);
+        }
+        else {
+            interstitialAdId=getString(R.string.interstitial_ad_id);
+            Log.i("HOME_ACT_AD", "HOME_ACT release version: "+interstitialAdId);
+        }
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(this, interstitialAdId, adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                Log.i("HOME_ACT_AD", "HOME_ACT onAdLoaded: ");
+                mInterstitialAd = interstitialAd;
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("HOME_ACT_AD", "HOME_ACT failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
+                mInterstitialAd = null;
+            }
+        });
+    }
+
+    public void showAd() {
+        //checking if ad is loaded or not
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    mInterstitialAd = null;
+
+                    //moving to AddRecordActivity
+                    startActivity(new Intent(HomeScreenActivity.this, AddRecordActivity.class));
+                }
+
+                //this function make sure no ad is loaded for second time
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+
+                    mInterstitialAd = null;
+                }
+            });
+        }
+        else
+        {
+            //if there is no internet connection, then no ad will be loaded and app will move onto next screen
+            Intent intent = new Intent(this, AddRecordActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    public void showAdClearHistory() {
+        //checking if ad is loaded or not
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(this);
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    mInterstitialAd = null;
+
+                    //recreating the activity
+                    startActivity(new Intent(HomeScreenActivity.this,HomeScreenActivity.class));
+                    finish();
+                }
+
+                //this function make sure no ad is loaded for second time
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+
+                    mInterstitialAd = null;
+                }
+            });
+        }
+        else
+        {
+            //if there is no internet connection, then no ad will be loaded
+            startActivity(new Intent(HomeScreenActivity.this,HomeScreenActivity.class));
+            finish();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mInterstitialAd = null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mInterstitialAd = null;
+        super.onDestroy();
     }
 }

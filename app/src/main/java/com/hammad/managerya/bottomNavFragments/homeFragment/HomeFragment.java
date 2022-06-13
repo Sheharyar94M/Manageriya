@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +28,13 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.hammad.managerya.BuildConfig;
 import com.hammad.managerya.R;
 import com.hammad.managerya.RoomDB.RoomDBHelper;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.ExpenseCatDetailModel;
@@ -90,6 +99,16 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     //string for saving current month and year
     private String currentMonth="";
 
+    private InterstitialAd mInterstitialAd;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //initializing mobile ad
+        MobileAds.initialize(requireContext(), initializationStatus -> {});
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -110,6 +129,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         //get current date
         getCurrentDate();
+
+        //loading the ad
+        loadAd();
 
         //initializing database instance
         database = RoomDBHelper.getInstance(requireActivity());
@@ -148,7 +170,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         setBudgetRecentRecyclerview();
 
         //insight (graphs) activity
-        imageViewInsights.setOnClickListener(v -> startActivity(new Intent(requireContext(), InsightActivity.class)));
+        imageViewInsights.setOnClickListener(v -> showAd());
 
         return view;
     }
@@ -478,4 +500,81 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         return convertedDate;
     }
 
+    public void loadAd() {
+
+        //checking whether app is running on release/debug version
+        String interstitialAdId="";
+        if(BuildConfig.DEBUG)
+        {
+            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            Log.i("HOME_FRAG_AD", "HOME_FRAG debug version: "+interstitialAdId);
+        }
+        else {
+            interstitialAdId=getString(R.string.interstitial_ad_id);
+            Log.i("HOME_FRAG_AD", "HOME_FRAG release version: "+interstitialAdId);
+        }
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(requireContext(), interstitialAdId, adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                Log.i("HOME_FRAG_AD", "HOME_FRAG onAdLoaded: ");
+                mInterstitialAd = interstitialAd;
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("HOME_FRAG_AD", "HOME_FRAG failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
+                mInterstitialAd = null;
+            }
+        });
+    }
+
+    public void showAd() {
+        //checking if ad is loaded or not
+        if (mInterstitialAd != null) {
+            mInterstitialAd.show(requireActivity());
+
+            mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+
+                    mInterstitialAd = null;
+
+                    //moving to Insight Screen
+                    startActivity(new Intent(requireContext(), InsightActivity.class));
+                }
+
+                //this function make sure no ad is loaded for second time
+                @Override
+                public void onAdShowedFullScreenContent() {
+                    super.onAdShowedFullScreenContent();
+
+                    mInterstitialAd = null;
+                }
+            });
+        }
+        else
+        {
+            //if there is no internet connection, then no ad will be loaded and app will move onto Insight Activity
+            Intent intent = new Intent(requireContext(), InsightActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mInterstitialAd = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        mInterstitialAd = null;
+        super.onDestroy();
+    }
 }
