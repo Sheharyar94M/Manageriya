@@ -114,7 +114,6 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.i("HELLO_123", "onCreateView: ");
         /*
             Clearing the list before adding new data.
             This is because when Home Fragment is called through back stack the onCreate of this fragment is not called.

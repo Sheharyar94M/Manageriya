@@ -24,7 +24,7 @@ import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeD
 import com.hammad.managerya.bottomNavFragments.addRecord.income.incomeDB.IncomeDetailEntity;
 import com.hammad.managerya.bottomNavFragments.homeFragment.homeDB.HomeFragmentDao;
 
-@Database(entities = {IncomeCategoryEntity.class, IncomeDetailEntity.class, ExpenseCategoryEntity.class, ExpenseDetailEntity.class, BudgetEntity.class, SavingEntity.class, SavingTransactionEntity.class, LoanEntity.class, LoanDetailEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {IncomeCategoryEntity.class, IncomeDetailEntity.class, ExpenseCategoryEntity.class, ExpenseDetailEntity.class, BudgetEntity.class, SavingEntity.class, SavingTransactionEntity.class, LoanEntity.class, LoanDetailEntity.class}, version = 2, exportSchema = false)
 public abstract class RoomDBHelper extends RoomDatabase {
 
     //create database instance

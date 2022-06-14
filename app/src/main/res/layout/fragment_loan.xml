@@ -82,7 +82,7 @@
         android:id="@+id/cons_4_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_add">
@@ -129,7 +129,7 @@
         android:id="@+id/cons_5_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_7sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_add">
