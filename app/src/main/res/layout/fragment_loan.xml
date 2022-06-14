@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#eff0f0"
+    android:background="@color/white"
     tools:context=".bottomNavFragments.loanFragment.LoanFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,15 +21,14 @@
         android:id="@+id/cons_2_loan"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.7"
         android:background="#eff0f0"
         app:layout_constraintTop_toBottomOf="@id/cons_1_loan"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_loan"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--<androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_3_loan"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -38,23 +37,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/drawable_loan_curve"
         app:layout_constraintTop_toTopOf="@id/cons_2_loan"
-        android:layout_marginTop="@dimen/_250sdp"/>
+        android:layout_marginTop="@dimen/_250sdp"/>-->
 
-    <!--<Button
+    <Button
         android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_30sdp"
         android:background="@drawable/button_finish_background"
-        android:text="Add Consumer"
+        android:text="Add Contact"
         android:drawableEnd="@drawable/ic_round_person"
         app:layout_constraintWidth_percent="0.5"
-        android:layout_marginTop="@dimen/_30sdp"
-        app:layout_constraintTop_toTopOf="@id/cons_3_loan"
-        app:layout_constraintBottom_toBottomOf="@id/cons_3_loan"
+        android:layout_marginTop="@dimen/_25sdp"
+        app:layout_constraintTop_toBottomOf="@id/flow_lend"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>-->
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/button_add"
         android:layout_width="@dimen/_55sdp"
         android:layout_height="@dimen/_55sdp"
@@ -64,7 +62,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@+id/recycler_loan"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_loan"
@@ -78,14 +76,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/cons_1_loan"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/no_recent_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Contact Added"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/recycler_loan"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_loan"
+        app:layout_constraintTop_toTopOf="@+id/recycler_loan"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_loan"/>
+
+   <!-- <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_4_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_add">
+        app:layout_constraintTop_toBottomOf="@id/recycler_loan">-->
 
         <TextView
             android:id="@+id/txt_sent_1"
@@ -97,8 +110,10 @@
             android:textStyle="bold"
             android:textColor="#6E6D6D"
             android:textAllCaps="true"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/recycler_loan"/>
 
         <TextView
             android:id="@+id/txt_currency_1_loan"
@@ -107,9 +122,7 @@
             android:text="$"
             android:textStyle="bold"
             android:textSize="@dimen/_13ssp"
-            android:textColor="@color/colorGreen"
-            app:layout_constraintStart_toStartOf="@id/txt_sent_1"
-            app:layout_constraintTop_toBottomOf="@id/txt_sent_1"/>
+            android:textColor="@color/colorGreen" />
 
         <TextView
             android:id="@+id/txt_total_sent"
@@ -119,20 +132,41 @@
             android:textStyle="bold"
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/colorGreen"
-            android:layout_marginStart="@dimen/_5sdp"
-            app:layout_constraintStart_toEndOf="@id/txt_currency_1_loan"
-            app:layout_constraintTop_toBottomOf="@id/txt_sent_1"/>
+            android:layout_marginStart="@dimen/_5sdp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_lend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:flow_horizontalGap="@dimen/_5sdp"
+        app:constraint_referenced_ids="txt_currency_1_loan,txt_total_sent"
+        app:layout_constraintStart_toStartOf="@+id/txt_sent_1"
+        app:layout_constraintEnd_toEndOf="@+id/txt_sent_1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_sent_1"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_borrowed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:flow_horizontalGap="@dimen/_5sdp"
+        app:constraint_referenced_ids="txt_currency_2_loan,txt_total_borrowed"
+        app:layout_constraintStart_toStartOf="@+id/txt_borrowed_1"
+        app:layout_constraintEnd_toEndOf="@+id/txt_borrowed_1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_borrowed_1"/>
+
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+   <!-- <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_5_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_add">
+        app:layout_constraintTop_toBottomOf="@id/recycler_loan">-->
 
         <TextView
             android:id="@+id/txt_borrowed_1"
@@ -144,8 +178,10 @@
             android:textAlignment="center"
             android:textColor="#6E6D6D"
             android:textAllCaps="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_loan"/>
 
         <TextView
             android:id="@+id/txt_currency_2_loan"
@@ -154,9 +190,7 @@
             android:text="$"
             android:textStyle="bold"
             android:textSize="@dimen/_13ssp"
-            android:textColor="@color/colorRed"
-            app:layout_constraintStart_toStartOf="@id/txt_borrowed_1"
-            app:layout_constraintTop_toBottomOf="@id/txt_borrowed_1"/>
+            android:textColor="@color/colorRed" />
 
         <TextView
             android:id="@+id/txt_total_borrowed"
@@ -166,10 +200,8 @@
             android:textStyle="bold"
             android:textSize="@dimen/_13ssp"
             android:textColor="@color/colorRed"
-            android:layout_marginStart="@dimen/_5sdp"
-            app:layout_constraintStart_toEndOf="@id/txt_currency_2_loan"
-            app:layout_constraintTop_toBottomOf="@id/txt_borrowed_1"/>
+            android:layout_marginStart="@dimen/_5sdp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

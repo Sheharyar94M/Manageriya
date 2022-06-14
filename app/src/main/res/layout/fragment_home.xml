@@ -210,7 +210,7 @@
                     app:layout_constraintTop_toBottomOf="@id/pie_chart"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/place_holder_2"
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="@dimen/_70sdp"
@@ -222,7 +222,25 @@
                     android:visibility="invisible"
                     app:layout_constraintTop_toBottomOf="@id/pie_chart"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent" />-->
+
+                <TextView
+                    android:id="@+id/no_budget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Active Budget"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="@dimen/_50sdp"
+                    app:layout_constraintStart_toStartOf="@+id/recycler_view_recent"
+                    app:layout_constraintEnd_toEndOf="@+id/recycler_view_recent"
+                    app:layout_constraintTop_toTopOf="@+id/recycler_view_recent"
+                    app:layout_constraintBottom_toBottomOf="@+id/recycler_view_recent"/>
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -240,5 +258,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/constraint_2"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/no_recent_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recent Transaction"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:textAllCaps="true"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/recycler_home_frag"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_home_frag"
+        app:layout_constraintTop_toTopOf="@+id/recycler_home_frag"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_home_frag"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

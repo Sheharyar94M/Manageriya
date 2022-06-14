@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     private InterstitialAd mInterstitialAd;
 
     private ImageView placeHolder1, placeHolder2;
+    private TextView textViewNoBudget,textViewNoRecentTrans;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,7 +207,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         //place holders
         placeHolder1 = view.findViewById(R.id.chart_place_holder);
-        placeHolder2 = view.findViewById(R.id.place_holder_2);
+        //placeHolder2 = view.findViewById(R.id.place_holder_2);
+        textViewNoBudget = view.findViewById(R.id.no_budget);
+        textViewNoRecentTrans = view.findViewById(R.id.no_recent_trans);
 
     }
 
@@ -223,6 +226,17 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
     }
 
     private void setRecentTransactionRecyclerView() {
+
+        if(recentTranslList.size() == 0)
+        {
+            recyclerViewRecentTransaction.setVisibility(View.INVISIBLE);
+            textViewNoRecentTrans.setVisibility(View.VISIBLE);
+        }
+        else if(recentTranslList.size() > 0)
+        {
+            recyclerViewRecentTransaction.setVisibility(View.VISIBLE);
+            textViewNoRecentTrans.setVisibility(View.INVISIBLE);
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);
@@ -376,12 +390,14 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         if(addedBudgetList.size() == 0)
         {
             recyclerViewRecentBudget.setVisibility(View.INVISIBLE);
-            placeHolder2.setVisibility(View.VISIBLE);
+            //placeHolder2.setVisibility(View.VISIBLE);
+            textViewNoBudget.setVisibility(View.VISIBLE);
         }
         else if(addedBudgetList.size() > 0)
         {
             recyclerViewRecentBudget.setVisibility(View.VISIBLE);
-            placeHolder2.setVisibility(View.INVISIBLE);
+            //placeHolder2.setVisibility(View.INVISIBLE);
+            textViewNoBudget.setVisibility(View.INVISIBLE);
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);

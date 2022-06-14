@@ -59,6 +59,8 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
     private InterstitialAd mInterstitialAd;
 
+    private TextView textViewNoSavingGoal;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +114,9 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
 
         textViewRemainingSavingAmount = view.findViewById(R.id.txt_remaining_saving_amount);
 
+        //no saving goal
+        textViewNoSavingGoal = view.findViewById(R.id.no_recent_trans_saving);
+
         progressBar = view.findViewById(R.id.progress_savings);
 
         createSavingGoal = view.findViewById(R.id.txt_create_saving_goal);
@@ -122,6 +127,17 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
     private void setupRecyclerview(List<SavingEntity> list) {
         //this static variable is incremented in recyclerview function to handle the if condition of onResume()
         check++;
+
+        if(list.size() == 0)
+        {
+            textViewNoSavingGoal.setVisibility(View.VISIBLE);
+            recyclerViewSavings.setVisibility(View.INVISIBLE);
+        }
+        else if(list.size() > 0)
+        {
+            textViewNoSavingGoal.setVisibility(View.GONE);
+            recyclerViewSavings.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewSavings.setLayoutManager(layoutManager);

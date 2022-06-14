@@ -77,6 +77,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
 
     private InterstitialAd mInterstitialAd;
 
+    private TextView textViewNoRecentTrans;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +158,9 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         //recent transaction recyclerview
         recyclerViewRecentTransaction=view.findViewById(R.id.recycler_recent_trans_wallet);
 
+        //no recent trans
+        textViewNoRecentTrans=view.findViewById(R.id.no_recent_trans_wallet);
+
         //layout History & Budget
         layoutHistory=view.findViewById(R.id.constraint_history);
         layoutBudget=view.findViewById(R.id.constraint_budget);
@@ -234,6 +239,17 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
     }
 
     private void setRecentTransactionRecyclerview(){
+
+        if(recentTranslList.size() == 0)
+        {
+            textViewNoRecentTrans.setVisibility(View.VISIBLE);
+            recyclerViewRecentTransaction.setVisibility(View.INVISIBLE);
+        }
+        else if(recentTranslList.size() > 0)
+        {
+            textViewNoRecentTrans.setVisibility(View.GONE);
+            recyclerViewRecentTransaction.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false);
         recyclerViewRecentTransaction.setLayoutManager(layoutManager);

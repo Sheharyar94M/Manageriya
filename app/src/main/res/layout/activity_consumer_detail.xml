@@ -28,18 +28,17 @@
         app:layout_constraintTop_toTopOf="@id/constraint_1_loan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.60">
+        app:layout_constraintWidth_percent="0.60"
+        android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/inner_constraint_loan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/text_amount">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/text_currency_loan"
@@ -49,6 +48,7 @@
                 android:textColor="@color/colorGreen"
                 android:textSize="@dimen/_14ssp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,10 +71,9 @@
             android:id="@+id/text_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:text=""
-            android:visibility="gone"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="Transaction Type"
             android:textColor="@color/colorGreen"
             android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
@@ -167,5 +166,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_date"
         app:layout_constraintBottom_toTopOf="@id/flow_button_loan"/>
+
+    <TextView
+        android:id="@+id/no_trans_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recent Transaction"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/recycler_loan"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_loan"
+        app:layout_constraintTop_toTopOf="@+id/recycler_loan"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_loan"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

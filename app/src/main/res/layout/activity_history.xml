@@ -153,5 +153,20 @@
         app:layout_constraintTop_toBottomOf="@id/constraint_3_history"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView
+        android:id="@+id/no_recent_trans_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recent Transaction"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/recycler_trans_history"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_trans_history"
+        app:layout_constraintTop_toTopOf="@+id/recycler_trans_history"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_trans_history"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

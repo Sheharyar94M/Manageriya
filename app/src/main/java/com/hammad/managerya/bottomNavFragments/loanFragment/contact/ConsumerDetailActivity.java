@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,7 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
     private TextView textViewCurrency,textViewAmount,textViewLatestTransType;
     private RecyclerView recyclerViewTransactions;
     private AppCompatButton buttonLend,buttonBorrowed;
+    private ConstraintLayout constraintLayoutTransDetail;
 
     private ConsumerTransactionAdapter consumerTransAdapter;
     List<LoanDetailEntity> loanDetailList =new ArrayList<>();
@@ -47,6 +49,9 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
 
     //variables for storing the values of lended and borrowed amounts sum (for individual user sums)
     private int lendedAmountSum = 0, borrowedAmountSum=0 ;
+
+    private TextView textViewNoTrans;
+    private TextView textViewDate,textViewLend,textViewBorrowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +94,22 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
 
         recyclerViewTransactions=findViewById(R.id.recycler_loan);
 
+        //no transaction
+        textViewNoTrans=findViewById(R.id.no_trans_loan);
+
+        //the views above recyclerview (date, lend,borrowed)
+        textViewDate=findViewById(R.id.text_date);
+        textViewLend=findViewById(R.id.text_lend);
+        textViewBorrowed=findViewById(R.id.text_borrow);
+
         buttonLend=findViewById(R.id.button_lend);
         buttonBorrowed=findViewById(R.id.button_borrow);
 
+        constraintLayoutTransDetail=findViewById(R.id.constraint_2_loan);
+
         //setting the currency
         textViewCurrency.setText(CURRENCY_);
+
 
     }
 
@@ -159,6 +175,22 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
     }
 
     private void setRecyclerView(List<LoanDetailEntity> list) {
+
+        if(list.size() == 0)
+        {
+            textViewNoTrans.setVisibility(View.VISIBLE);
+            textViewDate.setVisibility(View.INVISIBLE);
+            textViewLend.setVisibility(View.INVISIBLE);
+            textViewBorrowed.setVisibility(View.INVISIBLE);
+        }
+        else if(list.size() > 0)
+        {
+            textViewNoTrans.setVisibility(View.GONE);
+            textViewDate.setVisibility(View.VISIBLE);
+            textViewLend.setVisibility(View.VISIBLE);
+            textViewBorrowed.setVisibility(View.VISIBLE);
+        }
+
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransactions.setLayoutManager(layoutManager);
 
@@ -219,15 +251,13 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
         //if loan detail list size is zero, then set the following details to currentBalanceStatus
         if(loanDetailList.size() == 0)
         {
-            //setting the amount
-            textViewAmount.setText("0");
-
-            //setting the color green
-            textViewAmount.setTextColor(getResources().getColor(R.color.colorGreen));
-            textViewCurrency.setTextColor(getResources().getColor(R.color.colorGreen));
-
-            //setting the trans type visibility to gone
-            textViewLatestTransType.setVisibility(View.GONE);
+            //setting the loan detail layout visibility to gone
+            constraintLayoutTransDetail.setVisibility(View.GONE);
+        }
+        else if(loanDetailList.size() > 0)
+        {
+            //setting the loan detail layout visibility to visible
+            constraintLayoutTransDetail.setVisibility(View.VISIBLE);
         }
 
         if(lendedAmountSum > borrowedAmountSum)
@@ -278,4 +308,5 @@ public class ConsumerDetailActivity extends AppCompatActivity implements Consume
         currentBalanceStatus();
 
     }
+
 }

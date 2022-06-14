@@ -35,7 +35,7 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
     //variable for controlling the addedContactList refreshing
     private static int checkValue = 0;
 
-    private /*Button*/ ImageView buttonAddContact;
+    private Button buttonAddContact;
     private RecyclerView recyclerView;
     private TextView textViewCurrency1, textViewCurrency2, textViewTotalLend, textViewTotalBorrowed;
     private List<LoanEntity> addedContactList = new ArrayList<>();
@@ -48,6 +48,8 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
 
     //check variable 2 for handling total sum of lend and borrowed amounts
     private static int checkValueTotalSum = 0;
+
+    private TextView textViewNoContactAdded;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +87,9 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
         textViewTotalLend = view.findViewById(R.id.txt_total_sent);
         textViewTotalBorrowed = view.findViewById(R.id.txt_total_borrowed);
 
+        //no contact added
+        textViewNoContactAdded = view.findViewById(R.id.no_recent_loan);
+
         //setting the selected currency to textviews
         textViewCurrency1.setText(CURRENCY_);
         textViewCurrency2.setText(CURRENCY_);
@@ -94,6 +99,17 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
 
         //incrementing the check value each time this recyclerview function is called so that the updated list can be displayed
         checkValue++;
+
+        if(list.size() == 0)
+        {
+            textViewNoContactAdded.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
+        else if(list.size() > 0)
+        {
+            textViewNoContactAdded.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

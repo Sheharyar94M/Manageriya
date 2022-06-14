@@ -219,4 +219,19 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_40sdp"/>
 
+    <TextView
+        android:id="@+id/no_recent_trans_saving_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Saving Transactions"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/recycler_recent_saving_trans"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_recent_saving_trans"
+        app:layout_constraintTop_toTopOf="@+id/recycler_recent_saving_trans"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_recent_saving_trans"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

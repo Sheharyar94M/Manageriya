@@ -285,4 +285,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/no_recent_trans_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recent Transaction"
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/recycler_recent_trans_wallet"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_recent_trans_wallet"
+        app:layout_constraintTop_toTopOf="@+id/recycler_recent_trans_wallet"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_recent_trans_wallet"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

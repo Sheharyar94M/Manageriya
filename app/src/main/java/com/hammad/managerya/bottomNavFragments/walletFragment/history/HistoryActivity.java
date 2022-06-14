@@ -57,6 +57,8 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     //string for saving current month and year
     private String currentMonth="";
 
+    private TextView textViewNoRecentTrans;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +113,9 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
         recyclerViewTransaction=findViewById(R.id.recycler_trans_history);
 
         textViewCurrency=findViewById(R.id.text_currency_history);
+
+        //no recent trans
+        textViewNoRecentTrans=findViewById(R.id.no_recent_trans_history);
 
         //setting the currency
         textViewCurrency.setText(CURRENCY_);
@@ -190,6 +195,17 @@ public class HistoryActivity extends AppCompatActivity implements MonthAdapter.O
     }
 
     private void setRecentTransRecyclerview(List<HomeRecentTransModel> list) {
+
+        if(list.size() == 0)
+        {
+            textViewNoRecentTrans.setVisibility(View.VISIBLE);
+            recyclerViewTransaction.setVisibility(View.INVISIBLE);
+        }
+        else if(list.size() > 0)
+        {
+            textViewNoRecentTrans.setVisibility(View.GONE);
+            recyclerViewTransaction.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewTransaction.setLayoutManager(layoutManager);

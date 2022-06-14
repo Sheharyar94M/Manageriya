@@ -5,6 +5,7 @@ import static com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment.
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,6 +52,8 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
 
     //list of recent transaction
     List<SavingModel> savingTransactionList = new ArrayList<>();
+
+    private TextView textViewNoSavingTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,9 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
         textViewSavingGoal = findViewById(R.id.total_saving_goal);
         textViewPercentage = findViewById(R.id.percentage);
 
+        //no saving transaction
+        textViewNoSavingTrans =findViewById(R.id.no_recent_trans_saving_1);
+
         progressBar = findViewById(R.id.progress_savings_detail);
 
         textViewSavingTransaction = findViewById(R.id.txt_create_saving_trans);
@@ -135,6 +141,17 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
     }
 
     private void setRecyclerView() {
+
+        if(savingTransactionList.size() == 0)
+        {
+            textViewNoSavingTrans.setVisibility(View.VISIBLE);
+            recyclerViewSavingTransaction.setVisibility(View.INVISIBLE);
+        }
+        else if(savingTransactionList.size() > 0)
+        {
+            textViewNoSavingTrans.setVisibility(View.GONE);
+            recyclerViewSavingTransaction.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewSavingTransaction.setLayoutManager(layoutManager);

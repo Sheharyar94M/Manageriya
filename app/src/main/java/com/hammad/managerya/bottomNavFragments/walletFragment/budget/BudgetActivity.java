@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,8 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     private String currentMonth="";
 
     private InterstitialAd mInterstitialAd;
+
+    private TextView textViewNoActiveBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +163,9 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         textViewTotalBudgetAllocated =findViewById(R.id.txt_total_budget);
         textViewTotalRemainingBudget =findViewById(R.id.txt_remaining_budget_amount);
 
+        //no recent budget
+        textViewNoActiveBudget = findViewById(R.id.no_recent_trans_budget);
+
         textViewCreateBudget=findViewById(R.id.txt_create_budget);
 
         progressBar=findViewById(R.id.progress_budget);
@@ -231,6 +237,17 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
     }
 
     private void setBudgetRecyclerview() {
+
+        if(addedBudgetList.size() == 0)
+        {
+            textViewNoActiveBudget.setVisibility(View.VISIBLE);
+            recyclerViewBudget.setVisibility(View.INVISIBLE);
+        }
+        else if(addedBudgetList.size() > 0)
+        {
+            textViewNoActiveBudget.setVisibility(View.GONE);
+            recyclerViewBudget.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerViewBudget.setLayoutManager(layoutManager);

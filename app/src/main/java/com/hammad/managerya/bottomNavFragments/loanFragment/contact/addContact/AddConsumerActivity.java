@@ -9,6 +9,8 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +41,8 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
     //DB instance
     private RoomDBHelper database;
 
+    private TextView textViewNoContacts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,7 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
         //initializing views
         recyclerView = findViewById(R.id.recycler_view_contacts);
         editTextSearch=findViewById(R.id.edit_text_search);
+        textViewNoContacts=findViewById(R.id.no_contacts);
 
         //getting the contact list
         getContactList();
@@ -138,6 +143,18 @@ public class AddConsumerActivity extends AppCompatActivity implements ContactAda
     }
 
     private void setRecyclerView() {
+
+        if(contactModelList.size() == 0)
+        {
+            textViewNoContacts.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
+        else if(contactModelList.size() > 0)
+        {
+            textViewNoContacts.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
