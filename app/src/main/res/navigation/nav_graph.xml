@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/bottom_nav_home"
-        android:name="com.hammad.managerya.bottomNavFragments.homeFragment.HomeFragment"
+        android:name="com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/bottom_nav_wallet"
-        android:name="com.hammad.managerya.bottomNavFragments.walletFragment.WalletFragment"
+        android:name="com.risibleapps.mywallet.bottomNavFragments.walletFragment.WalletFragment"
         android:label="fragment_wallet"
         tools:layout="@layout/fragment_wallet" />
     <fragment
         android:id="@+id/bottom_nav_saving"
-        android:name="com.hammad.managerya.bottomNavFragments.savingFragment.SavingFragment"
+        android:name="com.risibleapps.mywallet.bottomNavFragments.savingFragment.SavingFragment"
         android:label="fragment_saving"
         tools:layout="@layout/fragment_saving" />
     <fragment
         android:id="@+id/bottom_nav_loan"
-        android:name="com.hammad.managerya.bottomNavFragments.loanFragment.LoanFragment"
+        android:name="com.risibleapps.mywallet.bottomNavFragments.loanFragment.LoanFragment"
         android:label="fragment_loan"
         tools:layout="@layout/fragment_loan" />
 </navigation>

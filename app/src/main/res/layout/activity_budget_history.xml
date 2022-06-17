@@ -271,12 +271,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_recent_budget"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintWidth_percent="0.96"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cons_3"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
         android:layout_marginTop="@dimen/_20sdp"/>
+
+    <TextView
+        android:id="@+id/no_recent_budget_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Recent Transaction"
+        android:textColor="#BA000000"
+        android:textSize="@dimen/_16ssp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/recycler_recent_budget"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_recent_budget"
+        app:layout_constraintTop_toTopOf="@+id/recycler_recent_budget"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_recent_budget"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

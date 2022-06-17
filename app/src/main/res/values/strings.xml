@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Managerya</string>
+    <string name="app_name">MyWallet</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
 
     <string name="categories_saved">Categories Saved</string>
 
     <string name="interstitial_ad_debug_id">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="interstitial_ad_id">xx-xxx-xxx-xxxxxxxx</string>
+    <string name="interstitial_ad_id">ca-app-pub-1814031312363155/1517466697</string>
 
 </resources>

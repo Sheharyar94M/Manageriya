@@ -8,7 +8,7 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
         <!-- the color of secondary items colors like in this case the menu button color of toolbar -->
         <item name="android:textColorSecondary">@color/white</item>
         <!-- Status bar color. -->

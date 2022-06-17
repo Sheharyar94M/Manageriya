@@ -6,7 +6,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.hammad.managerya"
+        applicationId "com.risibleapps.mywallet"
         minSdk 21
         targetSdk 32
         versionCode 1

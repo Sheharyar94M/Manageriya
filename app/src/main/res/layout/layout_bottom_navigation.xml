@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/gradient_toolbar"
-            app:title="Managerya"
-            app:titleMarginStart="@dimen/_70sdp"
+            app:title="MyWallet: Track Your Expenses"
+            app:titleMarginStart="@dimen/_30sdp"
             app:titleTextColor="@color/white"
             app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
