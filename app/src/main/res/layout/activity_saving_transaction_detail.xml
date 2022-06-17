@@ -19,6 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/gradient_toolbar"
             app:title="Saving Detail"
+            app:titleMarginStart="@dimen/_70sdp"
             app:titleTextColor="@color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
