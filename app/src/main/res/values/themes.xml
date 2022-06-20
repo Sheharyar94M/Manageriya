@@ -23,4 +23,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!--<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+
+    <style name="AppTheme.AdAttribution" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
+        <item name="android:text">@string/ad_attribution</item>
+        <item name="android:background">@color/colorPrimaryVariant</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:width">@dimen/_20sdp</item>
+        <item name="android:height">@dimen/_20sdp</item>
+    </style>-->
+
 </resources>

@@ -145,4 +145,5 @@ public class SplashScreen extends AppCompatActivity {
         mInterstitialAd = null;
         super.onDestroy();
     }
+
 }

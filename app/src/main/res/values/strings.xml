@@ -8,4 +8,9 @@
     <string name="interstitial_ad_debug_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="interstitial_ad_id">ca-app-pub-1814031312363155/1517466697</string>
 
+    <!-- custom style for unified adview in theme.xml-->
+    <!--<string name="ad_attribution">Ad</string>-->
+    <string name="native_advance_debug">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="native_advance_release">xxx-xxx-xxx</string>
+
 </resources>
