@@ -511,13 +511,8 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
                     FrameLayout frameLayout = dialog.findViewById(R.id.fl_adplaceholder);
 
-                    if(frameLayout == null)
+                    if(frameLayout != null)
                     {
-                        Log.i("HELLO_123", "refreshAd: null frame layout");
-                    }
-                    else if(frameLayout != null)
-                    {
-                        Log.i("HELLO_123", "refreshAd: not null frame layout");
                         UnifiedNativeAdView adView = (UnifiedNativeAdView) dialog.getLayoutInflater().inflate(R.layout.ad_unified, null);
                         populateUnifiedNativeAdView(unifiedNativeAd, adView);
                         frameLayout.removeAllViews();

@@ -160,7 +160,7 @@ public class ExpensePieChartFragment extends Fragment {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate.MATERIAL_COLORS) {
+        for (int color : ColorTemplate.VORDIPLOM_COLORS) {
             colors.add(color);
         }
 

@@ -28,10 +28,9 @@
                     android:id="@+id/text_view_budget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Budget Details"
+                    android:text="Dashboard"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:textAllCaps="true"
                     android:textSize="@dimen/_20ssp"
                     android:fontFamily="@font/century_gothic"
                     android:layout_marginTop="@dimen/_55sdp"
@@ -45,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_calendar"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
                     app:layout_constraintTop_toBottomOf="@id/text_view_budget"
                     app:layout_constraintStart_toStartOf="@id/text_view_budget"/>
 
@@ -55,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:fontFamily="@font/century_gothic"
-                    android:textSize="@dimen/_17ssp"
+                    android:textSize="@dimen/_15ssp"
                     app:layout_constraintTop_toBottomOf="@id/text_view_budget"
                     app:layout_constraintStart_toEndOf="@id/image_view_calendar"
                     android:layout_marginStart="@dimen/_8sdp"

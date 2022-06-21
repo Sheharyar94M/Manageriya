@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import com.risibleapps.mywallet.R;
 import com.risibleapps.mywallet.bottomNavFragments.addRecord.expense.AddExpenseFragment;
 import com.risibleapps.mywallet.bottomNavFragments.addRecord.income.AddIncomeFragment;
+import com.risibleapps.mywallet.mainActivity.HomeScreenActivity;
 
 public class AddRecordActivity extends AppCompatActivity {
 
@@ -42,7 +44,11 @@ public class AddRecordActivity extends AppCompatActivity {
         replaceFragment(new AddIncomeFragment());
 
         //finish activity button click listener
-        imageViewFinishActivity.setOnClickListener(view -> finish());
+        imageViewFinishActivity.setOnClickListener(view -> /*finish()*/{
+
+            startActivity(new Intent(this, HomeScreenActivity.class));
+            finish();
+        });
 
         //constraint income click listener
         constraintIncome.setOnClickListener(view -> {
