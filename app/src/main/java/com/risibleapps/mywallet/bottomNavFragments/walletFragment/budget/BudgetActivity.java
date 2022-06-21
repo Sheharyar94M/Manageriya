@@ -338,11 +338,11 @@ public class BudgetActivity extends AppCompatActivity implements MonthAdapter.On
         String interstitialAdId="";
         if(BuildConfig.DEBUG)
         {
-            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            interstitialAdId=getString(R.string.interstitial_ad_debug);
             Log.i("BUDGET_AD", "BUDGET debug version: "+interstitialAdId);
         }
         else {
-            interstitialAdId=getString(R.string.interstitial_ad_id);
+            interstitialAdId=getString(R.string.interstitial_ad_release);
             Log.i("BUDGET_AD", "BUDGET release version: "+interstitialAdId);
         }
 

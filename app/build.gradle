@@ -72,7 +72,4 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-
-    //this line is used to import native ad template project as nodule in this project
-    implementation project(':nativetemplate')
 }

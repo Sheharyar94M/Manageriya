@@ -9,4 +9,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Managerya"
 include ':app'
-include ':nativetemplate'

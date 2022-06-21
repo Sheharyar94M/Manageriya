@@ -226,11 +226,11 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
         String interstitialAdId="";
         if(BuildConfig.DEBUG)
         {
-            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            interstitialAdId=getString(R.string.interstitial_ad_debug);
             Log.i("SAVING_AD", "SAVING debug version: "+interstitialAdId);
         }
         else {
-            interstitialAdId=getString(R.string.interstitial_ad_id);
+            interstitialAdId=getString(R.string.interstitial_ad_release);
             Log.i("SAVING_AD", "SAVING release version: "+interstitialAdId);
         }
 

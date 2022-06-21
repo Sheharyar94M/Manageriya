@@ -1,6 +1,7 @@
 package com.risibleapps.mywallet.mainActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,7 +13,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,16 +32,19 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.ads.nativetemplates.NativeTemplateStyle;
-import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.VideoOptions;
+import com.google.android.gms.ads.formats.MediaView;
+import com.google.android.gms.ads.formats.NativeAdOptions;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.risibleapps.mywallet.BuildConfig;
@@ -75,6 +83,9 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     private InterstitialAd mInterstitialAd;
 
     private String nativeAdvanceId="";
+    private UnifiedNativeAd nativeAd;
+
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +100,9 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
         //loading the ad
         loadAd();
+
+        //loading the app exit ad
+        exitAlertDialog();
 
         //functions for adding category data in income & expense category lists
         incomeCategories();
@@ -155,7 +169,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         else {
 
             //calling the exit alert dialog
-            exitAlertDialog();
+            dialog.show();
         }
     }
 
@@ -332,11 +346,11 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         String interstitialAdId="";
         if(BuildConfig.DEBUG)
         {
-            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            interstitialAdId=getString(R.string.interstitial_ad_debug);
             Log.i("HOME_ACT_AD", "HOME_ACT debug version: "+interstitialAdId);
         }
         else {
-            interstitialAdId=getString(R.string.interstitial_ad_id);
+            interstitialAdId=getString(R.string.interstitial_ad_release);
             Log.i("HOME_ACT_AD", "HOME_ACT release version: "+interstitialAdId);
         }
 
@@ -436,51 +450,179 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     protected void onDestroy() {
         mInterstitialAd = null;
 
+        if (nativeAd != null) {
+            nativeAd.destroy();
+        }
+
         super.onDestroy();
     }
 
     private void exitAlertDialog(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        dialog=new Dialog(this);
+        dialog.setContentView(R.layout.exit_dialog);
 
-        builder.setTitle("Exit App")
-                .setMessage("Want to exit app?");
-        builder.setView(this.getLayoutInflater().inflate(R.layout.exit_dialog,null));
-        AlertDialog alertDialog=builder.create();
+        //setting the transparent background
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        //alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
+        //loading the ad
+        refreshAd(dialog);
 
-        TemplateView templateView=alertDialog.findViewById(R.id.ad_template_view);
-
-        AppCompatButton buttonExit=alertDialog.findViewById(R.id.btn_exit);
-        AppCompatButton buttonCancel=alertDialog.findViewById(R.id.btn_cancel);
-
+        AppCompatButton buttonExit=dialog.findViewById(R.id.btn_exit);
+        AppCompatButton buttonCancel=dialog.findViewById(R.id.btn_cancel);
 
         //click listener buttons
         buttonExit.setOnClickListener(view -> super.onBackPressed());
 
-        buttonCancel.setOnClickListener(view -> alertDialog.dismiss());
+        buttonCancel.setOnClickListener(view -> dialog.dismiss());
 
+    }
+
+    private void refreshAd(Dialog dialog) {
+
+        //checking whether the app is running in release or debug version
         if(BuildConfig.DEBUG)
         {
             nativeAdvanceId=getString(R.string.native_advance_debug);
+            Log.i("NATIVE_ADVANCE_AD: ", "debug version: "+nativeAdvanceId);
         }
-        else {
+        else{
             nativeAdvanceId=getString(R.string.native_advance_release);
+            Log.i("NATIVE_ADVANCE_AD: ", "release version: "+nativeAdvanceId);
         }
 
-        AdLoader adLoader=new AdLoader.Builder(this,nativeAdvanceId)
-                .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
-                    @Override
-                    public void onNativeAdLoaded(@NonNull NativeAd nativeAd) {
+        AdLoader.Builder builder = new AdLoader.Builder(this, nativeAdvanceId);
 
-                        NativeTemplateStyle style = new NativeTemplateStyle.Builder().build();
-                        templateView.setStyles(style);
-                        templateView.setNativeAd(nativeAd);
+        // OnUnifiedNativeAdLoadedListener implementation.
+        builder.forUnifiedNativeAd(
+                unifiedNativeAd -> {
+                    // If this callback occurs after the activity is destroyed, you must call
+                    // destroy and return or you may get a memory leak.
+                    boolean isDestroyed = false;
+                    if (isDestroyed || isFinishing() || isChangingConfigurations()) {
+                        unifiedNativeAd.destroy();
+                        return;
                     }
-                })
-                .build();
+                    // You must call destroy on old ads when you are done with them,
+                    // otherwise you will have a memory leak.
+                    if (nativeAd != null) {
+                        nativeAd.destroy();
+                    }
+                    nativeAd = unifiedNativeAd;
+
+                    FrameLayout frameLayout = dialog.findViewById(R.id.fl_adplaceholder);
+
+                    if(frameLayout == null)
+                    {
+                        Log.i("HELLO_123", "refreshAd: null frame layout");
+                    }
+                    else if(frameLayout != null)
+                    {
+                        Log.i("HELLO_123", "refreshAd: not null frame layout");
+                        UnifiedNativeAdView adView = (UnifiedNativeAdView) dialog.getLayoutInflater().inflate(R.layout.ad_unified, null);
+                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
+                        frameLayout.removeAllViews();
+                        frameLayout.addView(adView);
+                    }
+                });
+
+        VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
+
+        NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
+
+        builder.withNativeAdOptions(adOptions);
+
+        AdLoader adLoader = builder.withAdListener(new AdListener() {
+            @Override
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("NATIVE_ADVANCE_AD", "ad failed code: "+loadAdError.getCode());
+            }
+        }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
+
     }
+
+    private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
+        // Set the media view.
+        adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
+
+        // Set other ad assets.
+        adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
+        adView.setBodyView(adView.findViewById(R.id.ad_body));
+        adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
+        adView.setIconView(adView.findViewById(R.id.ad_app_icon));
+        adView.setPriceView(adView.findViewById(R.id.ad_price));
+        adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
+        adView.setStoreView(adView.findViewById(R.id.ad_store));
+        adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
+
+
+        // The headline and mediaContent are guaranteed to be in every UnifiedNativeAd.
+        ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
+        adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+
+        //setting the media visibility to gone
+        adView.getMediaView().setVisibility(View.GONE);
+
+        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+        // check before trying to display them.
+        if (nativeAd.getBody() == null) {
+            adView.getBodyView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getBodyView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+        }
+
+        if (nativeAd.getCallToAction() == null) {
+            adView.getCallToActionView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getCallToActionView().setVisibility(View.VISIBLE);
+            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+            ((Button) adView.getCallToActionView()).setTextSize(10);
+        }
+
+        if (nativeAd.getIcon() == null) {
+            adView.getIconView().setVisibility(View.GONE);
+        } else {
+            ((ImageView) adView.getIconView()).setImageDrawable(
+                    nativeAd.getIcon().getDrawable());
+            adView.getIconView().setVisibility(View.VISIBLE);
+        }
+
+        if (nativeAd.getPrice() == null) {
+            adView.getPriceView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getPriceView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
+        }
+
+        if (nativeAd.getStore() == null) {
+            adView.getStoreView().setVisibility(View.INVISIBLE);
+        } else {
+            adView.getStoreView().setVisibility(View.VISIBLE);
+            ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
+        }
+
+        if (nativeAd.getStarRating() == null) {
+            adView.getStarRatingView().setVisibility(View.INVISIBLE);
+        } else {
+            ((RatingBar) adView.getStarRatingView())
+                    .setRating(nativeAd.getStarRating().floatValue());
+            adView.getStarRatingView().setVisibility(View.VISIBLE);
+        }
+
+        if (nativeAd.getAdvertiser() == null) {
+            adView.getAdvertiserView().setVisibility(View.INVISIBLE);
+        } else {
+            ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
+            adView.getAdvertiserView().setVisibility(View.VISIBLE);
+        }
+
+
+        // This method tells the Google Mobile Ads SDK that you have finished populating your
+        // native ad view with this native ad.
+        adView.setNativeAd(nativeAd);
+    }
+
 }

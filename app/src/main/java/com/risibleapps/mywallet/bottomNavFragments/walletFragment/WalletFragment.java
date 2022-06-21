@@ -387,11 +387,11 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
         String interstitialAdId="";
         if(BuildConfig.DEBUG)
         {
-            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            interstitialAdId=getString(R.string.interstitial_ad_debug);
             Log.i("WALLET_FRAG_AD", "WALLET_FRAG debug version: "+interstitialAdId);
         }
         else {
-            interstitialAdId=getString(R.string.interstitial_ad_id);
+            interstitialAdId=getString(R.string.interstitial_ad_release);
             Log.i("WALLET_FRAG_AD", "WALLET_FRAG release version: "+interstitialAdId);
         }
 

@@ -23,7 +23,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!--<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
 
     <style name="AppTheme.AdAttribution" >
         <item name="android:layout_width">wrap_content</item>
@@ -34,8 +34,9 @@
         <item name="android:text">@string/ad_attribution</item>
         <item name="android:background">@color/colorPrimaryVariant</item>
         <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:layout_marginStart">@dimen/_10sdp</item>
         <item name="android:width">@dimen/_20sdp</item>
         <item name="android:height">@dimen/_20sdp</item>
-    </style>-->
+    </style>
 
 </resources>

@@ -16,19 +16,22 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
+import com.risibleapps.mywallet.BuildConfig;
+import com.risibleapps.mywallet.R;
 
 import java.util.Date;
 
 public class AppOpenManager implements LifecycleObserver, Application.ActivityLifecycleCallbacks {
 
     private static final String LOG_TAG = "AppOpenManager";
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294";
     private static boolean isShowingAd = false;
     private final MyApplication myApplication;
     private AppOpenAd appOpenAd = null;
     private AppOpenAd.AppOpenAdLoadCallback loadCallback;
     private Activity currentActivity;
     private long loadTime = 0;
+
+    private static String adId = "";
 
     /**
      * Constructor
@@ -69,8 +72,19 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
             }
 
         };
+
+        if(BuildConfig.DEBUG)
+        {
+            adId= myApplication.getString(R.string.app_open_debug);
+            Log.i("APP_OPEN_AD", "debug version: "+adId);
+        }
+        else {
+            adId= myApplication.getString(R.string.app_open_release);
+            Log.i("APP_OPEN_AD", "release version: "+adId);
+        }
+
         AdRequest request = getAdRequest();
-        AppOpenAd.load(myApplication, AD_UNIT_ID, request,
+        AppOpenAd.load(myApplication, adId, request,
                 AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback);
     }
 

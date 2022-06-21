@@ -552,11 +552,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         String interstitialAdId="";
         if(BuildConfig.DEBUG)
         {
-            interstitialAdId=getString(R.string.interstitial_ad_debug_id);
+            interstitialAdId=getString(R.string.interstitial_ad_debug);
             Log.i("HOME_FRAG_AD", "HOME_FRAG debug version: "+interstitialAdId);
         }
         else {
-            interstitialAdId=getString(R.string.interstitial_ad_id);
+            interstitialAdId=getString(R.string.interstitial_ad_release);
             Log.i("HOME_FRAG_AD", "HOME_FRAG release version: "+interstitialAdId);
         }
 
