@@ -1,5 +1,7 @@
 package com.risibleapps.mywallet.bottomNavFragments.homeFragment;
 
+import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -51,15 +53,18 @@ import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeFragTransAdapter.RecentTransInterface, MonthAdapter.OnMonthClickListener {
 
-    public static final int[] COLORS_PALETTE_1 = {
-            Color.rgb(210, 245, 255), Color.rgb(197, 230, 252),
-            Color.rgb(131, 200, 247), Color.rgb(58, 166, 239),
-            Color.rgb(29, 152, 255)
+    public static final int[] COLOR_PALETTE_1 = {
+            rgb("#ffa226"), rgb("#7fff23"), rgb("#ff257b"),
+            rgb("#FF4000"), rgb("#aaaaaa"), rgb("#ffd921"),
+            rgb("#80FF00"), rgb("#006666"), rgb("#FD6302"),
+            rgb("#BFFF00"), rgb("#ff0044"), rgb("#00FFBF")
     };
-    public static final int[] COLORS_PALETTE_2 = {
-            Color.rgb(87, 187, 248), Color.rgb(3, 138, 231),
-            Color.rgb(5, 159, 249), Color.rgb(4, 151, 243),
-            Color.rgb(187, 217, 249)
+
+    public static final int[] COLOR_PALETTE_2 = {
+            rgb("#21c1ff"), rgb("#256fff"), rgb("#483728"),
+            rgb("#6c4d4b"), rgb("#DF013A"), rgb("#F61104"),
+            rgb("#3020ff"), rgb("#2EFE9A"), rgb("#7800bd"),
+            rgb("#F78181"), rgb("#AE04FD"), rgb("#FB2C08")
     };
 
     //string for inner circle of pie graph
@@ -307,11 +312,11 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
         ArrayList<Integer> colors = new ArrayList<>();
 
-        for (int color : ColorTemplate.PASTEL_COLORS/*createColors(COLORS_PALETTE_1)*/) {
+        for (int color : ColorTemplate./*PASTEL_COLORS*/createColors(COLOR_PALETTE_1)) {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate.MATERIAL_COLORS/*createColors(COLORS_PALETTE_2)*/) {
+        for (int color : ColorTemplate./*MATERIAL_COLORS*/createColors(COLOR_PALETTE_2)) {
             colors.add(color);
         }
 

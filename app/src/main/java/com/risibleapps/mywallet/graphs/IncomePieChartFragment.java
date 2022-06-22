@@ -1,5 +1,7 @@
 package com.risibleapps.mywallet.graphs;
 
+import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.COLOR_PALETTE_1;
+import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.COLOR_PALETTE_2;
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
 import android.graphics.Color;
@@ -156,11 +158,11 @@ public class IncomePieChartFragment extends Fragment {
 
         ArrayList<Integer> colors = new ArrayList<>();
 
-        for (int color : ColorTemplate.PASTEL_COLORS) {
+        for (int color : ColorTemplate./*PASTEL_COLORS*/createColors(COLOR_PALETTE_2)) {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate.MATERIAL_COLORS) {
+        for (int color : ColorTemplate./*MATERIAL_COLORS*/createColors(COLOR_PALETTE_1)) {
             colors.add(color);
         }
 

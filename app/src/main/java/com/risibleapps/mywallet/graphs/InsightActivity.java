@@ -79,8 +79,6 @@ public class InsightActivity extends AppCompatActivity implements MonthAdapter.O
         //initializing database instance
         database = RoomDBHelper.getInstance(this);
 
-        Log.i("HELLO_123", "onCreate: month= "+currentMonth);
-
         totalIncome = database.incomeDetailDao().getTotalIncomeSum(monthDateConversion(currentMonth));
         totalExpense = database.expenseDetailDao().getTotalExpenseSum(monthDateConversion(currentMonth));
 
