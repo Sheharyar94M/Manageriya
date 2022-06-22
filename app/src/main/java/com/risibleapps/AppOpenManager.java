@@ -177,5 +177,6 @@ public class AppOpenManager implements LifecycleObserver, Application.ActivityLi
     @Override
     public void onActivityDestroyed(Activity activity) {
         currentActivity = null;
+        appOpenAd = null;
     }
 }

@@ -167,7 +167,6 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
             drawerLayout.closeDrawer(GravityCompat.START);
         }
         else {
-
             //calling the exit alert dialog
             dialog.show();
         }
