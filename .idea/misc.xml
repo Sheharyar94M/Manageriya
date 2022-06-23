@@ -115,7 +115,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_expense.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_income.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_add_transfer.xml" value="0.27291666666666664" />
-        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_expense_pie_chart.xml" value="0.16" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_expense_pie_chart.xml" value="0.18006872852233677" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_home.xml" value="0.18" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_income_pie_chart.xml" value="0.18" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/fragment_loan.xml" value="0.16666666666666666" />
@@ -136,6 +136,7 @@
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recycler_loan.xml" value="0.18" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_recyclerview_item.xml" value="0.18" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/layout_saving_recycler.xml" value="0.22" />
+        <entry key="..\:/Hammad/Managerya/app/src/main/res/layout/test_layout.xml" value="0.18125" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/menu_saving_goal.xml" value="0.25" />
         <entry key="..\:/Hammad/Managerya/app/src/main/res/menu/navigation_view_menu.xml" value="0.25" />

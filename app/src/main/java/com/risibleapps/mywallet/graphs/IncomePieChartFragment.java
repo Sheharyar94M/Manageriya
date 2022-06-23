@@ -1,6 +1,5 @@
 package com.risibleapps.mywallet.graphs;
 
-import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.COLOR_PALETTE_1;
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.COLOR_PALETTE_2;
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 
@@ -12,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -48,6 +49,9 @@ public class IncomePieChartFragment extends Fragment {
     //string for saving the currently selected month value
     private String currentMonth="";
 
+    //recyclerview for displaying the category names and allocated color
+    private RecyclerView recyclerViewColor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -59,6 +63,9 @@ public class IncomePieChartFragment extends Fragment {
 
         //initialize pie chart
         pieChartIncome=view.findViewById(R.id.pie_chart_income);
+
+        //initializing recyclerview
+        recyclerViewColor=view.findViewById(R.id.recycler_income);
 
         //getting the bundle value from InsightActivity
         Bundle bundle=getArguments();
@@ -77,6 +84,9 @@ public class IncomePieChartFragment extends Fragment {
 
         loadPieChartData();
 
+        //set recyclerview
+        setRecyclerViewColor();
+
         return view;
     }
 
@@ -89,7 +99,7 @@ public class IncomePieChartFragment extends Fragment {
 
         pieChartIncome.setCenterText(CURRENCY_.concat(String.valueOf(incomeAmount)).concat(earned));
         pieChartIncome.setCenterTextColor(getContext().getResources().getColor(R.color.colorPrimaryVariant));
-        pieChartIncome.setCenterTextSize(13);
+        pieChartIncome.setCenterTextSize(16);
         pieChartIncome.setCenterTextTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
         //sets the entry label text to false (not text is shown with pie chart slices)
@@ -110,7 +120,7 @@ public class IncomePieChartFragment extends Fragment {
         legend.setDrawInside(false);
 
         //hides/show the description line (like color red = grocery, color green = health)
-        legend.setEnabled(true);
+        legend.setEnabled(false);
 
         //set the vertical & horizontal spacing between pie chart descriptions
         legend.setXEntrySpace(12);
@@ -161,9 +171,9 @@ public class IncomePieChartFragment extends Fragment {
             colors.add(color);
         }
 
-        for (int color : ColorTemplate./*MATERIAL_COLORS*/createColors(COLOR_PALETTE_1)) {
+        /*for (int color : ColorTemplate.*//*MATERIAL_COLORS*//*createColors(COLOR_PALETTE_1)) {
             colors.add(color);
-        }
+        }*/
 
         PieDataSet pieDataSet = new PieDataSet(pieEntries, " ");
         pieDataSet.setColors(colors);
@@ -177,6 +187,25 @@ public class IncomePieChartFragment extends Fragment {
 
         pieChartIncome.setData(pieData);
         pieChartIncome.invalidate();
+    }
+
+    private void setRecyclerViewColor() {
+
+        if(pieChartDataList.size() == 0)
+        {
+            recyclerViewColor.setVisibility(View.GONE);
+        }
+        else if (pieChartDataList.size() > 0)
+        {
+            recyclerViewColor.setVisibility(View.VISIBLE);
+        }
+
+        GridLayoutManager layoutManager=new GridLayoutManager(requireContext(),2);
+        recyclerViewColor.setLayoutManager(layoutManager);
+
+        PieChartColorAdapter pieChartColorAdapter = new PieChartColorAdapter(requireContext(),pieChartDataList,COLOR_PALETTE_2);
+        recyclerViewColor.setAdapter(pieChartColorAdapter);
+
     }
 
 }

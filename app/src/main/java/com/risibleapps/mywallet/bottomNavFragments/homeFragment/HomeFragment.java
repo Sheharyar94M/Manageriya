@@ -57,14 +57,20 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             rgb("#ffa226"), rgb("#7fff23"), rgb("#ff257b"),
             rgb("#FF4000"), rgb("#aaaaaa"), rgb("#ffd921"),
             rgb("#80FF00"), rgb("#006666"), rgb("#FD6302"),
-            rgb("#BFFF00"), rgb("#ff0044"), rgb("#00FFBF")
-    };
-
-    public static final int[] COLOR_PALETTE_2 = {
+            rgb("#BFFF00"), rgb("#ff0044"), rgb("#00FFBF"),
             rgb("#21c1ff"), rgb("#256fff"), rgb("#483728"),
             rgb("#6c4d4b"), rgb("#DF013A"), rgb("#F61104"),
             rgb("#3020ff"), rgb("#2EFE9A"), rgb("#7800bd"),
             rgb("#F78181"), rgb("#AE04FD"), rgb("#FB2C08")
+
+    };
+
+    public static final int[] COLOR_PALETTE_2 = {
+            rgb("#21c1ff"), rgb("#256fff"), rgb("#00000"),
+            rgb("#6c4d4b"), rgb("#DF013A"), rgb("#F61104"),
+            rgb("#3020ff"), rgb("#2EFE9A"), rgb("#7800bd"),
+            rgb("#F78181"), rgb("#AE04FD"), rgb("#FB2C08"),
+            rgb("#006666")
     };
 
     //string for inner circle of pie graph
@@ -316,9 +322,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
             colors.add(color);
         }
 
-        for (int color : ColorTemplate./*MATERIAL_COLORS*/createColors(COLOR_PALETTE_2)) {
+        /*for (int color : ColorTemplate.*//*MATERIAL_COLORS*//*createColors(COLOR_PALETTE_2)) {
             colors.add(color);
-        }
+        }*/
 
         PieDataSet pieDataSet = new PieDataSet(pieEntries, " ");
         pieDataSet.setColors(colors);
@@ -385,6 +391,7 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
 
             @Override
             public void onNothingSelected() {
+
             }
         });
 
@@ -675,4 +682,5 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         mInterstitialAd = null;
         super.onDestroy();
     }
+
 }
