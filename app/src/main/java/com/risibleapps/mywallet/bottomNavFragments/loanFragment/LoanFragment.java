@@ -1,6 +1,7 @@
 package com.risibleapps.mywallet.bottomNavFragments.loanFragment;
 
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+import static com.risibleapps.mywallet.mainActivity.HomeScreenActivity.isHomeFragment;
 
 import android.Manifest;
 import android.content.Intent;
@@ -169,6 +170,9 @@ public class LoanFragment extends Fragment implements LoanAdapter.OnLoanInterfac
             //setting the value to zero
             checkValueTotalSum = 0;
         }
+
+        //boolean variable for handling the exit dialog in HomeScreenActivity
+        isHomeFragment = false;
     }
 
     //LoanAdapter click listener

@@ -1,6 +1,7 @@
 package com.risibleapps.mywallet.bottomNavFragments.walletFragment;
 
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+import static com.risibleapps.mywallet.mainActivity.HomeScreenActivity.isHomeFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -360,6 +361,8 @@ public class WalletFragment extends Fragment implements MonthAdapter.OnMonthClic
             CHECK_VALUE = 0;
         }
 
+        //boolean variable for handling the exit dialog in HomeScreenActivity
+        isHomeFragment = false;
     }
 
     private String monthDateConversion(String dateToConvert) {

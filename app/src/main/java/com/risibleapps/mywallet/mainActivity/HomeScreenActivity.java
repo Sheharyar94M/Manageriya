@@ -87,6 +87,12 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     Dialog dialog;
 
+    /*
+        static boolean variable for handling the exit dialog on back pressed
+        We want only to show exit dialog when home fragment is visible (jugar)
+    */
+    public static boolean isHomeFragment = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +153,8 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         NavController navController= Navigation.findNavController(this,R.id.fragment_container);
         NavigationUI.setupWithNavController(bottomNavigationView,navController);
 
+       /* navController.popBackStack(new HomeFragment().getId(),true);*/
+
         //image view add record click listener
         imageViewAddRecord.setOnClickListener(view -> addRecord());
 
@@ -166,9 +174,12 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
-        else {
-            //calling the exit alert dialog
+        else if(isHomeFragment) {
+            //calling the exit alert dialog only when HomeFragment is visible
             dialog.show();
+        }
+        else {
+            super.onBackPressed();
         }
     }
 

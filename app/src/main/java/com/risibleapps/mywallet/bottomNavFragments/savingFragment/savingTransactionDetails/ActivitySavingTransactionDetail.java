@@ -4,10 +4,10 @@ import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragm
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.risibleapps.mywallet.R;
 import com.risibleapps.mywallet.RoomDB.RoomDBHelper;
 import com.risibleapps.mywallet.bottomNavFragments.savingFragment.DB.SavingModel;
@@ -31,7 +32,7 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
 
     private TextView textViewSavingGoalTitle,textViewDate,textViewCurrency,textViewAmountSaved,textViewSavingGoal,textViewPercentage;
     private ImageView imageViewCategory;
-    private ProgressBar progressBar;
+    private LinearProgressIndicator progressBar;
     private Toolbar toolbar;
 
     private TextView textViewSavingTransaction;
@@ -194,8 +195,13 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
         textViewPercentage.append(" %");
 
         //progress bar
-        progressBar.setProgress((int) amountSaved);
+        //in case of progress bars, we need to write the max value first followed by set progress
         progressBar.setMax((int) savingGoalAmount);
+        progressBar.setProgress((int) amountSaved);
+
+        Log.i("HELLO_123", "amount saved: "+amountSaved);
+        Log.i("HELLO_123", "progress: "+progressBar.getProgress());
+        Log.i("HELLO_123", "max: "+progressBar.getMax());
 
     }
 

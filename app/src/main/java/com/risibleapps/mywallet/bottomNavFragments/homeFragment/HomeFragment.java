@@ -1,6 +1,7 @@
 package com.risibleapps.mywallet.bottomNavFragments.homeFragment;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
+import static com.risibleapps.mywallet.mainActivity.HomeScreenActivity.isHomeFragment;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -669,6 +670,9 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         //setting the recent recyclerview
         setBudgetRecentRecyclerview();
 
+        //boolean variable for handling the exit dialog in HomeScreenActivity
+        isHomeFragment = true;
+
     }
 
     @Override
@@ -682,5 +686,4 @@ public class HomeFragment extends Fragment implements HomeFragTransAdapter.Recen
         mInterstitialAd = null;
         super.onDestroy();
     }
-
 }

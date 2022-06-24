@@ -228,7 +228,13 @@ public class ActivityAddSavingGoal extends AppCompatActivity implements SavingCa
         } else if (editTextAddTag.getText().toString().trim().isEmpty()) {
             Snackbar snackbar = Snackbar.make(recyclerView, "Add tag", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        } else {
+        }
+        else if(categoryIcon == 0)
+        {
+            Snackbar snackbar = Snackbar.make(recyclerView, "Select Category Icon", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        }
+        else {
 
             //saving the goal to Database
             database.savingDao().addSavingGoal(new SavingEntity(Integer.valueOf(editTextEnterAmount.getText().toString().trim()),editTextGoalTitle.getText().toString(),editTextAddTag.getText().toString(),categoryIcon,dateToSave));

@@ -1,6 +1,7 @@
 package com.risibleapps.mywallet.bottomNavFragments.savingFragment;
 
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
+import static com.risibleapps.mywallet.mainActivity.HomeScreenActivity.isHomeFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -197,6 +198,8 @@ public class SavingFragment extends Fragment implements SavingsAdapter.OnSavingC
             setValuesToViews();
         }
 
+        //boolean variable for handling the exit dialog in HomeScreenActivity
+        isHomeFragment = false;
     }
 
     private void setValuesToViews(){
