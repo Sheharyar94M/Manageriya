@@ -74,7 +74,8 @@
             android:exported="false" />
         <activity
             android:name="com.risibleapps.mywallet.mainActivity.HomeScreenActivity"
-            android:exported="false"/>
+            android:exported="false"
+            android:launchMode="singleInstance"/>
         <activity
             android:name="com.risibleapps.mywallet.bottomNavFragments.homeFragment.ViewTransDetailsActivity"
             android:exported="false" />

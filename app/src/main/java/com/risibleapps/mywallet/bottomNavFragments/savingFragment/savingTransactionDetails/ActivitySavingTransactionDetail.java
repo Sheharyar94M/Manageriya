@@ -4,7 +4,6 @@ import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragm
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -198,10 +197,6 @@ public class ActivitySavingTransactionDetail extends AppCompatActivity implement
         //in case of progress bars, we need to write the max value first followed by set progress
         progressBar.setMax((int) savingGoalAmount);
         progressBar.setProgress((int) amountSaved);
-
-        Log.i("HELLO_123", "amount saved: "+amountSaved);
-        Log.i("HELLO_123", "progress: "+progressBar.getProgress());
-        Log.i("HELLO_123", "max: "+progressBar.getMax());
 
     }
 
