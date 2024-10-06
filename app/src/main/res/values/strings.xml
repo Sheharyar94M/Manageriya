@@ -16,5 +16,6 @@
 
     <string name="app_open_debug">ca-app-pub-3940256099942544/3419835294</string>
     <string name="app_open_release">ca-app-pub-1814031312363155/8094337545</string>
+    <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit?</string>
 
 </resources>

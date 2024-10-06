@@ -2,7 +2,6 @@ package com.risibleapps.mywallet.bottomNavFragments.loanFragment;
 
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
 import static com.risibleapps.mywallet.mainActivity.HomeScreenActivity.isHomeFragment;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,19 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.risibleapps.mywallet.R;
 import com.risibleapps.mywallet.RoomDB.RoomDBHelper;
 import com.risibleapps.mywallet.bottomNavFragments.loanFragment.DB.LoanEntity;
 import com.risibleapps.mywallet.bottomNavFragments.loanFragment.contact.ConsumerDetailActivity;
 import com.risibleapps.mywallet.bottomNavFragments.loanFragment.contact.addContact.AddConsumerActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 

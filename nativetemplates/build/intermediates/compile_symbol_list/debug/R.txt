@@ -709,6 +709,7 @@ int dimen gnt_medium_template_top_weight 0x0
 int dimen gnt_no_margin 0x0
 int dimen gnt_no_size 0x0
 int dimen gnt_small_cta_button_height 0x0
+int dimen gnt_small_margin 0x0
 int dimen gnt_text_row_weight 0x0
 int dimen gnt_text_size_large 0x0
 int dimen gnt_text_size_small 0x0

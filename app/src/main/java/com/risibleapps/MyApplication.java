@@ -2,6 +2,8 @@ package com.risibleapps;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.google.android.gms.ads.MobileAds;
 
 public class MyApplication extends Application {
@@ -13,6 +15,10 @@ public class MyApplication extends Application {
         super.onCreate();
         MobileAds.initialize(this, initializationStatus -> {});
         appOpenManager = new AppOpenManager(this);
+
+        //disabling night mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
     }
 
 }

@@ -24,6 +24,7 @@
     <dimen name="gnt_no_margin">0dp</dimen>
     <dimen name="gnt_no_size">0dp</dimen>
     <dimen name="gnt_small_cta_button_height">30dp</dimen>
+    <dimen name="gnt_small_margin">5dp</dimen>
     <item format="float" name="gnt_text_row_weight" type="dimen">0.25</item>
     <dimen name="gnt_text_size_large">15sp</dimen>
     <dimen name="gnt_text_size_small">12sp</dimen>

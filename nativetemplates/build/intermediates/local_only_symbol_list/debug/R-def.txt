@@ -25,6 +25,7 @@ dimen gnt_medium_template_top_weight
 dimen gnt_no_margin
 dimen gnt_no_size
 dimen gnt_small_cta_button_height
+dimen gnt_small_margin
 dimen gnt_text_row_weight
 dimen gnt_text_size_large
 dimen gnt_text_size_small

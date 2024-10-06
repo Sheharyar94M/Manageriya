@@ -2,6 +2,7 @@ package com.risibleapps.mywallet.bottomNavFragments.loanFragment.DB;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;

@@ -2,6 +2,7 @@ package com.risibleapps.mywallet.mainActivity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,14 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,17 +30,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.gms.ads.AdListener;
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.VideoOptions;
-import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
-import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -56,6 +51,7 @@ import com.risibleapps.mywallet.bottomNavFragments.addRecord.income.incomeDB.Inc
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeScreenActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -67,8 +63,8 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     Activity homeScreenActivity;
 
     //lists of income & expense category
-    List<IncomeCategoryEntity> incomeCatList=new ArrayList<>();
-    List<ExpenseCategoryEntity> expenseCatList=new ArrayList<>();
+    List<IncomeCategoryEntity> incomeCatList = new ArrayList<>();
+    List<ExpenseCategoryEntity> expenseCatList = new ArrayList<>();
 
     //Room Database instance
     RoomDBHelper database;
@@ -82,7 +78,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     private InterstitialAd mInterstitialAd;
 
-    private String nativeAdvanceId="";
+    private String nativeAdvanceId = "";
     private UnifiedNativeAd nativeAd;
 
     Dialog dialog;
@@ -92,6 +88,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         We want only to show exit dialog when home fragment is visible (jugar)
     */
     public static boolean isHomeFragment = true;
+    private AdLoader adLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +96,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_home_screen);
 
         //initializing mobile ad
-        MobileAds.initialize(this, initializationStatus -> {});
+        MobileAds.initialize(this);
 
         //initialize views
         initialViews();
@@ -115,29 +112,28 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         expenseCategories();
 
         //initializing home screen activity instance
-        homeScreenActivity=this;
+        homeScreenActivity = this;
 
         //initialize preference
         initializePreference();
 
         //Room DB instance
-        database=RoomDBHelper.getInstance(homeScreenActivity);
+        database = RoomDBHelper.getInstance(homeScreenActivity);
 
         //getting shared preference value
-        areCategoriesAdded=sharedPreferences.getBoolean(getString(R.string.categories_saved),false);
+        areCategoriesAdded = sharedPreferences.getBoolean(getString(R.string.categories_saved), false);
 
         /*
             This condition is called only once. When this called, income and expense category will be created in database,
             and preference value will be set to true.
             This condition will be only true again when user clears the app data or application is uninstalled and then installed again
         */
-        if(!areCategoriesAdded)
-        {
+        if (!areCategoriesAdded) {
             addCategories();
         }
 
         //setting the support action bar
-        toolbar=findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //code for menu button on top left side of toolbar
@@ -150,8 +146,8 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         navigationView.setNavigationItemSelectedListener(this);
 
         //bottom navigation
-        NavController navController= Navigation.findNavController(this,R.id.fragment_container);
-        NavigationUI.setupWithNavController(bottomNavigationView,navController);
+        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         //image view add record click listener
         imageViewAddRecord.setOnClickListener(view -> addRecord());
@@ -160,10 +156,10 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     private void initialViews() {
 
-        drawerLayout=findViewById(R.id.drawer_layout);
-        navigationView=findViewById(R.id.navigation_view);
-        bottomNavigationView=findViewById(R.id.bottom_navigation);
-        imageViewAddRecord=findViewById(R.id.image_view_add_record);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        imageViewAddRecord = findViewById(R.id.image_view_add_record);
 
     }
 
@@ -171,12 +167,10 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else if(isHomeFragment) {
+        } else if (isHomeFragment) {
             //calling the exit alert dialog only when HomeFragment is visible
             dialog.show();
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -188,8 +182,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         //setting the selected item to checked state
         item.setChecked(true);
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menu_share_with_friends:
                 shareAppLink();
                 break;
@@ -214,76 +207,75 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    private void addRecord()
-    {
+    private void addRecord() {
         showAd();
     }
 
     private void incomeCategories() {
 
-        incomeCatList.add(new IncomeCategoryEntity(1,"Allowance",R.drawable.allowance));
+        incomeCatList.add(new IncomeCategoryEntity(1, "Allowance", R.drawable.allowance));
 
-        incomeCatList.add(new IncomeCategoryEntity(2,"Bonus",R.drawable.bonus));
-        incomeCatList.add(new IncomeCategoryEntity(3,"Business \nProfit",R.drawable.business_profit));
+        incomeCatList.add(new IncomeCategoryEntity(2, "Bonus", R.drawable.bonus));
+        incomeCatList.add(new IncomeCategoryEntity(3, "Business \nProfit", R.drawable.business_profit));
 
-        incomeCatList.add(new IncomeCategoryEntity(4,"Commission",R.drawable.commission));
+        incomeCatList.add(new IncomeCategoryEntity(4, "Commission", R.drawable.commission));
 
-        incomeCatList.add(new IncomeCategoryEntity(5,"Freelance",R.drawable.freelance));
+        incomeCatList.add(new IncomeCategoryEntity(5, "Freelance", R.drawable.freelance));
 
-        incomeCatList.add(new IncomeCategoryEntity(6,"Gifts \nReceived",R.drawable.gifts_received));
+        incomeCatList.add(new IncomeCategoryEntity(6, "Gifts \nReceived", R.drawable.gifts_received));
 
-        incomeCatList.add(new IncomeCategoryEntity(7,"Investment",R.drawable.investment));
+        incomeCatList.add(new IncomeCategoryEntity(7, "Investment", R.drawable.investment));
 
-        incomeCatList.add(new IncomeCategoryEntity(8,"Loan \nReceived",R.drawable.loan_received));
+        incomeCatList.add(new IncomeCategoryEntity(8, "Loan \nReceived", R.drawable.loan_received));
 
-        incomeCatList.add(new IncomeCategoryEntity(9,"Pension",R.drawable.pension));
-        incomeCatList.add(new IncomeCategoryEntity(10,"Pocket \nMoney",R.drawable.pocket_money));
+        incomeCatList.add(new IncomeCategoryEntity(9, "Pension", R.drawable.pension));
+        incomeCatList.add(new IncomeCategoryEntity(10, "Pocket \nMoney", R.drawable.pocket_money));
 
-        incomeCatList.add(new IncomeCategoryEntity(11,"Salary",R.drawable.salary));
-        incomeCatList.add(new IncomeCategoryEntity(12,"Savings",R.drawable.savings));
+        incomeCatList.add(new IncomeCategoryEntity(11, "Salary", R.drawable.salary));
+        incomeCatList.add(new IncomeCategoryEntity(12, "Savings", R.drawable.savings));
 
-        incomeCatList.add(new IncomeCategoryEntity(13,"Tuition",R.drawable.tuition));
+        incomeCatList.add(new IncomeCategoryEntity(13, "Tuition", R.drawable.tuition));
     }
 
     private void expenseCategories() {
 
-        expenseCatList.add(new ExpenseCategoryEntity(1,"Bills & \nUtilities",R.drawable.bills));
+        expenseCatList.add(new ExpenseCategoryEntity(1, "Bills & \nUtilities", R.drawable.bills));
 
-        expenseCatList.add(new ExpenseCategoryEntity(2,"Charity", R.drawable.charity));
-        expenseCatList.add(new ExpenseCategoryEntity(3,"Committee",R.drawable.committee));
+        expenseCatList.add(new ExpenseCategoryEntity(2, "Charity", R.drawable.charity));
+        expenseCatList.add(new ExpenseCategoryEntity(3, "Committee", R.drawable.committee));
 
-        expenseCatList.add(new ExpenseCategoryEntity(4,"Entertain\nment", R.drawable.entertainment));
-        expenseCatList.add(new ExpenseCategoryEntity(5,"Electronics",R.drawable.electronics));
-        expenseCatList.add(new ExpenseCategoryEntity(6,"Education",R.drawable.education));
+        expenseCatList.add(new ExpenseCategoryEntity(4, "Entertain\nment", R.drawable.entertainment));
+        expenseCatList.add(new ExpenseCategoryEntity(5, "Electronics", R.drawable.electronics));
+        expenseCatList.add(new ExpenseCategoryEntity(6, "Education", R.drawable.education));
 
-        expenseCatList.add(new ExpenseCategoryEntity(7,"Family",R.drawable.family));
-        expenseCatList.add(new ExpenseCategoryEntity(8,"Food",R.drawable.food));
-        expenseCatList.add(new ExpenseCategoryEntity(9,"Fuel",R.drawable.fuel));
+        expenseCatList.add(new ExpenseCategoryEntity(7, "Family", R.drawable.family));
+        expenseCatList.add(new ExpenseCategoryEntity(8, "Food", R.drawable.food));
+        expenseCatList.add(new ExpenseCategoryEntity(9, "Fuel", R.drawable.fuel));
 
-        expenseCatList.add(new ExpenseCategoryEntity(10,"Grocery",R.drawable.grocery));
+        expenseCatList.add(new ExpenseCategoryEntity(10, "Grocery", R.drawable.grocery));
 
-        expenseCatList.add(new ExpenseCategoryEntity(11,"Health",R.drawable.health));
-        expenseCatList.add(new ExpenseCategoryEntity(12,"Home",R.drawable.home_e));
+        expenseCatList.add(new ExpenseCategoryEntity(11, "Health", R.drawable.health));
+        expenseCatList.add(new ExpenseCategoryEntity(12, "Home", R.drawable.home_e));
 
-        expenseCatList.add(new ExpenseCategoryEntity(13,"Installment",R.drawable.installment));
-        expenseCatList.add(new ExpenseCategoryEntity(14,"Insurance",R.drawable.insurance));
+        expenseCatList.add(new ExpenseCategoryEntity(13, "Installment", R.drawable.installment));
+        expenseCatList.add(new ExpenseCategoryEntity(14, "Insurance", R.drawable.insurance));
 
-        expenseCatList.add(new ExpenseCategoryEntity(15,"Loan \nPaid",R.drawable.loan_paid));
+        expenseCatList.add(new ExpenseCategoryEntity(15, "Loan \nPaid", R.drawable.loan_paid));
 
-        expenseCatList.add(new ExpenseCategoryEntity(16,"Medical",R.drawable.medical));
-        expenseCatList.add(new ExpenseCategoryEntity(17,"Mobile",R.drawable.mobile));
+        expenseCatList.add(new ExpenseCategoryEntity(16, "Medical", R.drawable.medical));
+        expenseCatList.add(new ExpenseCategoryEntity(17, "Mobile", R.drawable.mobile));
 
-        expenseCatList.add(new ExpenseCategoryEntity(18,"Office",R.drawable.office));
-        expenseCatList.add(new ExpenseCategoryEntity(19,"Other \nExpenses",R.drawable.other_expenses));
+        expenseCatList.add(new ExpenseCategoryEntity(18, "Office", R.drawable.office));
+        expenseCatList.add(new ExpenseCategoryEntity(19, "Other \nExpenses", R.drawable.other_expenses));
 
-        expenseCatList.add(new ExpenseCategoryEntity(20,"Rent \nPaid",R.drawable.rent_paid));
+        expenseCatList.add(new ExpenseCategoryEntity(20, "Rent \nPaid", R.drawable.rent_paid));
 
-        expenseCatList.add(new ExpenseCategoryEntity(21,"Shopping",R.drawable.shopping));
+        expenseCatList.add(new ExpenseCategoryEntity(21, "Shopping", R.drawable.shopping));
 
-        expenseCatList.add(new ExpenseCategoryEntity(22,"Transport",R.drawable.transport));
-        expenseCatList.add(new ExpenseCategoryEntity(23,"Travel",R.drawable.travel));
+        expenseCatList.add(new ExpenseCategoryEntity(22, "Transport", R.drawable.transport));
+        expenseCatList.add(new ExpenseCategoryEntity(23, "Travel", R.drawable.travel));
 
-        expenseCatList.add(new ExpenseCategoryEntity(24,"Wedding",R.drawable.wedding));
+        expenseCatList.add(new ExpenseCategoryEntity(24, "Wedding", R.drawable.wedding));
 
     }
 
@@ -292,18 +284,18 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         preferenceEditor = sharedPreferences.edit();
     }
 
-    private void addCategories(){
+    private void addCategories() {
 
         database.incomeCategoryDao().addIncomeCat(incomeCatList);
         database.expenseCategoryDao().addExpenseCat(expenseCatList);
         //database.close();
 
         //setting the preference value to true to indicate that categories tables are added
-        preferenceEditor.putBoolean(getString(R.string.categories_saved),true);
+        preferenceEditor.putBoolean(getString(R.string.categories_saved), true);
         preferenceEditor.apply();
     }
 
-    private void shareAppLink(){
+    private void shareAppLink() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         String subSectionLink = "Download\n Managerya: Daily-Expense-Manager \nfrom:\n\n\t\"https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID;
@@ -317,9 +309,9 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         startActivity(intent);
     }
 
-    private void clearAllRecord(MenuItem item){
+    private void clearAllRecord(MenuItem item) {
 
-        AlertDialog.Builder alertDialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         alertDialog.setTitle("Delete All Record")
                 .setMessage("Want to delete all record?")
@@ -329,7 +321,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     database.clearAllTables();
 
                     //setting the preference value to false to indicate that categories tables are empty
-                    preferenceEditor.putBoolean(getString(R.string.categories_saved),false);
+                    preferenceEditor.putBoolean(getString(R.string.categories_saved), false);
                     preferenceEditor.apply();
 
                     //setting the checked item to false (removes highlighted item)
@@ -340,7 +332,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     new Handler().postDelayed(() -> {
                         //showing the ad
                         showAdClearHistory();
-                    },1000);
+                    }, 1000);
 
                 })
                 .setNegativeButton("CANCEL", (dialogInterface, i) -> dialogInterface.dismiss());
@@ -351,15 +343,13 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
     public void loadAd() {
 
         //checking whether app is running on release/debug version
-        String interstitialAdId="";
-        if(BuildConfig.DEBUG)
-        {
-            interstitialAdId=getString(R.string.interstitial_ad_debug);
-            Log.i("HOME_ACT_AD", "HOME_ACT debug version: "+interstitialAdId);
-        }
-        else {
-            interstitialAdId=getString(R.string.interstitial_ad_release);
-            Log.i("HOME_ACT_AD", "HOME_ACT release version: "+interstitialAdId);
+        String interstitialAdId = "";
+        if (BuildConfig.DEBUG) {
+            interstitialAdId = getString(R.string.interstitial_ad_debug);
+            Log.i("HOME_ACT_AD", "HOME_ACT debug version: " + interstitialAdId);
+        } else {
+            interstitialAdId = getString(R.string.interstitial_ad_release);
+            Log.i("HOME_ACT_AD", "HOME_ACT release version: " + interstitialAdId);
         }
 
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -375,7 +365,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
-                Log.i("HOME_ACT_AD", "HOME_ACT failed ad: "+loadAdError.getCode()+"\n"+loadAdError.getMessage());
+                Log.i("HOME_ACT_AD", "HOME_ACT failed ad: " + loadAdError.getCode() + "\n" + loadAdError.getMessage());
                 mInterstitialAd = null;
             }
         });
@@ -405,9 +395,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     mInterstitialAd = null;
                 }
             });
-        }
-        else
-        {
+        } else {
             //if there is no internet connection, then no ad will be loaded and app will move onto next screen
             Intent intent = new Intent(this, AddRecordActivity.class);
             startActivity(intent);
@@ -427,7 +415,7 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     mInterstitialAd = null;
 
                     //recreating the activity
-                    startActivity(new Intent(HomeScreenActivity.this,HomeScreenActivity.class));
+                    startActivity(new Intent(HomeScreenActivity.this, HomeScreenActivity.class));
                     finish();
                 }
 
@@ -439,11 +427,9 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
                     mInterstitialAd = null;
                 }
             });
-        }
-        else
-        {
+        } else {
             //if there is no internet connection, then no ad will be loaded
-            startActivity(new Intent(HomeScreenActivity.this,HomeScreenActivity.class));
+            startActivity(new Intent(HomeScreenActivity.this, HomeScreenActivity.class));
             finish();
         }
     }
@@ -465,18 +451,36 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
         super.onDestroy();
     }
 
-    private void exitAlertDialog(){
-        dialog=new Dialog(this);
+    private void exitAlertDialog() {
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.exit_dialog);
+        dialog.setCancelable(false);
+
+        // Get the screen dimensions
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+
+        // Calculate the dialog's dimensions (percentage of the screen)
+        int dialogWidth = (int) (screenWidth * 1.0);
+        int dialogHeight = (int) (screenHeight * 0.5);
+
+        // Set the dialog's dimensions
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.width = dialogWidth;
+        layoutParams.height = dialogHeight;
+        Objects.requireNonNull(dialog.getWindow()).setAttributes(layoutParams);
 
         //setting the transparent background
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //loading the ad
-        refreshAd(dialog);
+        LoadAd(dialog);
 
-        AppCompatButton buttonExit=dialog.findViewById(R.id.btn_exit);
-        AppCompatButton buttonCancel=dialog.findViewById(R.id.btn_cancel);
+        AppCompatButton buttonExit = dialog.findViewById(R.id.btn_exit);
+        AppCompatButton buttonCancel = dialog.findViewById(R.id.btn_cancel);
 
         //click listener buttons
         buttonExit.setOnClickListener(view -> super.onBackPressed());
@@ -485,147 +489,27 @@ public class HomeScreenActivity extends AppCompatActivity implements NavigationV
 
     }
 
-    private void refreshAd(Dialog dialog) {
+    private void LoadAd(Dialog dialog) {
 
         //checking whether the app is running in release or debug version
-        if(BuildConfig.DEBUG)
-        {
-            nativeAdvanceId=getString(R.string.native_advance_debug);
-            Log.i("NATIVE_ADVANCE_AD: ", "debug version: "+nativeAdvanceId);
-        }
-        else{
-            nativeAdvanceId=getString(R.string.native_advance_release);
-            Log.i("NATIVE_ADVANCE_AD: ", "release version: "+nativeAdvanceId);
+        if (BuildConfig.DEBUG) {
+            nativeAdvanceId = getString(R.string.native_advance_debug);
+            Log.i("NATIVE_ADVANCE_AD: ", "debug version: " + nativeAdvanceId);
+        } else {
+            nativeAdvanceId = getString(R.string.native_advance_release);
+            Log.i("NATIVE_ADVANCE_AD: ", "release version: " + nativeAdvanceId);
         }
 
-        AdLoader.Builder builder = new AdLoader.Builder(this, nativeAdvanceId);
+        //setting Ad
+        TemplateView adTemplate = dialog.findViewById(R.id.ad_template);
+        adLoader = new AdLoader.Builder(this, nativeAdvanceId).forNativeAd(nativeAd -> {
 
-        // OnUnifiedNativeAdLoadedListener implementation.
-        builder.forUnifiedNativeAd(
-                unifiedNativeAd -> {
-                    // If this callback occurs after the activity is destroyed, you must call
-                    // destroy and return or you may get a memory leak.
-                    boolean isDestroyed = false;
-                    if (isDestroyed || isFinishing() || isChangingConfigurations()) {
-                        unifiedNativeAd.destroy();
-                        return;
-                    }
-                    // You must call destroy on old ads when you are done with them,
-                    // otherwise you will have a memory leak.
-                    if (nativeAd != null) {
-                        nativeAd.destroy();
-                    }
-                    nativeAd = unifiedNativeAd;
+            adTemplate.setStyles(new NativeTemplateStyle.Builder().build());
+            adTemplate.setNativeAd(nativeAd);
 
-                    FrameLayout frameLayout = dialog.findViewById(R.id.fl_adplaceholder);
-
-                    if(frameLayout != null)
-                    {
-                        UnifiedNativeAdView adView = (UnifiedNativeAdView) dialog.getLayoutInflater().inflate(R.layout.ad_unified, null);
-                        populateUnifiedNativeAdView(unifiedNativeAd, adView);
-                        frameLayout.removeAllViews();
-                        frameLayout.addView(adView);
-                    }
-                });
-
-        VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
-
-        NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
-
-        builder.withNativeAdOptions(adOptions);
-
-        AdLoader adLoader = builder.withAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-                super.onAdFailedToLoad(loadAdError);
-                Log.i("NATIVE_ADVANCE_AD", "ad failed code: "+loadAdError.getCode());
-            }
         }).build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
 
     }
-
-    private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
-        // Set the media view.
-        adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
-
-        // Set other ad assets.
-        adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-        adView.setBodyView(adView.findViewById(R.id.ad_body));
-        adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-        adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-        adView.setPriceView(adView.findViewById(R.id.ad_price));
-        adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-        adView.setStoreView(adView.findViewById(R.id.ad_store));
-        adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
-
-
-        // The headline and mediaContent are guaranteed to be in every UnifiedNativeAd.
-        ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-        adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-
-        //setting the media visibility to gone
-        adView.getMediaView().setVisibility(View.GONE);
-
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
-        if (nativeAd.getBody() == null) {
-            adView.getBodyView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getBodyView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
-        }
-
-        if (nativeAd.getCallToAction() == null) {
-            adView.getCallToActionView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getCallToActionView().setVisibility(View.VISIBLE);
-            ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
-            ((Button) adView.getCallToActionView()).setTextSize(10);
-        }
-
-        if (nativeAd.getIcon() == null) {
-            adView.getIconView().setVisibility(View.GONE);
-        } else {
-            ((ImageView) adView.getIconView()).setImageDrawable(
-                    nativeAd.getIcon().getDrawable());
-            adView.getIconView().setVisibility(View.VISIBLE);
-        }
-
-        if (nativeAd.getPrice() == null) {
-            adView.getPriceView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getPriceView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
-        }
-
-        if (nativeAd.getStore() == null) {
-            adView.getStoreView().setVisibility(View.INVISIBLE);
-        } else {
-            adView.getStoreView().setVisibility(View.VISIBLE);
-            ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
-        }
-
-        if (nativeAd.getStarRating() == null) {
-            adView.getStarRatingView().setVisibility(View.INVISIBLE);
-        } else {
-            ((RatingBar) adView.getStarRatingView())
-                    .setRating(nativeAd.getStarRating().floatValue());
-            adView.getStarRatingView().setVisibility(View.VISIBLE);
-        }
-
-        if (nativeAd.getAdvertiser() == null) {
-            adView.getAdvertiserView().setVisibility(View.INVISIBLE);
-        } else {
-            ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
-            adView.getAdvertiserView().setVisibility(View.VISIBLE);
-        }
-
-
-        // This method tells the Google Mobile Ads SDK that you have finished populating your
-        // native ad view with this native ad.
-        adView.setNativeAd(nativeAd);
-    }
-
 }

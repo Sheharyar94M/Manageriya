@@ -2,6 +2,7 @@ package com.risibleapps.mywallet.bottomNavFragments.addRecord.income.incomeDB;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class IncomeCategoryEntity implements Serializable {
     @ColumnInfo(name = "income_icon_name")
     private int incomeCatIconName;
 
+    @Ignore
     public IncomeCategoryEntity() {}
 
     public IncomeCategoryEntity(int incomeCatId, String incomeCatName, int incomeCatIconName) {

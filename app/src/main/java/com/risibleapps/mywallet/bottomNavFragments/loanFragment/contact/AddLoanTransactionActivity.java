@@ -1,7 +1,6 @@
 package com.risibleapps.mywallet.bottomNavFragments.loanFragment.contact;
 
 import static com.risibleapps.mywallet.bottomNavFragments.homeFragment.HomeFragment.CURRENCY_;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -11,16 +10,13 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-
 import com.risibleapps.mywallet.R;
 import com.risibleapps.mywallet.RoomDB.RoomDBHelper;
 import com.risibleapps.mywallet.bottomNavFragments.loanFragment.DB.LoanDetailEntity;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 

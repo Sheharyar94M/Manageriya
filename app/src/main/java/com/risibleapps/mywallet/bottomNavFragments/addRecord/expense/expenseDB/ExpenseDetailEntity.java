@@ -2,6 +2,7 @@ package com.risibleapps.mywallet.bottomNavFragments.addRecord.expense.expenseDB;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -34,8 +35,10 @@ public class ExpenseDetailEntity implements Serializable {
     @ColumnInfo(name = "expense_img_path")
     private String expenseImgPath;
 
+    @Ignore
     public ExpenseDetailEntity() {}
 
+    @Ignore
     public ExpenseDetailEntity(int expenseDetailCatId, int expenseAmount, String expenseDate) {
         this.expenseDetailCatId = expenseDetailCatId;
         this.expenseAmount = expenseAmount;
